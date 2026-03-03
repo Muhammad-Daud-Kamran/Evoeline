@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 
@@ -18,23 +19,16 @@ class Screen37VendorProfile extends StatelessWidget {
               clipBehavior: Clip.none,
               alignment: Alignment.bottomCenter,
               children: [
-                // Cover Image Placeholder
+                // Cover Image
                 Container(
                   height: 220,
                   width: double.infinity,
-                  color: const Color(0xFF1E1E1E), // Dark background for cover
-                  child: Image.network(
-                    'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop',
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Center(
-                        child: Icon(
-                          Icons.image,
-                          color: Colors.white54,
-                          size: 50,
-                        ),
-                      );
-                    },
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF1E1E1E),
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/s37image1.jpg'),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 // Custom App Bar overlays
@@ -59,13 +53,14 @@ class Screen37VendorProfile extends StatelessWidget {
                   right: 16,
                   child: InkWell(
                     onTap: () {},
-                    child: const CircleAvatar(
+                    child: CircleAvatar(
                       backgroundColor: Colors.white,
                       radius: 18,
-                      child: Icon(
-                        Icons.ios_share,
-                        color: AppColors.darkText,
-                        size: 20,
+                      child: SvgPicture.asset(
+                        'assets/images/s32icon5share.svg',
+                        colorFilter: const ColorFilter.mode(AppColors.darkText, BlendMode.srcIn),
+                        width: 33,
+                        height: 33,
                       ),
                     ),
                   ),
@@ -82,11 +77,7 @@ class Screen37VendorProfile extends StatelessWidget {
                     child: const CircleAvatar(
                       radius: 36,
                       backgroundColor: Color(0xFFBCAAA4), // Brownish
-                      child: Icon(
-                        Icons.restaurant,
-                        color: Colors.white,
-                        size: 30,
-                      ),
+                      backgroundImage: AssetImage('assets/images/s37image2.jpg'),
                     ),
                   ),
                 ),
@@ -176,14 +167,13 @@ class Screen37VendorProfile extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: const Color(0xFFF1CDC0), // Peach color
                         borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.description_outlined,
-                          size: 40,
-                          color: Color(0xFF3B5B43),
+
+                        image: const DecorationImage(
+                          image: AssetImage('assets/images/s37image3.jpg'),
+                          fit: BoxFit.cover,
                         ),
                       ),
+
                     ),
                   ),
                 ],
@@ -288,7 +278,15 @@ class Screen37VendorProfile extends StatelessWidget {
                         ),
                         elevation: 0,
                       ),
-                      icon: const Icon(Icons.ios_share, size: 18),
+                      icon: SvgPicture.asset(
+                        'assets/images/s32icon5share.svg',
+                        colorFilter: const ColorFilter.mode(
+                          AppColors.darkText,
+                          BlendMode.srcIn,
+                        ),
+                        width: 36,
+                        height: 36,
+                      ),
                       label: Text(
                         'Share Vendor Profile',
                         style: AppTextStyles.bodyText.copyWith(
@@ -335,7 +333,7 @@ class Screen37VendorProfile extends StatelessWidget {
       children: [
         Text(
           label,
-          style: AppTextStyles.label.copyWith(color: AppColors.primaryGreen),
+          style: AppTextStyles.label.copyWith(color: AppColors.lightText),
         ), // Using green tone like image
         Text(
           value,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../widgets/review_list_item.dart';
@@ -52,7 +53,7 @@ class Screen38VendorReviews extends StatelessWidget {
                         children: List.generate(5, (index) {
                           return Icon(
                             index < 4 ? Icons.star : Icons.star_border,
-                            color: Colors.amber,
+                            color: Color(0xFF8CC9EB),
                             size: 16,
                           );
                         }),
@@ -163,49 +164,12 @@ class Screen38VendorReviews extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: const Color(0xFFDCC8B3),
                   borderRadius: BorderRadius.circular(16),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/s38image1.jpg'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      bottom: 20,
-                      left: 20,
-                      child: Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: const Color(0xFFB5A18C),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.2),
-                              blurRadius: 4,
-                              offset: const Offset(2, 2),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 20,
-                      right: 40,
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: const Color(0xFFB5A18C),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.2),
-                              blurRadius: 4,
-                              offset: const Offset(2, 2),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+
               ),
               const SizedBox(height: 24),
 
@@ -234,7 +198,49 @@ class Screen38VendorReviews extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _buildCustomBottomNav(),
+      bottomNavigationBar: Container(
+        height: 65,
+        decoration: const BoxDecoration(
+          color: AppColors.background,
+          border: Border(top: BorderSide(color: Color(0xFFEEEEEE), width: 1)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            SvgPicture.asset(
+              'assets/images/s32icon1home.svg',
+              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              width: 44,
+              height: 44,
+            ),
+            SvgPicture.asset(
+              'assets/images/s32icon2events.svg',
+              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn), // Selected
+              width: 44,
+              height: 44,
+            ),
+            SizedBox(width: 6,),
+            SvgPicture.asset(
+              'assets/images/s36icone3vendors.svg', // Re-verified filename in assets
+              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              width: 44,
+              height: 44,
+            ),
+            SvgPicture.asset(
+              'assets/images/s38icon1review.svg',
+              colorFilter: const ColorFilter.mode(AppColors.darkText, BlendMode.srcIn),
+              width: 44,
+              height: 44,
+            ),
+            SvgPicture.asset(
+              'assets/images/s32icon4profile.svg',
+              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              width: 44,
+              height: 44,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -265,7 +271,7 @@ class Screen38VendorReviews extends StatelessWidget {
               widthFactor: percentageFilled,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.blueAccent.shade200,
+                  color: Color(0xFF8CC9EB),
                   borderRadius: BorderRadius.circular(3),
                 ),
               ),
@@ -285,40 +291,4 @@ class Screen38VendorReviews extends StatelessWidget {
     );
   }
 
-  Widget _buildCustomBottomNav() {
-    return BottomNavigationBar(
-      currentIndex: 3, // "Reviews" selected
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: AppColors.darkText,
-      unselectedItemColor: AppColors.lightText,
-      showSelectedLabels: true,
-      showUnselectedLabels: true,
-      selectedLabelStyle: const TextStyle(
-        fontSize: 10,
-        fontWeight: FontWeight.w600,
-      ),
-      unselectedLabelStyle: const TextStyle(
-        fontSize: 10,
-        fontWeight: FontWeight.normal,
-      ),
-      elevation: 8,
-      backgroundColor: AppColors.background,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.event_outlined),
-          label: 'Events',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.groups_outlined),
-          label: 'Vendors',
-        ),
-        BottomNavigationBarItem(icon: Icon(Icons.star), label: 'Reviews'),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          label: 'Profile',
-        ),
-      ],
-    );
-  }
 }

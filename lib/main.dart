@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       ),
 
       home:
-          const Screen36PhotographyCategory(), // 👈 Changed to the latest screen
+          const Screen38VendorReviews(), // 👈 Changed to the latest screen
     );
   }
 }

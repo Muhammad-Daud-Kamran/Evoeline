@@ -154,13 +154,20 @@ class Screen36PhotographyCategory extends StatelessWidget {
               height: 44,
             ),
             SvgPicture.asset(
-              'assets/images/s32icon2events.svg',
+              'assets/images/s36icon2categories.svg',
+              colorFilter: const ColorFilter.mode(AppColors.darkText, BlendMode.srcIn), // Selected
+              width: 44,
+              height: 44,
+            ),
+            SizedBox(width: 6,),
+            SvgPicture.asset(
+              'assets/images/s36icone3vendors.svg', // Re-verified filename in assets
               colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
               width: 44,
               height: 44,
             ),
             SvgPicture.asset(
-              'assets/images/s32icon3tickets.svg',
+              'assets/images/s32icon2events.svg',
               colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
               width: 44,
               height: 44,
