@@ -273,15 +273,17 @@ class _Screen39ReviewVendorState extends State<Screen39ReviewVendor> {
         ),
         const SizedBox(width: 16),
         Container(
-          width: 80,
-          height: 60,
+          width: 88,
+          height: 68,
           decoration: BoxDecoration(
             color: const Color(0xFF1E3F3D), // matching UI header bg
             borderRadius: BorderRadius.circular(8),
+            image: const DecorationImage(
+              image: AssetImage('assets/images/s39image1.jpg'),
+              fit: BoxFit.cover,
+            ),
           ),
-          child: const Center(
-            child: Icon(Icons.restaurant_menu, color: Colors.white24, size: 24),
-          ),
+
         ),
       ],
     );

@@ -14,6 +14,12 @@ import 'package:evoeline/screens/screen_35_vendor_directory.dart';
 import 'package:evoeline/screens/screen_36_photography_category.dart';
 import 'package:evoeline/screens/screen_37_vendor_profile.dart';
 import 'package:evoeline/screens/screen_38_vendor_reviews.dart';
+import 'package:evoeline/screens/screen_39_review_vendor.dart';
+import 'package:evoeline/screens/screen_40_discover_events.dart';
+import 'package:evoeline/screens/screen_41_event_details.dart';
+import 'package:evoeline/screens/screen_42_register_event.dart';
+import 'package:evoeline/screens/screen_43_checkout.dart';
+import 'package:evoeline/screens/screen_44_registration_success.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -34,7 +40,7 @@ class MyApp extends StatelessWidget {
       ),
 
       home:
-          const Screen38VendorReviews(), // 👈 Changed to the latest screen
+          const Screen44RegistrationSuccess(), // 👈 Changed to the latest screen
     );
   }
 }

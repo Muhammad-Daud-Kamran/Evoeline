@@ -323,16 +323,16 @@ class Screen44RegistrationSuccess extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem('assets/images/s32icon1home.svg', 'Home', true),
-          _buildNavItem('assets/images/s32icon2events.svg', 'Events', false),
-          _buildNavItem('assets/images/s32icon3tickets.svg', 'Tickets', false),
-          _buildNavItem('assets/images/s32icon4profile.svg', 'Profile', false),
+          _buildNavItem('assets/images/s32icon1home.svg',  true),
+          _buildNavItem('assets/images/s32icon2events.svg',  false),
+          _buildNavItem('assets/images/s32icon3tickets.svg',  false),
+          _buildNavItem('assets/images/s32icon4profile.svg',  false),
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(String assetPath, String label, bool isSelected) {
+  Widget _buildNavItem(String assetPath, bool isSelected) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -342,17 +342,8 @@ class Screen44RegistrationSuccess extends StatelessWidget {
             isSelected ? AppColors.primaryGreen : AppColors.lightText,
             BlendMode.srcIn,
           ),
-          width: 24,
-          height: 24,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 10,
-            color: isSelected ? AppColors.primaryGreen : AppColors.lightText,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-          ),
+          width: 38,
+          height: 38,
         ),
       ],
     );
