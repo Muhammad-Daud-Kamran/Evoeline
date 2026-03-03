@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart'; // 👈 add this import
+import 'package:flutter_svg/flutter_svg.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../widgets/agenda_timeline_item.dart';
@@ -164,14 +164,6 @@ class Screen31EventDetails extends StatelessWidget {
             ),
             const SizedBox(height: 32),
 
-            // Sponsors
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text('Sponsors', style: AppTextStyles.heading2),
-            ),
-            const SizedBox(height: 26),
-            const SizedBox(height: 36),
-
             // Venue Information
             const Align(
               alignment: Alignment.centerLeft,
@@ -271,7 +263,6 @@ class Screen31EventDetails extends StatelessWidget {
   }
 }
 
-// ✅ Moved OUTSIDE Screen31EventDetails — was nested inside before which caused the error
 class _BuildActionIcon extends StatelessWidget {
   final String svgPath;
   const _BuildActionIcon({required this.svgPath});

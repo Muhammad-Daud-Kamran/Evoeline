@@ -40,9 +40,12 @@ class Screen32Register extends StatelessWidget {
             Container(
               height: 200,
               width: double.infinity,
-              // TODO: To use the real event image:
-               decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/screen32img1.jpg'), fit: BoxFit.cover)),
-
+               decoration: const BoxDecoration(
+                 image: DecorationImage(
+                   image: AssetImage('assets/images/screen32img1.jpg'), 
+                   fit: BoxFit.cover
+                 )
+               ),
             ),
 
             Padding(
@@ -89,7 +92,7 @@ class Screen32Register extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: AppColors.cardBackground, // Peach background
                           borderRadius: BorderRadius.circular(12),
-                          image: DecorationImage(
+                          image: const DecorationImage(
                             image: AssetImage('assets/images/screen32img2.jpg'),
                             fit: BoxFit.cover,
                           ),
@@ -175,7 +178,6 @@ class Screen32Register extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-
             SvgPicture.asset(
               'assets/images/s32icon1home.svg',
               colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
@@ -188,14 +190,12 @@ class Screen32Register extends StatelessWidget {
               width: 44,
               height: 44,
             ),
-
             SvgPicture.asset(
               'assets/images/s32icon3tickets.svg',
               colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
               width: 44,
               height: 44,
             ),
-
             SvgPicture.asset(
               'assets/images/s32icon4profile.svg',
               colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),

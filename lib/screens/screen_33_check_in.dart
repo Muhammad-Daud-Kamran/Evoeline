@@ -114,7 +114,10 @@ class Screen33CheckIn extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: SvgPicture.asset(
                 'assets/images/s33icon1download.svg',
-                colorFilter: const ColorFilter.mode(AppColors.darkText, BlendMode.srcIn),
+                colorFilter: const ColorFilter.mode(
+                  AppColors.darkText,
+                  BlendMode.srcIn,
+                ),
                 width: 32,
                 height: 30,
               ),

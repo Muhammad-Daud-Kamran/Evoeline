@@ -29,11 +29,10 @@ class AttendeeListItem extends StatelessWidget {
           CircleAvatar(
             radius: 24,
             backgroundColor: AppColors.cardBackground,
-            // TODO: To use image assets from the assets folder for avatars, uncomment the backgroundImage handling below
-            // backgroundImage: avatarImagePath != null ? AssetImage(avatarImagePath!) : null,
+            backgroundImage: avatarImagePath != null ? AssetImage(avatarImagePath!) : null,
             child: avatarImagePath == null
                 ? Text(
-                    name[0],
+                    name.isNotEmpty ? name[0].toUpperCase() : '',
                     style: AppTextStyles.heading2.copyWith(
                       color: AppColors.primaryGreen,
                     ),
