@@ -20,6 +20,8 @@ import 'package:evoeline/screens/screen_41_event_details.dart';
 import 'package:evoeline/screens/screen_42_register_event.dart';
 import 'package:evoeline/screens/screen_43_checkout.dart';
 import 'package:evoeline/screens/screen_44_registration_success.dart';
+import 'package:evoeline/screens1-22/screen_1_splash.dart';
+import 'package:evoeline/screens1-22/screen_2_onboarding_1.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
       ),
 
       home:
-          const Screen44RegistrationSuccess(), // 👈 Changed to the latest screen
+          const Screen2Onboarding1(), // 👈 Changed to the latest screen
     );
   }
 }
