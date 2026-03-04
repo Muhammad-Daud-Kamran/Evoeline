@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import '../constants/app_colors.dart';
-import '../widgets/discover_bottom_nav_bar.dart';
 
 /// Screen 40: Discover Events
 class Screen40DiscoverEvents extends StatelessWidget {
@@ -9,13 +9,13 @@ class Screen40DiscoverEvents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lightGreyBackground,
+      backgroundColor: AppColors.background,
       appBar: _buildAppBar(),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 16),
             _buildSearchBar(),
             const SizedBox(height: 24),
             _buildSectionTitle('Events Near You'),
@@ -41,10 +41,46 @@ class Screen40DiscoverEvents extends StatelessWidget {
             _buildSectionTitle('Your Past Events'),
             const SizedBox(height: 12),
             _buildPastEventsList(),
+            const SizedBox(height: 32),
           ],
         ),
       ),
-      bottomNavigationBar: const DiscoverBottomNavBar(currentIndex: 0),
+      bottomNavigationBar: Container(
+        height: 65,
+        decoration: const BoxDecoration(
+          color: AppColors.background,
+          border: Border(top: BorderSide(color: Color(0xFFEEEEEE), width: 1)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            SvgPicture.asset(
+              'assets/images/s32icon1home.svg',
+              colorFilter: const ColorFilter.mode(AppColors.darkText, BlendMode.srcIn),
+              width: 46,
+              height: 46,
+            ),
+            SvgPicture.asset(
+              'assets/images/s40iconexplore.svg',
+              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              width: 44,
+              height: 44,
+            ),
+            SvgPicture.asset(
+              'assets/images/s40iconfav.svg',
+              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              width: 44,
+              height: 44,
+            ),
+            SvgPicture.asset(
+              'assets/images/s32icon4profile.svg',
+              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              width: 44,
+              height: 44,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -52,6 +88,7 @@ class Screen40DiscoverEvents extends StatelessWidget {
   AppBar _buildAppBar() {
     return AppBar(
       backgroundColor: AppColors.background,
+      surfaceTintColor: Colors.transparent,
       elevation: 0,
       centerTitle: true,
       title: const Text(
@@ -83,18 +120,18 @@ class Screen40DiscoverEvents extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Container(
+        height: 48,
         decoration: BoxDecoration(
-          color: AppColors.background,
+          color: const Color(0xFFEDF2F4), // Light blue-grey tint from design
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.dividerColor),
         ),
         child: const TextField(
           decoration: InputDecoration(
-            hintText: 'Search events, organizers, categories...',
+            hintText: 'Search',
             hintStyle: TextStyle(color: AppColors.lightText, fontSize: 14),
             prefixIcon: Icon(Icons.search, color: AppColors.lightText),
             border: InputBorder.none,
-            contentPadding: EdgeInsets.symmetric(vertical: 14),
+            contentPadding: EdgeInsets.symmetric(vertical: 12),
           ),
         ),
       ),
@@ -123,74 +160,47 @@ class Screen40DiscoverEvents extends StatelessWidget {
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         scrollDirection: Axis.horizontal,
-        itemCount: 3,
-        separatorBuilder: (_, __) => const SizedBox(width: 12),
+        itemCount: 2,
+        separatorBuilder: (_, __) => const SizedBox(width: 16),
         itemBuilder: (context, index) {
-          // Dummy data for visual representation
-          final List<String> titles = [
-            'Tech Meetup',
-            'Business Network',
-            'Art Expo',
-          ];
-          final List<String> dates = [
-            'Oct 26, 2024',
-            'Nov 15, 2024',
-            'Dec 01, 2024',
+          final List<String> titles = ['Tech Meetup', 'Business Network'];
+          final List<String> dates = ['Oct 26, 2024', 'Nov 15, 2024'];
+          final List<String> images = [
+            'assets/images/s40image1.jpg',
+            'assets/images/s40image2.png',
           ];
 
-          return Container(
-            width: 140,
-            decoration: BoxDecoration(
-              color: AppColors.background,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.dividerColor),
-            ),
+          return SizedBox(
+            width: 200,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Image Placeholder
                 Expanded(
                   child: Container(
-                    decoration: const BoxDecoration(
-                      color: AppColors.lightGreyBackground,
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(12),
-                      ),
-                    ),
-                    // TODO: Replace with actual asset image
-                    child: const Center(
-                      child: Icon(
-                        Icons.image,
-                        color: AppColors.lightText,
-                        size: 40,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF5F5F5),
+                      borderRadius: BorderRadius.circular(16),
+                      image: DecorationImage(
+                        image: AssetImage(images[index]),
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        titles[index],
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                          color: AppColors.darkText,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        dates[index],
-                        style: const TextStyle(
-                          color: AppColors.lightText,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
+                const SizedBox(height: 12),
+                Text(
+                  titles[index],
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: AppColors.darkText,
+                  ),
+                ),
+                Text(
+                  dates[index],
+                  style: const TextStyle(
+                    color: AppColors.lightText,
+                    fontSize: 12,
                   ),
                 ),
               ],
@@ -204,7 +214,7 @@ class Screen40DiscoverEvents extends StatelessWidget {
   /// Trending Now Horizontal List
   Widget _buildTrendingNowList() {
     return SizedBox(
-      height: 220,
+      height: 260,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         scrollDirection: Axis.horizontal,
@@ -213,37 +223,36 @@ class Screen40DiscoverEvents extends StatelessWidget {
         itemBuilder: (context, index) {
           final List<String> titles = ['Future of Tech', 'Global Business'];
           final List<String> subtitles = ['TechCon', 'BizSummit'];
+          final List<String> images = [
+            'assets/images/s40image3.jpg',
+            'assets/images/s40image4.png',
+          ];
 
           return Container(
             width: 240,
             decoration: BoxDecoration(
               color: AppColors.background,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.dividerColor),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.04),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: const Color(0xFFF0F0F0)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Highlight Image Placeholder
-                Container(
-                  height: 110,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF6B9F9A), // Based on UI image palette
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(16),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                      image: DecorationImage(
+                        image: AssetImage(images[index]),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                  // TODO: Use NetworkImage or AssetImage here
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -255,31 +264,33 @@ class Screen40DiscoverEvents extends StatelessWidget {
                           color: AppColors.darkText,
                         ),
                       ),
-                      const SizedBox(height: 2),
                       Text(
                         subtitles[index],
                         style: const TextStyle(
                           color: AppColors.lightText,
-                          fontSize: 12,
+                          fontSize: 13,
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
                       SizedBox(
                         width: double.infinity,
-                        height: 32,
+                        height: 40,
                         child: ElevatedButton(
                           onPressed: () {},
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.lightGreyBackground,
+                            backgroundColor: const Color(0xFFEDF2F4),
                             foregroundColor: AppColors.darkText,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                           child: const Text(
                             'Register',
-                            style: TextStyle(fontSize: 12),
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -303,33 +314,32 @@ class Screen40DiscoverEvents extends StatelessWidget {
     ];
 
     return SizedBox(
-      height: 36,
+      height: 40,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
           final cat = categories[index];
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
-              color: AppColors.background,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.dividerColor),
+              color: const Color(0xFFEDF2F4),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Row(
               children: [
                 Icon(
                   cat['icon'] as IconData,
-                  size: 16,
+                  size: 18,
                   color: AppColors.iconColor,
                 ),
                 const SizedBox(width: 8),
                 Text(
                   cat['label'] as String,
                   style: const TextStyle(
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: FontWeight.w500,
                     color: AppColors.darkText,
                   ),
@@ -348,22 +358,32 @@ class Screen40DiscoverEvents extends StatelessWidget {
       {
         'title': 'AI in Business',
         'time': 'Oct 28, 2024 · 9:00 AM',
-        'color': 0xFF2F4F4F,
+        'image': 'assets/images/s40image5.jpg',
       },
       {
         'title': 'Startup Pitch Night',
         'time': 'Nov 2, 2024 · 6:00 PM',
-        'color': 0xFF66CDAA,
+        'image': 'assets/images/s40image6.jpg',
       },
       {
         'title': 'Healthcare Innovation',
-        'time': 'Nov 10, 2024 · 10:00 AM',
-        'color': 0xFF001F3F,
+        'time': 'Nov 10, 2024 · 10:30 AM',
+        'image': 'assets/images/s40image7.jpg',
       },
       {
-        'title': 'Digital Marketing',
+        'title': 'Digital Marketing Workshop',
         'time': 'Nov 18, 2024 · 2:00 PM',
-        'color': 0xFFE0F2F1,
+        'image': 'assets/images/s40image8.jpg',
+      },
+      {
+        'title': 'FinTech Conference',
+        'time': 'Nov 25, 2024 · 9:00 AM',
+        'image': 'assets/images/s40image9.jpg',
+      },
+      {
+        'title': 'Design Thinking Seminar',
+        'time': 'Dec 2, 2024 · 1:00 PM',
+        'image': 'assets/images/s40image10.jpg',
       },
     ];
 
@@ -375,22 +395,23 @@ class Screen40DiscoverEvents extends StatelessWidget {
         itemCount: items.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 16,
-          childAspectRatio: 0.9,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 20,
+          childAspectRatio: 1.1, // Matches grid image style
         ),
         itemBuilder: (context, index) {
           final item = items[index];
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Thumbnail Placeholder
               Expanded(
                 child: Container(
-                  width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Color(item['color'] as int),
                     borderRadius: BorderRadius.circular(12),
+                    image: DecorationImage(
+                      image: AssetImage(item['image'] as String),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -405,7 +426,6 @@ class Screen40DiscoverEvents extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 2),
               Text(
                 item['time'] as String,
                 style: const TextStyle(
@@ -424,69 +444,59 @@ class Screen40DiscoverEvents extends StatelessWidget {
 
   /// Recommended for You (Horizontal List)
   Widget _buildRecommendedList() {
-    return _buildSmallHorizontalList(
-      colors: [0xFF2A363B, 0xFF769695, 0xFF43A047],
-      titles: ['AI Workshop', 'Marketing Seminar', 'Finance 101'],
-      dates: ['Oct 29, 2024', 'Nov 5, 2024', 'Nov 12, 2024'],
-    );
-  }
+    final items = [
+      {
+        'title': 'AI Workshop',
+        'date': 'Oct 29, 2024',
+        'image': 'assets/images/s40image11.jpg',
+      },
+      {
+        'title': 'Marketing Seminar',
+        'date': 'Nov 5, 2024',
+        'image': 'assets/images/s40image12.jpg',
+      },
+    ];
 
-  /// Your Past Events (Horizontal List)
-  Widget _buildPastEventsList() {
-    return _buildSmallHorizontalList(
-      colors: [0xFFE6E2DB, 0xFF423C32, 0xFF5B6E4A],
-      titles: ['Past Event 1', 'Past Event 2', 'Past Event 3'],
-      dates: ['Oct 1, 2024', 'Oct 8, 2024', 'Oct 15, 2024'],
-    );
-  }
-
-  /// Reusable helper for compact horizontal lists (Recommended / Past Events)
-  Widget _buildSmallHorizontalList({
-    required List<int> colors,
-    required List<String> titles,
-    required List<String> dates,
-  }) {
     return SizedBox(
-      height: 130, // Thumbnail + text
+      height: 160,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         scrollDirection: Axis.horizontal,
-        itemCount: titles.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 12),
+        itemCount: items.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 16),
         itemBuilder: (context, index) {
+          final item = items[index];
           return SizedBox(
-            width: 140,
+            width: 160,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Image container
-                Container(
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: Color(colors[index]),
-                    borderRadius: BorderRadius.circular(12),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      image: DecorationImage(
+                        image: AssetImage(item['image'] as String),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  titles[index],
+                  item['title'] as String,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 13,
                     color: AppColors.darkText,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 2),
                 Text(
-                  dates[index],
+                  item['date'] as String,
                   style: const TextStyle(
                     color: AppColors.lightText,
                     fontSize: 11,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
@@ -495,4 +505,69 @@ class Screen40DiscoverEvents extends StatelessWidget {
       ),
     );
   }
+
+  /// Your Past Events (Horizontal List)
+  Widget _buildPastEventsList() {
+    final items = [
+      {
+        'title': 'Past Event 1',
+        'date': 'Oct 1, 2024',
+        'image': 'assets/images/s40image14.jpg',
+      },
+      {
+        'title': 'Past Event 2',
+        'date': 'Oct 8, 2024',
+        'image': 'assets/images/s40image15.jpg',
+      },
+    ];
+
+    return SizedBox(
+      height: 160,
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        scrollDirection: Axis.horizontal,
+        itemCount: items.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 16),
+        itemBuilder: (context, index) {
+          final item = items[index];
+          return SizedBox(
+            width: 160,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      image: DecorationImage(
+                        image: AssetImage(item['image'] as String),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  item['title'] as String,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                    color: AppColors.darkText,
+                  ),
+                ),
+                Text(
+                  item['date'] as String,
+                  style: const TextStyle(
+                    color: AppColors.lightText,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
 }

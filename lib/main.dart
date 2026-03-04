@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       ),
 
       home:
-          const Screen2Onboarding1(), // 👈 Changed to the latest screen
+          const Screen44RegistrationSuccess(), // 👈 Changed to the latest screen
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import '../constants/app_colors.dart';
 import '../widgets/custom_button.dart';
 
@@ -43,23 +44,23 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
             ),
             actions: [
               IconButton(
-                icon: const Icon(Icons.ios_share, color: Colors.white),
+                icon: SvgPicture.asset(
+                  'assets/images/s32icon5share.svg',
+                  colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                  width: 42,
+                  height: 42,
+                ),
                 onPressed: () {},
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
                 decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xFF8B4513),
-                      Color(0xFF191923),
-                    ], // Gradient based on UI
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/s41image1.jpg'),
+                    fit: BoxFit.cover,
                   ),
                 ),
-                // TODO: Add Image.asset or Image.network here
               ),
             ),
           ),
@@ -160,6 +161,42 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
           ),
         ],
       ),
+      bottomNavigationBar: Container(
+        height: 65,
+        decoration: const BoxDecoration(
+          color: AppColors.background,
+          border: Border(top: BorderSide(color: Color(0xFFEEEEEE), width: 1)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            SvgPicture.asset(
+              'assets/images/s32icon1home.svg',
+              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              width: 46,
+              height: 46,
+            ),
+            SvgPicture.asset(
+              'assets/images/s40iconexplore.svg',
+              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              width: 44,
+              height: 44,
+            ),
+            SvgPicture.asset(
+              'assets/images/s41iconeventbold.svg',
+              colorFilter: const ColorFilter.mode(AppColors.darkText, BlendMode.srcIn),
+              width: 44,
+              height: 44,
+            ),
+            SvgPicture.asset(
+              'assets/images/s32icon4profile.svg',
+              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              width: 44,
+              height: 44,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -228,10 +265,7 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
               CircleAvatar(
                 radius: 20,
                 backgroundColor: AppColors.heroPlaceholderDark,
-                child: const Text(
-                  'IE',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
+                backgroundImage: const AssetImage('assets/images/s41image2.jpg'),
               ),
               const SizedBox(width: 12),
               const Column(
@@ -329,7 +363,7 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
             child: CircleAvatar(
               radius: 18,
               backgroundColor: AppColors.avatarGreen1,
-              child: Icon(Icons.person, color: Colors.white, size: 20),
+              child: const Icon(Icons.person, color: Colors.white, size: 20),
             ),
           ),
           Positioned(
@@ -342,7 +376,7 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
               child: CircleAvatar(
                 radius: 16,
                 backgroundColor: AppColors.avatarGreen2,
-                child: Icon(Icons.person, color: Colors.white, size: 18),
+                child: const Icon(Icons.person, color: Colors.white, size: 18),
               ),
             ),
           ),
@@ -356,7 +390,7 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
               child: CircleAvatar(
                 radius: 16,
                 backgroundColor: AppColors.avatarGrey,
-                child: Icon(Icons.person, color: Colors.white, size: 18),
+                child: const Icon(Icons.person, color: Colors.white, size: 18),
               ),
             ),
           ),
@@ -394,25 +428,38 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
 
   Widget _buildSimilarEventsList() {
     return SizedBox(
-      height: 140,
+      height: 160,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: 2,
+        itemCount: 4,
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
-          final titles = ['AI in Business', 'Design Thinking\nWorkshop'];
-          final dates = ['Oct 15', 'Nov 5'];
-          final colors = [0xFFEBD3C6, 0xFF5D5144];
+          final titles = [
+            'AI in Business',
+            'Design Thinking Workshop',
+            'Sustainable Energy Expo',
+            'Cybersecurity Summit',
+          ];
+          final dates = ['Oct 15', 'Nov 5', 'Nov 20', 'Dec 12'];
+          final images = [
+            'assets/images/s40image6.jpg',
+            'assets/images/s40image11.jpg',
+            'assets/images/s41image3.jpg', // Added
+            'assets/images/s41image4.jpg', // Added
+          ];
           return SizedBox(
             width: 160,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: 80,
+                  height: 100,
                   decoration: BoxDecoration(
-                    color: Color(colors[index]),
                     borderRadius: BorderRadius.circular(12),
+                    image: DecorationImage(
+                      image: AssetImage(images[index]),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -422,7 +469,8 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
                     fontWeight: FontWeight.bold,
                     fontSize: 13,
                   ),
-                  maxLines: 2,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   dates[index],

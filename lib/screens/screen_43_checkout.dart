@@ -111,9 +111,10 @@ class _Screen43CheckoutState extends State<Screen43Checkout> {
 
             // Promo Code
             _buildSectionTitle('Promo Code'),
-            const SizedBox(height: 12),
+            const SizedBox(height: 6),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              //crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const Expanded(
                   child: OutlinedTextField(
@@ -122,6 +123,8 @@ class _Screen43CheckoutState extends State<Screen43Checkout> {
                   ),
                 ),
                 const SizedBox(width: 12),
+
+
                 SizedBox(
                   height: 48,
                   child: ElevatedButton(
