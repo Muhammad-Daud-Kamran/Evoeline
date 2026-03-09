@@ -56,25 +56,37 @@ class Screen40DiscoverEvents extends StatelessWidget {
           children: [
             SvgPicture.asset(
               'assets/images/s32icon1home.svg',
-              colorFilter: const ColorFilter.mode(AppColors.darkText, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.darkText,
+                BlendMode.srcIn,
+              ),
               width: 46,
               height: 46,
             ),
             SvgPicture.asset(
               'assets/images/s40iconexplore.svg',
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.lightText,
+                BlendMode.srcIn,
+              ),
               width: 44,
               height: 44,
             ),
             SvgPicture.asset(
               'assets/images/s40iconfav.svg',
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.lightText,
+                BlendMode.srcIn,
+              ),
               width: 44,
               height: 44,
             ),
             SvgPicture.asset(
               'assets/images/s32icon4profile.svg',
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.lightText,
+                BlendMode.srcIn,
+              ),
               width: 44,
               height: 44,
             ),
@@ -156,7 +168,7 @@ class Screen40DiscoverEvents extends StatelessWidget {
   /// Horizontal list of Events Near You
   Widget _buildEventsNearYouList() {
     return SizedBox(
-      height: 180,
+      height: 260,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         scrollDirection: Axis.horizontal,
@@ -165,13 +177,19 @@ class Screen40DiscoverEvents extends StatelessWidget {
         itemBuilder: (context, index) {
           final List<String> titles = ['Tech Meetup', 'Business Network'];
           final List<String> dates = ['Oct 26, 2024', 'Nov 15, 2024'];
+          final List<String> categories = ['Technology', 'Business'];
+          final List<String> descriptions = [
+            'A premier gathering for tech enthusiasts and innovators.',
+            'Connect with local and regional business leaders.',
+          ];
+          final List<String> prices = ['Free', '\$20.00'];
           final List<String> images = [
             'assets/images/s40image1.jpg',
             'assets/images/s40image2.png',
           ];
 
           return SizedBox(
-            width: 200,
+            width: 220,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -181,7 +199,7 @@ class Screen40DiscoverEvents extends StatelessWidget {
                       color: const Color(0xFFF5F5F5),
                       borderRadius: BorderRadius.circular(16),
                       image: DecorationImage(
-                        image: AssetImage(images[index]),
+                        image: AssetImage(images[index]), // Acts as bannerImage
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -189,19 +207,55 @@ class Screen40DiscoverEvents extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 Text(
+                  categories[index].toUpperCase(),
+                  style: const TextStyle(
+                    color: AppColors.primaryGreen,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
                   titles[index],
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                     color: AppColors.darkText,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
+                const SizedBox(height: 4),
                 Text(
-                  dates[index],
+                  descriptions[index],
                   style: const TextStyle(
                     color: AppColors.lightText,
                     fontSize: 12,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      dates[index],
+                      style: const TextStyle(
+                        color: AppColors.lightText,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      prices[index],
+                      style: const TextStyle(
+                        color: AppColors.darkText,
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -214,7 +268,7 @@ class Screen40DiscoverEvents extends StatelessWidget {
   /// Trending Now Horizontal List
   Widget _buildTrendingNowList() {
     return SizedBox(
-      height: 260,
+      height: 310,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         scrollDirection: Axis.horizontal,
@@ -222,14 +276,19 @@ class Screen40DiscoverEvents extends StatelessWidget {
         separatorBuilder: (_, __) => const SizedBox(width: 16),
         itemBuilder: (context, index) {
           final List<String> titles = ['Future of Tech', 'Global Business'];
-          final List<String> subtitles = ['TechCon', 'BizSummit'];
+          final List<String> categories = ['Technology', 'Business'];
+          final List<String> descriptions = [
+            'Explore the frontier of emerging technologies.',
+            'Strategies for succeeding in a globalized economy.',
+          ];
+          final List<String> prices = ['\$150.00', 'Free'];
           final List<String> images = [
             'assets/images/s40image3.jpg',
             'assets/images/s40image4.png',
           ];
 
           return Container(
-            width: 240,
+            width: 260,
             decoration: BoxDecoration(
               color: AppColors.background,
               borderRadius: BorderRadius.circular(20),
@@ -245,7 +304,7 @@ class Screen40DiscoverEvents extends StatelessWidget {
                         top: Radius.circular(20),
                       ),
                       image: DecorationImage(
-                        image: AssetImage(images[index]),
+                        image: AssetImage(images[index]), // bannerImage
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -257,42 +316,70 @@ class Screen40DiscoverEvents extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
+                        categories[index].toUpperCase(),
+                        style: const TextStyle(
+                          color: AppColors.primaryGreen,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.0,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
                         titles[index],
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                           color: AppColors.darkText,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
+                      const SizedBox(height: 4),
                       Text(
-                        subtitles[index],
+                        descriptions[index],
                         style: const TextStyle(
                           color: AppColors.lightText,
-                          fontSize: 13,
+                          fontSize: 12,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 40,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFEDF2F4),
-                            foregroundColor: AppColors.darkText,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: const Text(
-                            'Register',
-                            style: TextStyle(
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            prices[index],
+                            style: const TextStyle(
+                              color: AppColors.darkText,
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
+                          SizedBox(
+                            width: 100,
+                            height: 36,
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFEDF2F4),
+                                foregroundColor: AppColors.darkText,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: const Text(
+                                'Register',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -357,32 +444,50 @@ class Screen40DiscoverEvents extends StatelessWidget {
     final items = [
       {
         'title': 'AI in Business',
-        'time': 'Oct 28, 2024 · 9:00 AM',
+        'time': 'Oct 28',
+        'category': 'Technology',
+        'description': 'AI implications in business.',
+        'price': 'Free',
         'image': 'assets/images/s40image5.jpg',
       },
       {
         'title': 'Startup Pitch Night',
-        'time': 'Nov 2, 2024 · 6:00 PM',
+        'time': 'Nov 2',
+        'category': 'Business',
+        'description': 'Watch startups pitch.',
+        'price': '\$10.00',
         'image': 'assets/images/s40image6.jpg',
       },
       {
         'title': 'Healthcare Innovation',
-        'time': 'Nov 10, 2024 · 10:30 AM',
+        'time': 'Nov 10',
+        'category': 'Health',
+        'description': 'New medtech.',
+        'price': 'Free',
         'image': 'assets/images/s40image7.jpg',
       },
       {
         'title': 'Digital Marketing Workshop',
-        'time': 'Nov 18, 2024 · 2:00 PM',
+        'time': 'Nov 18',
+        'category': 'Marketing',
+        'description': 'SEO and SEM.',
+        'price': '\$25.00',
         'image': 'assets/images/s40image8.jpg',
       },
       {
         'title': 'FinTech Conference',
-        'time': 'Nov 25, 2024 · 9:00 AM',
+        'time': 'Nov 25',
+        'category': 'Finance',
+        'description': 'Future of money.',
+        'price': '\$100.00',
         'image': 'assets/images/s40image9.jpg',
       },
       {
         'title': 'Design Thinking Seminar',
-        'time': 'Dec 2, 2024 · 1:00 PM',
+        'time': 'Dec 2',
+        'category': 'Design',
+        'description': 'UX patterns.',
+        'price': 'Free',
         'image': 'assets/images/s40image10.jpg',
       },
     ];
@@ -397,7 +502,8 @@ class Screen40DiscoverEvents extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 16,
           mainAxisSpacing: 20,
-          childAspectRatio: 1.1, // Matches grid image style
+          childAspectRatio:
+              0.60, // Changed from 1.1 to fit more text vertically
         ),
         itemBuilder: (context, index) {
           final item = items[index];
@@ -417,6 +523,16 @@ class Screen40DiscoverEvents extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
+                (item['category'] as String).toUpperCase(),
+                style: const TextStyle(
+                  color: AppColors.primaryGreen,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
                 item['title'] as String,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
@@ -426,14 +542,38 @@ class Screen40DiscoverEvents extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
+              const SizedBox(height: 2),
               Text(
-                item['time'] as String,
+                item['description'] as String,
                 style: const TextStyle(
                   color: AppColors.lightText,
                   fontSize: 11,
                 ),
-                maxLines: 1,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 6),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    item['time'] as String,
+                    style: const TextStyle(
+                      color: AppColors.lightText,
+                      fontSize: 11,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    item['price'] as String,
+                    style: const TextStyle(
+                      color: AppColors.darkText,
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             ],
           );
@@ -448,17 +588,23 @@ class Screen40DiscoverEvents extends StatelessWidget {
       {
         'title': 'AI Workshop',
         'date': 'Oct 29, 2024',
+        'category': 'Technology',
+        'description': 'Hands-on AI model building.',
+        'price': '\$50.00',
         'image': 'assets/images/s40image11.jpg',
       },
       {
         'title': 'Marketing Seminar',
         'date': 'Nov 5, 2024',
+        'category': 'Marketing',
+        'description': 'Growth hacking strategies.',
+        'price': 'Free',
         'image': 'assets/images/s40image12.jpg',
       },
     ];
 
     return SizedBox(
-      height: 160,
+      height: 250,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         scrollDirection: Axis.horizontal,
@@ -467,7 +613,7 @@ class Screen40DiscoverEvents extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = items[index];
           return SizedBox(
-            width: 160,
+            width: 200, // Widened slightly to fit description text
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -476,13 +622,25 @@ class Screen40DiscoverEvents extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       image: DecorationImage(
-                        image: AssetImage(item['image'] as String),
+                        image: AssetImage(
+                          item['image'] as String,
+                        ), // bannerImage
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
+                Text(
+                  (item['category'] as String).toUpperCase(),
+                  style: const TextStyle(
+                    color: AppColors.primaryGreen,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+                const SizedBox(height: 4),
                 Text(
                   item['title'] as String,
                   style: const TextStyle(
@@ -491,12 +649,36 @@ class Screen40DiscoverEvents extends StatelessWidget {
                     color: AppColors.darkText,
                   ),
                 ),
+                const SizedBox(height: 4),
                 Text(
-                  item['date'] as String,
+                  item['description'] as String,
                   style: const TextStyle(
                     color: AppColors.lightText,
-                    fontSize: 11,
+                    fontSize: 12,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      item['date'] as String,
+                      style: const TextStyle(
+                        color: AppColors.lightText,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      item['price'] as String,
+                      style: const TextStyle(
+                        color: AppColors.darkText,
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -512,17 +694,23 @@ class Screen40DiscoverEvents extends StatelessWidget {
       {
         'title': 'Past Event 1',
         'date': 'Oct 1, 2024',
+        'category': 'Networking',
+        'description': 'Speed networking session.',
+        'price': 'Free',
         'image': 'assets/images/s40image14.jpg',
       },
       {
         'title': 'Past Event 2',
         'date': 'Oct 8, 2024',
+        'category': 'Workshop',
+        'description': 'Building scalable apps.',
+        'price': '\$15.00',
         'image': 'assets/images/s40image15.jpg',
       },
     ];
 
     return SizedBox(
-      height: 160,
+      height: 250,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         scrollDirection: Axis.horizontal,
@@ -531,7 +719,7 @@ class Screen40DiscoverEvents extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = items[index];
           return SizedBox(
-            width: 160,
+            width: 200,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -540,13 +728,25 @@ class Screen40DiscoverEvents extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       image: DecorationImage(
-                        image: AssetImage(item['image'] as String),
+                        image: AssetImage(
+                          item['image'] as String,
+                        ), // bannerImage
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
+                Text(
+                  (item['category'] as String).toUpperCase(),
+                  style: const TextStyle(
+                    color: AppColors.primaryGreen,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+                const SizedBox(height: 4),
                 Text(
                   item['title'] as String,
                   style: const TextStyle(
@@ -555,12 +755,36 @@ class Screen40DiscoverEvents extends StatelessWidget {
                     color: AppColors.darkText,
                   ),
                 ),
+                const SizedBox(height: 4),
                 Text(
-                  item['date'] as String,
+                  item['description'] as String,
                   style: const TextStyle(
                     color: AppColors.lightText,
-                    fontSize: 11,
+                    fontSize: 12,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      item['date'] as String,
+                      style: const TextStyle(
+                        color: AppColors.lightText,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      item['price'] as String,
+                      style: const TextStyle(
+                        color: AppColors.darkText,
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -569,5 +793,4 @@ class Screen40DiscoverEvents extends StatelessWidget {
       ),
     );
   }
-
 }

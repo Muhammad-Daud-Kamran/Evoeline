@@ -58,7 +58,10 @@ class Screen37VendorProfile extends StatelessWidget {
                       radius: 18,
                       child: SvgPicture.asset(
                         'assets/images/s32icon5share.svg',
-                        colorFilter: const ColorFilter.mode(AppColors.darkText, BlendMode.srcIn),
+                        colorFilter: const ColorFilter.mode(
+                          AppColors.darkText,
+                          BlendMode.srcIn,
+                        ),
                         width: 33,
                         height: 33,
                       ),
@@ -77,7 +80,9 @@ class Screen37VendorProfile extends StatelessWidget {
                     child: const CircleAvatar(
                       radius: 36,
                       backgroundColor: Color(0xFFBCAAA4), // Brownish
-                      backgroundImage: AssetImage('assets/images/s37image2.jpg'),
+                      backgroundImage: AssetImage(
+                        'assets/images/s37image2.jpg',
+                      ),
                     ),
                   ),
                 ),
@@ -105,16 +110,43 @@ class Screen37VendorProfile extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.lightGreyBackground,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Text('Catering Service', style: AppTextStyles.label),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.lightGreyBackground,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: const Text(
+                          'Catering Service',
+                          style: AppTextStyles.label,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      // Added Status Badge based on Schema
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.green.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Text(
+                          'Active',
+                          style: AppTextStyles.label.copyWith(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -173,7 +205,6 @@ class Screen37VendorProfile extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                       ),
-
                     ),
                   ),
                 ],
@@ -217,6 +248,11 @@ class Screen37VendorProfile extends StatelessWidget {
                   _buildStatRow('Established', '2010'),
                   const SizedBox(height: 12),
                   _buildStatRow('Team Size', '25+'),
+                  const SizedBox(height: 12),
+                  // Added Business Stats based on Schema
+                  _buildStatRow('Total Bookings', '45'),
+                  const SizedBox(height: 12),
+                  _buildStatRow('Completed Bookings', '42'),
                   const SizedBox(height: 24),
 
                   // Service Areas
@@ -252,14 +288,32 @@ class Screen37VendorProfile extends StatelessWidget {
                     style: AppTextStyles.heading3,
                   ),
                   const SizedBox(height: 16),
-                  _buildContactRow(Icons.phone_outlined, '(555) 123-4567'),
+                  // Primary Phone
+                  _buildContactRow(Icons.phone_outlined, '+92 300 1234567'),
                   const SizedBox(height: 16),
+                  // Secondary Phone
                   _buildContactRow(
-                    Icons.mail_outline,
-                    'info@cuisinecatering.com',
+                    Icons.phone_android_outlined,
+                    '+92 300 1234568',
                   ),
                   const SizedBox(height: 16),
-                  _buildContactRow(Icons.language, 'www.cuisinecatering.com'),
+                  // Business Email
+                  _buildContactRow(
+                    Icons.mail_outline,
+                    'info@perfectcatering.pk',
+                  ),
+                  const SizedBox(height: 16),
+                  // Website
+                  _buildContactRow(
+                    Icons.language,
+                    'https://perfectcatering.pk',
+                  ),
+                  const SizedBox(height: 16),
+                  // Address
+                  _buildContactRow(
+                    Icons.location_on_outlined,
+                    '123 Commercial Area, Karachi, Pakistan',
+                  ),
                   const SizedBox(height: 32),
 
                   // Bottom Action Button
@@ -359,6 +413,7 @@ class Screen37VendorProfile extends StatelessWidget {
 
   Widget _buildContactRow(IconData icon, String text) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           padding: const EdgeInsets.all(8),
@@ -369,7 +424,17 @@ class Screen37VendorProfile extends StatelessWidget {
           child: Icon(icon, color: AppColors.darkText, size: 20),
         ),
         const SizedBox(width: 16),
-        Text(text, style: AppTextStyles.bodyText),
+        Expanded(
+          child: Container(
+            margin: const EdgeInsets.only(top: 8),
+            child: Text(
+              text,
+              style: AppTextStyles.bodyText,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
       ],
     );
   }

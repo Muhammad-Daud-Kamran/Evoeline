@@ -46,7 +46,10 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
               IconButton(
                 icon: SvgPicture.asset(
                   'assets/images/s32icon5share.svg',
-                  colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                  colorFilter: const ColorFilter.mode(
+                    Colors.white,
+                    BlendMode.srcIn,
+                  ),
                   width: 42,
                   height: 42,
                 ),
@@ -71,7 +74,17 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Event Title & Organizer
+                  // Category, Event Title & Organizer
+                  const Text(
+                    'TECHNOLOGY',
+                    style: TextStyle(
+                      color: AppColors.primaryGreen,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
                   const Text(
                     'Tech Summit 2024',
                     style: TextStyle(
@@ -87,7 +100,45 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
                   ),
                   const SizedBox(height: 16),
 
-                  // Action Buttons
+                  // Event Schedule & Location (Essential Info)
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.calendar_today,
+                        size: 16,
+                        color: AppColors.iconColor,
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'Oct 15, 2024 • 9:00 AM - 5:00 PM',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: AppColors.darkText,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on,
+                        size: 16,
+                        color: AppColors.iconColor,
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'San Francisco Convention Center',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: AppColors.darkText,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Action Buttons & Pricing
                   Row(
                     children: [
                       Expanded(
@@ -110,7 +161,11 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: CustomButton(text: 'Register', onPressed: () {}),
+                        flex: 2,
+                        child: CustomButton(
+                          text: 'Register - \$150.00',
+                          onPressed: () {},
+                        ),
                       ),
                     ],
                   ),
@@ -172,25 +227,37 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
           children: [
             SvgPicture.asset(
               'assets/images/s32icon1home.svg',
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.lightText,
+                BlendMode.srcIn,
+              ),
               width: 46,
               height: 46,
             ),
             SvgPicture.asset(
               'assets/images/s40iconexplore.svg',
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.lightText,
+                BlendMode.srcIn,
+              ),
               width: 44,
               height: 44,
             ),
             SvgPicture.asset(
               'assets/images/s41iconeventbold.svg',
-              colorFilter: const ColorFilter.mode(AppColors.darkText, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.darkText,
+                BlendMode.srcIn,
+              ),
               width: 44,
               height: 44,
             ),
             SvgPicture.asset(
               'assets/images/s32icon4profile.svg',
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.lightText,
+                BlendMode.srcIn,
+              ),
               width: 44,
               height: 44,
             ),
@@ -265,7 +332,9 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
               CircleAvatar(
                 radius: 20,
                 backgroundColor: AppColors.heroPlaceholderDark,
-                backgroundImage: const AssetImage('assets/images/s41image2.jpg'),
+                backgroundImage: const AssetImage(
+                  'assets/images/s41image2.jpg',
+                ),
               ),
               const SizedBox(width: 12),
               const Column(

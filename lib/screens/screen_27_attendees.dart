@@ -57,7 +57,7 @@ class Screen27Attendees extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
 
-                // Filters Scrollable Row
+                // Filters
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -89,7 +89,6 @@ class Screen27Attendees extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
 
-                // Export Button Overlay Alternative
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
@@ -107,53 +106,49 @@ class Screen27Attendees extends StatelessWidget {
             ),
           ),
 
-          // Attendee List
+          // Attendee List (Updated with Status and Payment from Schema)
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: const [
-                // TODO: Replace names and emails with real variables.
-                // To display an avatar, pass `avatarImagePath` like below:
-                // AttendeeListItem(name: 'Olivia Smith', email: 'olivia.smith@email.com', isCheckedIn: true, avatarImagePath: 'assets/images/user_olivia.png'),
                 AttendeeListItem(
                   name: 'Olivia Smith',
                   subtitle: 'olivia.smith@email.com',
                   isCheckedIn: true,
+                  statusText: 'Checked In',
+                  paymentStatus: 'Paid',
+                  paymentAmount: 'PKR 1500',
                 ),
                 AttendeeListItem(
                   name: 'Liam Johnson',
                   subtitle: 'liam.johnson@email.com',
                   isCheckedIn: true,
+                  statusText: 'Confirmed',
+                  paymentStatus: 'Paid',
+                  paymentAmount: 'PKR 2000',
                 ),
                 AttendeeListItem(
                   name: 'Emma Brown',
                   subtitle: 'emma.brown@email.com',
-                  isCheckedIn: true,
+                  isCheckedIn: false,
+                  statusText: 'Confirmed',
+                  paymentStatus: 'Paid',
+                  paymentAmount: 'PKR 1500',
                 ),
                 AttendeeListItem(
                   name: 'Noah Davis',
                   subtitle: 'noah.davis@email.com',
-                  isCheckedIn: true,
-                ),
-                AttendeeListItem(
-                  name: 'Isabella Wilson',
-                  subtitle: 'isabella.wilson@email.com',
-                  isCheckedIn: true,
-                ),
-                AttendeeListItem(
-                  name: 'James Garcia',
-                  subtitle: 'james.garcia@email.com',
-                  isCheckedIn: true,
+                  isCheckedIn: false,
+                  statusText: 'Pending',
+                  paymentStatus: 'Unpaid',
                 ),
                 AttendeeListItem(
                   name: 'Sophia Rodriguez',
                   subtitle: 'sophia.rodriguez@email.com',
                   isCheckedIn: true,
-                ),
-                AttendeeListItem(
-                  name: 'Benjamin Lee',
-                  subtitle: 'benjamin.lee@email.com',
-                  isCheckedIn: true,
+                  statusText: 'Checked In',
+                  paymentStatus: 'Paid',
+                  paymentAmount: 'PKR 2000',
                 ),
               ],
             ),

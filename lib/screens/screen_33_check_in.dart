@@ -6,7 +6,7 @@ import '../widgets/solid_stat_card.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/attendee_list_item.dart';
 
-/// Screen 29: Check-in
+
 class Screen33CheckIn extends StatelessWidget {
   const Screen33CheckIn({Key? key}) : super(key: key);
   @override

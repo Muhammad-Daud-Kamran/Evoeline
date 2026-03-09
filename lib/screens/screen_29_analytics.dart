@@ -7,7 +7,7 @@ import '../widgets/analytics_stat_card.dart';
 import '../widgets/horizontal_progress_bar.dart';
 import '../widgets/analytics_chart_mockups.dart';
 
-/// Screen 30: Analytics
+
 class Screen29Analytics extends StatelessWidget {
   const Screen29Analytics({super.key});
 

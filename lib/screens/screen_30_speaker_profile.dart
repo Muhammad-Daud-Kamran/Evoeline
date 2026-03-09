@@ -54,25 +54,45 @@ class Screen30SpeakerProfile extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // Social Links Row - Changed to Row to align horizontally
-            Column(
+            // Social Links Row
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _SocialLink(
                   svgPath: 'assets/images/linkedin.svg',
                   label: 'LinkedIn',
                 ),
-                const SizedBox(height: 34),
+                const SizedBox(width: 40), 
                 _SocialLink(
                   svgPath: 'assets/images/twitter.svg',
                   label: 'Twitter',
                 ),
-                const SizedBox(height: 34),
+                const SizedBox(width: 40),
                 _SocialLink(
                   svgPath: 'assets/images/website.svg',
                   label: 'Website',
                 ),
               ],
+            ),
+            const SizedBox(height: 32),
+
+            // NEW: Bio Section (Schema: bio)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('About Speaker', style: AppTextStyles.heading3),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Dr. Anya Sharma is a visionary leader with over 10 years of experience in mobile development and tech innovation. She currently serves as the Chief Innovation Officer at InnovateTech Solutions, where she leads the development of cutting-edge solutions for global enterprises.',
+                    style: AppTextStyles.bodyText.copyWith(
+                      color: AppColors.darkText,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 32),
 
@@ -118,23 +138,23 @@ class Screen30SpeakerProfile extends StatelessWidget {
                   const Text('Past Events', style: AppTextStyles.heading2),
                   const SizedBox(height: 16),
                   SizedBox(
-                    height: 200, // Increased height to prevent overflow
+                    height: 220, 
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: const [
                         PastEventCard(
-                            imagePath: 'assets/images/screen30image5.jpg',
+                            imagePath: 'assets/images/screen29image1.jpg',
                             title: 'Tech Summit 2023',
                             year: '2023'),
                         PastEventCard(
                           title: 'Innovate Conference 2022',
-                          imagePath: 'assets/images/screen30image6.jpg',
+                          imagePath: 'assets/images/screen26image1.jpg',
                           year: '2022',
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 36),
 
                   // Actions
                   CustomButton(

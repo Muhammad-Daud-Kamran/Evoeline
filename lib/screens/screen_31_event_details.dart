@@ -164,6 +164,25 @@ class Screen31EventDetails extends StatelessWidget {
             ),
             const SizedBox(height: 32),
 
+            // NEW: Sponsors Section (Schema Addition)
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Sponsors', style: AppTextStyles.heading2),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              height: 100,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  _buildSponsorCard('Innovate Solutions'),
+                  _buildSponsorCard('FutureTech'),
+                  _buildSponsorCard('Global Partners'),
+                ],
+              ),
+            ),
+            const SizedBox(height: 32),
+
             // Venue Information
             const Align(
               alignment: Alignment.centerLeft,
@@ -207,7 +226,7 @@ class Screen31EventDetails extends StatelessWidget {
             ),
             const SizedBox(height: 48),
 
-            // Action Icons — pass your svg paths here 👇
+            // Action Icons
             const _BuildActionIcon(svgPath: 'assets/images/whatsapp.svg'),
             const SizedBox(height: 24),
             const _BuildActionIcon(svgPath: 'assets/images/linkedin.svg'),
@@ -232,6 +251,31 @@ class Screen31EventDetails extends StatelessWidget {
             const SizedBox(height: 32),
           ],
         ),
+      ),
+    );
+  }
+
+  // Helper for Sponsor Cards
+  Widget _buildSponsorCard(String name) {
+    return Container(
+      width: 140,
+      margin: const EdgeInsets.only(right: 16),
+      decoration: BoxDecoration(
+        color: AppColors.lightGreyBackground,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.dividerColor),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.business, color: AppColors.lightText, size: 24),
+          const SizedBox(height: 8),
+          Text(
+            name,
+            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }

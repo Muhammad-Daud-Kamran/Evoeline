@@ -22,9 +22,12 @@ class Screen32Register extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon:  SvgPicture.asset(
+            icon: SvgPicture.asset(
               'assets/images/s32icon5share.svg',
-              colorFilter: const ColorFilter.mode(AppColors.darkText, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.darkText,
+                BlendMode.srcIn,
+              ),
               width: 44,
               height: 44,
             ),
@@ -40,12 +43,12 @@ class Screen32Register extends StatelessWidget {
             Container(
               height: 200,
               width: double.infinity,
-               decoration: const BoxDecoration(
-                 image: DecorationImage(
-                   image: AssetImage('assets/images/screen32img1.jpg'), 
-                   fit: BoxFit.cover
-                 )
-               ),
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/screen32img1.jpg'),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
 
             Padding(
@@ -110,6 +113,57 @@ class Screen32Register extends StatelessWidget {
                   const SizedBox(height: 24),
 
                   // Form Fields
+                  // Profile Image Upload (From Schema)
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        // TODO: Implement image upload logic
+                      },
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              color: AppColors.lightGreyBackground,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: AppColors.dividerColor,
+                                width: 1,
+                              ),
+                            ),
+                            child: const Icon(
+                              Icons.person_outline,
+                              size: 40,
+                              color: AppColors.lightText,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: AppColors.primaryGreen,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 2,
+                                ),
+                              ),
+                              child: const Icon(
+                                Icons.camera_alt,
+                                size: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
                   const OutlinedTextField(
                     label: 'Full Name',
                     hintText: 'Enter yourfullname',
@@ -125,6 +179,38 @@ class Screen32Register extends StatelessWidget {
                     hintText: 'Enter yourphonenumber',
                   ),
                   const SizedBox(height: 16),
+
+                  // Gender Field (From Schema)
+                  const OutlinedTextField(
+                    label: 'Gender',
+                    hintText: 'Select your gender',
+                    trailingIcon: Icon(
+                      Icons.arrow_drop_down,
+                      color: AppColors.iconColor,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Location Fields (From Schema)
+                  const Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedTextField(
+                          label: 'City',
+                          hintText: 'Enter city',
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      Expanded(
+                        child: OutlinedTextField(
+                          label: 'Country',
+                          hintText: 'Enter country',
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+
                   const OutlinedTextField(
                     label: 'Dietary Preferences',
                     hintText: 'Select',
@@ -180,25 +266,37 @@ class Screen32Register extends StatelessWidget {
           children: [
             SvgPicture.asset(
               'assets/images/s32icon1home.svg',
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.lightText,
+                BlendMode.srcIn,
+              ),
               width: 44,
               height: 44,
             ),
             SvgPicture.asset(
               'assets/images/s32icon2events.svg',
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.lightText,
+                BlendMode.srcIn,
+              ),
               width: 44,
               height: 44,
             ),
             SvgPicture.asset(
               'assets/images/s32icon3tickets.svg',
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.lightText,
+                BlendMode.srcIn,
+              ),
               width: 44,
               height: 44,
             ),
             SvgPicture.asset(
               'assets/images/s32icon4profile.svg',
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.lightText,
+                BlendMode.srcIn,
+              ),
               width: 44,
               height: 44,
             ),

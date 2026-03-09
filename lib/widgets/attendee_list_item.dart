@@ -7,8 +7,11 @@ class AttendeeListItem extends StatelessWidget {
   final String name;
   final String subtitle;
   final bool isCheckedIn;
-  final String? avatarImagePath; // E.g. 'assets/images/user1.png'
+  final String? avatarImagePath;
   final Color? subtitleColor;
+  final String? statusText; // Schema: confirmed, pending, checked_in, etc.
+  final String? paymentStatus; // Schema: paid, unpaid, partially_paid
+  final String? paymentAmount;
 
   const AttendeeListItem({
     Key? key,
@@ -17,6 +20,9 @@ class AttendeeListItem extends StatelessWidget {
     required this.isCheckedIn,
     this.avatarImagePath,
     this.subtitleColor,
+    this.statusText,
+    this.paymentStatus,
+    this.paymentAmount,
   }) : super(key: key);
 
   @override
@@ -53,6 +59,23 @@ class AttendeeListItem extends StatelessWidget {
                     color: subtitleColor ?? AppColors.primaryGreen,
                   ),
                 ),
+                if (statusText != null || paymentStatus != null) ...[
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      if (statusText != null)
+                        _buildBadge(statusText!, AppColors.primaryGreen.withOpacity(0.1), AppColors.primaryGreen),
+                      if (paymentStatus != null) ...[
+                        const SizedBox(width: 8),
+                        _buildBadge(
+                          '${paymentStatus!} ${paymentAmount != null ? "($paymentAmount)" : ""}',
+                          paymentStatus!.toLowerCase() == 'paid' ? Colors.blue.withOpacity(0.1) : Colors.orange.withOpacity(0.1),
+                          paymentStatus!.toLowerCase() == 'paid' ? Colors.blue : Colors.orange,
+                        ),
+                      ],
+                    ],
+                  ),
+                ],
               ],
             ),
           ),
@@ -67,6 +90,24 @@ class AttendeeListItem extends StatelessWidget {
               ),
             ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildBadge(String label, Color bgColor, Color textColor) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        label.toUpperCase(),
+        style: TextStyle(
+          color: textColor,
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

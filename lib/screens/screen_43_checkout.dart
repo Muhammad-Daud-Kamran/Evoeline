@@ -54,13 +54,25 @@ class _Screen43CheckoutState extends State<Screen43Checkout> {
             _buildTicketTypeCard(
               'General Admission',
               'Standard entry to the event',
+              '\$50.00',
+              150,
+              null,
             ),
             const SizedBox(height: 8),
-            _buildTicketTypeCard('VIP Access', 'Exclusive access to VIP areas'),
+            _buildTicketTypeCard(
+              'VIP Access',
+              'Exclusive access to VIP areas',
+              '\$150.00',
+              50,
+              'Ends Oct 10',
+            ),
             const SizedBox(height: 8),
             _buildTicketTypeCard(
               'Premium Pass',
               'All-inclusive premium experience',
+              '\$250.00',
+              20,
+              null,
             ),
             const SizedBox(height: 24),
 
@@ -98,15 +110,6 @@ class _Screen43CheckoutState extends State<Screen43Checkout> {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'Available: 100 tickets',
-              style: TextStyle(
-                color: AppColors.successGreen,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
             const SizedBox(height: 24),
 
             // Promo Code
@@ -123,7 +126,6 @@ class _Screen43CheckoutState extends State<Screen43Checkout> {
                   ),
                 ),
                 const SizedBox(width: 12),
-
 
                 SizedBox(
                   height: 48,
@@ -238,7 +240,13 @@ class _Screen43CheckoutState extends State<Screen43Checkout> {
     );
   }
 
-  Widget _buildTicketTypeCard(String title, String subtitle) {
+  Widget _buildTicketTypeCard(
+    String title,
+    String subtitle,
+    String price,
+    int availableSeats,
+    String? availableUntil,
+  ) {
     final bool isSelected = _selectedTicketType == title;
     return GestureDetector(
       onTap: () => setState(() => _selectedTicketType = title),
@@ -255,20 +263,32 @@ class _Screen43CheckoutState extends State<Screen43Checkout> {
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                      color: isSelected
-                          ? AppColors.darkText
-                          : AppColors.darkText,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: AppColors.darkText,
+                        ),
+                      ),
+                      Text(
+                        price,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: AppColors.darkText,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -278,16 +298,52 @@ class _Screen43CheckoutState extends State<Screen43Checkout> {
                       fontSize: 12,
                     ),
                   ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 8,
+                    children: [
+                      Text(
+                        '$availableSeats left',
+                        style: const TextStyle(
+                          color: AppColors.successGreen,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      if (availableUntil != null) ...[
+                        const Text(
+                          '•',
+                          style: TextStyle(
+                            color: AppColors.lightText,
+                            fontSize: 12,
+                          ),
+                        ),
+                        Text(
+                          availableUntil,
+                          style: const TextStyle(
+                            color: AppColors.lightText,
+                            fontSize: 12,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
                 ],
               ),
             ),
-            Icon(
-              isSelected
-                  ? Icons.radio_button_checked
-                  : Icons.radio_button_unchecked,
-              color: isSelected
-                  ? AppColors.primaryGreen
-                  : AppColors.dividerColor,
+            const SizedBox(width: 12),
+            Padding(
+              padding: const EdgeInsets.only(top: 2.0),
+              child: Icon(
+                isSelected
+                    ? Icons.radio_button_checked
+                    : Icons.radio_button_unchecked,
+                color: isSelected
+                    ? AppColors.primaryGreen
+                    : AppColors.dividerColor,
+              ),
             ),
           ],
         ),
