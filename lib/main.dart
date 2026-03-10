@@ -1,4 +1,3 @@
-
 import 'package:evoeline/screens/screen_23_registration.dart';
 import 'package:evoeline/screens/screen_24_review.dart';
 import 'package:evoeline/screens/screen_25_event_details.dart';
@@ -22,6 +21,24 @@ import 'package:evoeline/screens/screen_43_checkout.dart';
 import 'package:evoeline/screens/screen_44_registration_success.dart';
 import 'package:evoeline/screens1-22/screen_1_splash.dart';
 import 'package:evoeline/screens1-22/screen_2_onboarding_1.dart';
+import 'package:evoeline/screens1-22/screen_10_discover.dart';
+import 'package:evoeline/screens1-22/screen_11_notification_settings.dart';
+import 'package:evoeline/screens1-22/screen_12_my_certificates.dart';
+import 'package:evoeline/screens1-22/screen_13_certificate_details.dart';
+import 'package:evoeline/screens1-22/screen_14_settings.dart';
+import 'package:evoeline/screens1-22/screen_15_discover_list.dart';
+import 'package:evoeline/screens1-22/screen_16_analytics_dashboard.dart';
+import 'package:evoeline/screens1-22/screen_17_my_events.dart';
+import 'package:evoeline/screens1-22/screen_18_notifications.dart';
+import 'package:evoeline/screens1-22/screen_19_create_event_step_1.dart';
+import 'package:evoeline/screens1-22/screen_20_dashboard.dart';
+import 'package:evoeline/screens1-22/screen_21_create_event_step_2.dart';
+import 'package:evoeline/screens1-22/screen_22_create_event_step_3.dart';
+import 'package:evoeline/screens1-22/screen_3_onboarding_2.dart';
+import 'package:evoeline/screens1-22/screen_6_forgot_password.dart';
+import 'package:evoeline/screens1-22/screen_7_set_up_profile.dart';
+import 'package:evoeline/screens1-22/screen_8_profile.dart';
+import 'package:evoeline/widgets/discover_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -41,8 +58,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
 
-      home:
-          const Screen44RegistrationSuccess(), // 👈 Changed to the latest screen
+      home: const Screen8SetUpProfile(), // 👈 Changed to the latest screen
     );
   }
 }

@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 
+
 /// Centralized color palette extracted from the UI designs
 class AppColors {
   // Primary & Backgrounds
   static const Color primaryGreen = Color(0xFF43A047);
-  static const Color oliveGreen = Color(
-    0xFFA5A536,
-  ); // Used in Review Screen (Publish Event)
+  static const Color oliveGreen = Color(0xFFA5A536,); // Used in Review Screen (Publish Event)
   static const Color background = Color(0xFFFFFFFF);
   static const Color lightGreyBackground = Color(0xFFF5F5F5);
-  static const Color cardBackground = Color(
-    0xFFFBE9E7,
-  ); // Peach/Beige for registration cards
-
-  // Text Colors
+  static const Color cardBackground = Color(0xFFFBE9E7,); // Peach/Beige for registration cards // Text Colors
   static const Color darkText = Color(0xFF212121);
   static const Color lightText = Color(0xFF757575);
+  static const Color searchBarFillColor = Color(0xFFF5F5F5);
 
   // UI Elements
   static const Color dividerColor = Color(0xFFE0E0E0);
