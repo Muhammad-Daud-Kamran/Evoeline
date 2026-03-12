@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       ),
 
       home:
-          const Screen44RegistrationSuccess(), // 👈 Changed to the latest screen
+          const Screen29Analytics(), // 👈 Changed to the latest screen
     );
   }
 }
