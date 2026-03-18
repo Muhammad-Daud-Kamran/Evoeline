@@ -15,6 +15,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod/src/framework.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_text_styles.dart';
 import '../../../models/registration_models/pricing_tier_model.dart';
@@ -26,6 +27,8 @@ import '../../../widgets/stat_card_with_image.dart';
 // ── ConsumerWidget = StatelessWidget that can use Riverpod
 class Screen25EventDetails extends ConsumerWidget {
   const Screen25EventDetails({Key? key}) : super(key: key);
+
+  ProviderListenable get eventProvider => null;
 
   @override
   // WidgetRef ref = your connection to the provider
