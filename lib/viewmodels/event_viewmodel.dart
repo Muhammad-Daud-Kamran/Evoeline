@@ -1,43 +1,14 @@
-// lib/viewmodels/event_viewmodel.dart
-
-// ─────────────────────────────────────────────────────
-// WHAT IS THIS FILE?
-// ViewModel for Screen 25 — Event Details
-//
-// CONTAINS:
-//   EventState       → snapshot of everything Screen 25 needs
-//   EventViewModel   → loads data + holds methods
-//   eventProvider    → connects both to the UI
-//
-// DATABASE: not connected yet — using dummy data
-// When Firebase is ready just replace _loadDummyEvent()
-// with a Firestore call inside loadEvent()
-// ─────────────────────────────────────────────────────
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/event_model.dart';
 import '../models/registration_models/pricing_tier_model.dart';
-import '../models/registration_models/discount_model.dart';
-import '../models/registration_models/custom_field_model.dart';
 
-// ═════════════════════════════════════════════════════
+// ─────────────────────────────────────────────────────
 // PART A — STATE CLASS
-// Holds everything Screen 25 needs to display
-// ═════════════════════════════════════════════════════
-
+// ─────────────────────────────────────────────────────
 class EventState {
-  // The main event object
-  // This is the EventModel that Screen 25 reads from
   final EventModel event;
-
-  // Loading state — shows spinner while data loads
   final bool isLoading;
-
-  // Error state — shows error message if load fails
   final String errorMessage;
-
-  // Active tab index — Overview=0, Attendees=1, Agenda=2, Vendors=3
-  // Kept in state because tab switching is UI behaviour
   final int activeTabIndex;
 
   const EventState({
@@ -47,7 +18,6 @@ class EventState {
     this.activeTabIndex = 0,
   });
 
-  // copyWith — create new state with only changed fields
   EventState copyWith({
     EventModel? event,
     bool? isLoading,
@@ -63,184 +33,84 @@ class EventState {
   }
 }
 
-// ═════════════════════════════════════════════════════
-// PART B — VIEWMODEL
-// All logic lives here — NO widgets, NO UI code
-// ═════════════════════════════════════════════════════
-
+// ─────────────────────────────────────────────────────
+// PART B — VIEWMODEL CLASS
+// ─────────────────────────────────────────────────────
 class EventViewModel extends Notifier<EventState> {
   @override
   EventState build() {
-    Future.microtask(loadEvent);
-    return EventState(event: EventModel.empty(), isLoading: true);
+    // Return empty state initially
+    return EventState(event: EventModel.empty());
   }
 
-  // ── Load Event ─────────────────────────────────────
-  // Called automatically when screen opens
-  // Replace Future.delayed with Firestore call later
+  // Load event data (Mock for now)
   Future<void> loadEvent() async {
-    // Show loading spinner
     state = state.copyWith(isLoading: true, errorMessage: '');
 
     try {
-      // Simulate network delay
-      // REPLACE THIS with Firestore:
-      // final doc = await FirebaseFirestore.instance
-      //     .collection('events')
-      //     .doc('EVT001')
-      //     .get();
-      // final event = EventModel.fromMap(doc.data()!);
-      await Future.delayed(const Duration(milliseconds: 800));
+      // Simulate API call
+      await Future.delayed(const Duration(seconds: 1));
 
-      // Load dummy event data matching the schema exactly
-      final event = _getDummyEvent();
+      // Mock Data reflecting the screenshots/requirements
+      final mockEvent = EventModel(
+        eventId: 'EVT001',
+        organizerId: 'ORG001',
+        title: 'Tech Summit 2024',
+        description:
+            'A premier tech conference featuring industry leaders, hands-on workshops, and networking opportunities. Join us for two days of innovation and inspiration.',
+        shortDescription: 'The biggest tech event of the year.',
+        category: 'Technology',
+        eventType: 'Conference',
+        format: 'Physical',
+        status: 'Published',
+        bannerImage: 'assets/images/event_banner.jpg',
+        galleryImages: ['assets/images/gallery1.jpg'],
+        startDate: '15 Apr 2024',
+        endDate: '16 Apr 2024',
+        startTime: '10:00 AM',
+        endTime: '05:00 PM',
+        venueName: 'Convention Center, NY',
+        address: '123 Innovation Way, NY',
+        totalSeats: 500,
+        availableSeats: 42,
+        registrations: 458,
+        isFree: false,
+        currency: 'PKR',
+        tiers: [
+          const PricingTierModel(
+            id: 'T1',
+            name: 'Early Bird',
+            price: 1500,
+            availableUntil: '2024-03-15',
+            seats: 100,
+          ),
+          const PricingTierModel(
+            id: 'T2',
+            name: 'Regular',
+            price: 2500,
+            availableUntil: '2024-04-10',
+            seats: 400,
+          ),
+        ],
+      );
 
-      // Update state → Screen 25 rebuilds automatically
-      state = state.copyWith(event: event, isLoading: false);
+      state = state.copyWith(isLoading: false, event: mockEvent);
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        errorMessage: 'Failed to load event. Please try again.',
+        errorMessage: 'Failed to load event details.',
       );
     }
   }
 
-  // ── Switch Tab ─────────────────────────────────────
-  // Called when user taps Overview/Attendees/Agenda/Vendors
   void switchTab(int index) {
     state = state.copyWith(activeTabIndex: index);
   }
-
-  // ── Dummy Event Data ───────────────────────────────
-  // All field values match the schema exactly
-  // Remove this method when Firebase is connected
-  EventModel _getDummyEvent() {
-    return EventModel(
-      // Core Identity
-      eventId: 'EVT001',
-      organizerId: 'U002',
-      title: 'Tech Summit 2024',
-      description:
-          'A premier tech conference featuring industry leaders, '
-          'workshops, and networking opportunities. Join us to '
-          'explore the future of AI, Cloud Computing, and '
-          'Blockchain technology.',
-      shortDescription: '2-day intensive tech conference',
-      category: 'technology',
-      eventType: 'conference',
-      format: 'physical',
-      status: 'published', // shows Published chip
-      visibility: 'public',
-
-      // Media
-      bannerImage: 'assets/images/banner1screen25.jpg',
-      galleryImages: ['assets/images/banner2screen25.jpg'],
-
-      // Schedule — matches schema: schedule.*
-      startDate: 'Aug 20, 2024',
-      endDate: 'Aug 22, 2024',
-      startTime: '9:00 AM',
-      endTime: '5:00 PM',
-      timezone: 'PKT',
-
-      // Location — matches schema: location.*
-      venueName: 'Convention Center, NY',
-      address: '123 Innovation Way, NY 10001',
-      city: 'New York',
-      country: 'USA',
-      latitude: 40.7128,
-      longitude: -74.0060,
-
-      // Capacity — matches schema: capacity.*
-      totalSeats: 150,
-      reservedSeats: 20,
-      availableSeats: 30,
-
-      // Registration — matches schema: registration.*
-      registrationOpenDate: '2024-07-01',
-      registrationCloseDate: '2024-08-19',
-      requiresApproval: false,
-
-      // Custom Fields — matches schema: registration.customForm[]
-      customFields: const [
-        CustomFieldModel(
-          fieldId: 'F001',
-          label: 'University ID',
-          type: 'Text',
-          isRequired: true,
-        ),
-        CustomFieldModel(
-          fieldId: 'F002',
-          label: 'Job Role',
-          type: 'Dropdown',
-          isRequired: false,
-          options: ['Student', 'Developer', 'Manager'],
-        ),
-      ],
-
-      // Pricing — matches schema: pricing.*
-      isFree: false,
-      currency: 'PKR',
-
-      // Tiers — matches schema: pricing.tiers[]
-      tiers: const [
-        PricingTierModel(
-          id: 'T001',
-          name: 'Early Bird',
-          price: 1500,
-          availableUntil: 'Mar 15',
-          seats: 30,
-        ),
-        PricingTierModel(
-          id: 'T002',
-          name: 'Regular',
-          price: 2000,
-          availableUntil: 'Apr 14',
-          seats: 60,
-        ),
-      ],
-
-      // Student Discount — matches schema: pricing.studentDiscount
-      studentDiscount: const DiscountModel(
-        isEnabled: true,
-        percentage: 20,
-        requiresVerification: true,
-      ),
-
-      // Group Discount — matches schema: pricing.groupDiscount
-      groupDiscount: const DiscountModel(
-        isEnabled: true,
-        percentage: 15,
-        minGroupSize: 5,
-      ),
-
-      // Certificate Config — matches schema: certificateConfig.*
-      issueCertificates: true,
-      certificateType: 'both',
-      minAttendance: 80,
-      mustCompleteSurvey: true,
-
-      // Analytics — matches schema: analytics.*
-      views: 1245,
-      registrations: 120, // used in stat card "120 / 150"
-      checkIns: 85,
-      completionRate: 95.5,
-      revenue: 178000,
-
-      // Timestamps
-      createdAt: '2024-01-15',
-      updatedAt: '2024-03-01',
-      publishedAt: '2024-03-01',
-    );
-  }
 }
 
-// ═════════════════════════════════════════════════════
+// ─────────────────────────────────────────────────────
 // PART C — PROVIDER
-// The connector between ViewModel and Screen 25
-// Import this provider in Screen 25 to use it
-// ═════════════════════════════════════════════════════
-
-final eventProvider = NotifierProvider<EventViewModel, EventState>(
-  EventViewModel.new,
-);
+// ─────────────────────────────────────────────────────
+final eventProvider = NotifierProvider<EventViewModel, EventState>(() {
+  return EventViewModel();
+});

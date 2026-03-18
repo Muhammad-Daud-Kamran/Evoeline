@@ -15,13 +15,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../constants/app_colors.dart';
-import '../../../constants/app_text_styles.dart';
-import '../../../models/registration_models/pricing_tier_model.dart';
-import '../../../viewmodels/event_viewmodel.dart';
-import '../../../widgets/info_chip.dart';
-import '../../../widgets/custom_tab_bar.dart';
-import '../../../widgets/stat_card_with_image.dart';
+import '../constants/app_colors.dart';
+import '../constants/app_text_styles.dart';
+import '../models/registration_models/pricing_tier_model.dart';
+import '../viewmodels/event_viewmodel.dart';
+import '../widgets/info_chip.dart';
+import '../widgets/custom_tab_bar.dart';
+import '../widgets/stat_card_with_image.dart';
 
 // ── ConsumerWidget = StatelessWidget that can use Riverpod
 class Screen25EventDetails extends ConsumerWidget {
@@ -30,7 +30,6 @@ class Screen25EventDetails extends ConsumerWidget {
   @override
   // WidgetRef ref = your connection to the provider
   Widget build(BuildContext context, WidgetRef ref) {
-
     // ── READ STATE FROM VIEWMODEL ────────────────────
     // ref.watch() reads state AND rebuilds when it changes
     // state.event gives us the full EventModel
@@ -53,37 +52,29 @@ class Screen25EventDetails extends ConsumerWidget {
       // state.isLoading comes from EventViewModel
       body: state.isLoading
           ? const Center(
-        child: CircularProgressIndicator(
-          color: AppColors.primaryGreen,
-        ),
-      )
-
-      // ── SHOW ERROR ────────────────────────────
-      // state.errorMessage comes from EventViewModel
+              child: CircularProgressIndicator(color: AppColors.primaryGreen),
+            )
+          // ── SHOW ERROR ────────────────────────────
+          // state.errorMessage comes from EventViewModel
           : state.errorMessage.isNotEmpty
           ? Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.error_outline,
-                color: Colors.red, size: 48),
-            const SizedBox(height: 16),
-            Text(
-              state.errorMessage,
-              style: AppTextStyles.bodyText,
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              // Retry button calls loadEvent() in ViewModel
-              onPressed: () =>
-                  ref.read(eventProvider.notifier).loadEvent(),
-              child: const Text('Retry'),
-            ),
-          ],
-        ),
-      )
-
-      // ── SHOW CONTENT ──────────────────────────
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, color: Colors.red, size: 48),
+                  const SizedBox(height: 16),
+                  Text(state.errorMessage, style: AppTextStyles.bodyText),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    // Retry button calls loadEvent() in ViewModel
+                    onPressed: () =>
+                        ref.read(eventProvider.notifier).loadEvent(),
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            )
+          // ── SHOW CONTENT ──────────────────────────
           : _buildContent(context, ref, state),
 
       floatingActionButton: FloatingActionButton(
@@ -96,11 +87,7 @@ class Screen25EventDetails extends ConsumerWidget {
 
   // ── Main Content Builder ───────────────────────────
   // Extracted so build() stays clean and readable
-  Widget _buildContent(
-      BuildContext context,
-      WidgetRef ref,
-      EventState state,
-      ) {
+  Widget _buildContent(BuildContext context, WidgetRef ref, EventState state) {
     // Shortcut — so we write event.title instead of state.event.title
     final event = state.event;
 
@@ -108,7 +95,6 @@ class Screen25EventDetails extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           // ── Banner Image ───────────────────────────
           // event.bannerImage comes from EventModel
           Container(
@@ -127,11 +113,10 @@ class Screen25EventDetails extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 // ── Event Title ──────────────────────
                 // event.title comes from EventModel
                 Text(
-                  event.title,          // ← from model
+                  event.title, // ← from model
                   style: AppTextStyles.heading1,
                 ),
                 const SizedBox(height: 4),
@@ -151,10 +136,11 @@ class Screen25EventDetails extends ConsumerWidget {
                   runSpacing: 8,
                   children: [
                     InfoChip(
-                      label: event.startDate,   // ← from model
+                      label: event.startDate, // ← from model
                     ),
                     InfoChip(
-                      label: '${event.startTime} - ${event.endTime}', // ← from model
+                      label:
+                          '${event.startTime} - ${event.endTime}', // ← from model
                     ),
                     InfoChip(
                       // Capitalize first letter of status
@@ -222,8 +208,7 @@ class Screen25EventDetails extends ConsumerWidget {
 
                 // ── About This Event ──────────────────
                 // event.description comes from EventModel
-                const Text('About this Event',
-                    style: AppTextStyles.heading2),
+                const Text('About this Event', style: AppTextStyles.heading2),
                 const SizedBox(height: 8),
                 Text(
                   event.description, // ← from model
@@ -234,12 +219,11 @@ class Screen25EventDetails extends ConsumerWidget {
                 // ── Tickets & Pricing ─────────────────
                 // Only show when event is paid
                 // event.isFree from EventModel
-                const Text('Tickets & Pricing',
-                    style: AppTextStyles.heading2),
+                const Text('Tickets & Pricing', style: AppTextStyles.heading2),
                 const SizedBox(height: 12),
 
                 if (event.isFree)
-                // Free event — show free badge
+                  // Free event — show free badge
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
@@ -248,23 +232,26 @@ class Screen25EventDetails extends ConsumerWidget {
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.check_circle,
-                            color: AppColors.primaryGreen),
+                        const Icon(
+                          Icons.check_circle,
+                          color: AppColors.primaryGreen,
+                        ),
                         const SizedBox(width: 8),
                         Text(
                           'This is a FREE event',
-                          style: AppTextStyles.heading3
-                              .copyWith(color: AppColors.primaryGreen),
+                          style: AppTextStyles.heading3.copyWith(
+                            color: AppColors.primaryGreen,
+                          ),
                         ),
                       ],
                     ),
                   )
                 else
-                // Paid event — loop through tiers from EventModel
-                // event.tiers is List<PricingTierModel>
+                  // Paid event — loop through tiers from EventModel
+                  // event.tiers is List<PricingTierModel>
                   ...event.tiers.map(
-                        (tier) => _buildTicketTier(
-                      tier:     tier,
+                    (tier) => _buildTicketTier(
+                      tier: tier,
                       currency: event.currency, // PKR from model
                     ),
                   ),
@@ -277,21 +264,21 @@ class Screen25EventDetails extends ConsumerWidget {
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: () {},
-                        icon: const Icon(Icons.people_outline,
-                            color: AppColors.darkText),
+                        icon: const Icon(
+                          Icons.people_outline,
+                          color: AppColors.darkText,
+                        ),
                         label: const Text(
                           'Manage\nAttendees',
                           style: AppTextStyles.bodyText,
                           textAlign: TextAlign.center,
                         ),
                         style: OutlinedButton.styleFrom(
-                          padding:
-                          const EdgeInsets.symmetric(vertical: 12),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          side: const BorderSide(
-                              color: AppColors.dividerColor),
+                          side: const BorderSide(color: AppColors.dividerColor),
                         ),
                       ),
                     ),
@@ -300,21 +287,20 @@ class Screen25EventDetails extends ConsumerWidget {
                       child: OutlinedButton.icon(
                         onPressed: () {},
                         icon: const Icon(
-                            Icons.workspace_premium_outlined,
-                            color: AppColors.darkText),
+                          Icons.workspace_premium_outlined,
+                          color: AppColors.darkText,
+                        ),
                         label: const Text(
                           'View\nCertificates',
                           style: AppTextStyles.bodyText,
                           textAlign: TextAlign.center,
                         ),
                         style: OutlinedButton.styleFrom(
-                          padding:
-                          const EdgeInsets.symmetric(vertical: 12),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          side: const BorderSide(
-                              color: AppColors.dividerColor),
+                          side: const BorderSide(color: AppColors.dividerColor),
                         ),
                       ),
                     ),
@@ -333,14 +319,14 @@ class Screen25EventDetails extends ConsumerWidget {
   // Receives a PricingTierModel — NO hardcoded values
   Widget _buildTicketTier({
     required PricingTierModel tier,
-    required String           currency,
+    required String currency,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color:        AppColors.lightGreyBackground,
+          color: AppColors.lightGreyBackground,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
@@ -359,18 +345,16 @@ class Screen25EventDetails extends ConsumerWidget {
                 ),
 
                 // tier.seats from PricingTierModel
-                Text(
-                  '${tier.seats} seats',
-                  style: AppTextStyles.label,
-                ),
+                Text('${tier.seats} seats', style: AppTextStyles.label),
               ],
             ),
 
             // currency from EventModel + tier.price from PricingTierModel
             Text(
               '$currency ${tier.price.toInt()}',
-              style: AppTextStyles.heading3
-                  .copyWith(color: AppColors.primaryGreen),
+              style: AppTextStyles.heading3.copyWith(
+                color: AppColors.primaryGreen,
+              ),
             ),
           ],
         ),
