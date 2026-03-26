@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../widgets/custom_button.dart';
-import 'screen_4_login.dart';
+import 'package:go_router/go_router.dart';
 
 class Screen3Onboarding2 extends StatelessWidget {
   const Screen3Onboarding2({super.key});
@@ -90,12 +90,7 @@ class Screen3Onboarding2 extends StatelessWidget {
                       text: 'Get Started',
                       onPressed: () {
                         // Navigate to Login
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const Screen4Login(),
-                          ),
-                        );
+                        context.goNamed('login');
                       },
                     ),
                   ),

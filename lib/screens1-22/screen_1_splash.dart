@@ -1,8 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../constants/app_colors.dart';
 
-class Screen1Splash extends StatelessWidget {
+class Screen1Splash extends StatefulWidget {
   const Screen1Splash({super.key});
+
+  @override
+  State<Screen1Splash> createState() => _Screen1SplashState();
+}
+
+class _Screen1SplashState extends State<Screen1Splash> {
+  @override
+  void initState() {
+    super.initState();
+    _navigateToNextScreen();
+  }
+
+  Future<void> _navigateToNextScreen() async {
+    // Simulate some loading time
+    await Future.delayed(const Duration(seconds: 2));
+    if (mounted) {
+      // Navigate to onboarding
+      context.goNamed('onboarding1');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,9 +79,7 @@ class Screen1Splash extends StatelessWidget {
                           ),
                           Container(
                             height: 8,
-                            width:
-                                MediaQuery.of(context).size.width *
-                                0.45, // roughly 50%
+                            width: MediaQuery.of(context).size.width * 0.45,
                             decoration: BoxDecoration(
                               color: AppColors.primaryGreen,
                               borderRadius: BorderRadius.circular(4),

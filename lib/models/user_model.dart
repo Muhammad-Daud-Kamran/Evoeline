@@ -9,16 +9,16 @@
 
 class UserModel {
   // ── Core Identity ──────────────────────────────────
-  final String userId;         // U001, U002
-  final String email;          // used for Firebase Auth
-  final String userType;       // attendee | organizer | vendor | admin
-  final String accountStatus;  // active | suspended | deactivated
+  final String userId; // U001, U002
+  final String email; // used for Firebase Auth
+  final String userType; // attendee | organizer | vendor | admin
+  final String accountStatus; // active | suspended | deactivated
 
   // ── Profile ────────────────────────────────────────
   final String fullName;
   final String phoneNumber;
   final String profileImageUrl;
-  final String gender;         // male | female | other
+  final String gender; // male | female | other
 
   // ── Location ───────────────────────────────────────
   final String city;
@@ -27,15 +27,15 @@ class UserModel {
   // ── Preferences ────────────────────────────────────
   final bool emailNotifications;
   final bool pushNotifications;
-  final String language;       // en | ur
-  final String theme;          // light | dark
+  final String language; // en | ur
+  final String theme; // light | dark
 
   // ── Security ───────────────────────────────────────
   final DateTime? lastLogin;
   final int loginCount;
   final int failedLoginAttempts;
   final bool mfaEnabled;
-  final String? mfaMethod;     // sms, authenticator
+  final String? mfaMethod; // sms, authenticator
 
   // ── Verification ───────────────────────────────────
   final bool isEmailVerified;
@@ -84,6 +84,24 @@ class UserModel {
       email: '',
       userType: '',
       fullName: '',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      lastActive: DateTime.now(),
+    );
+  }
+
+  // ── dummy() ───────────────────────────────────────
+  factory UserModel.dummy() {
+    return UserModel(
+      userId: 'dummy_u_001',
+      email: 'john.doe@example.com',
+      userType: 'attendee',
+      fullName: 'John Doe',
+      phoneNumber: '+92 300 1234567',
+      profileImageUrl: 'https://i.pravatar.cc/150?img=11',
+      gender: 'male',
+      city: 'Karachi',
+      country: 'Pakistan',
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
       lastActive: DateTime.now(),

@@ -3,6 +3,7 @@ import '../constants/app_colors.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/role_selection_toggle.dart';
+import 'package:go_router/go_router.dart';
 
 class Screen5SignUp extends StatefulWidget {
   const Screen5SignUp({super.key});
@@ -40,7 +41,7 @@ class _Screen5SignUpState extends State<Screen5SignUp> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => context.pop(),
                     child: const Icon(
                       Icons.arrow_back,
                       color: AppColors.darkText,
@@ -169,7 +170,7 @@ class _Screen5SignUpState extends State<Screen5SignUp> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pop(context);
+                      context.pop();
                     },
                     child: const Text(
                       'Login',

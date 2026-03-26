@@ -145,6 +145,25 @@ class CertificateModel {
     );
   }
 
+  static List<CertificateModel> getDummyCertificates() {
+    return [
+      CertificateModel.empty().copyWith(
+        certificateId: 'CERT-001',
+        eventId: 'EVT-001',
+        title: 'Advanced Flutter Workshop',
+        description: 'Successfully completed the advanced Flutter workshop.',
+        status: 'issued',
+      ),
+      CertificateModel.empty().copyWith(
+        certificateId: 'CERT-002',
+        eventId: 'EVT-002',
+        title: 'Firebase Masterclass',
+        description: 'Completed the comprehensive Firebase architecture class.',
+        status: 'issued',
+      ),
+    ];
+  }
+
   CertificateModel copyWith({
     String? certificateId,
     String? registrationId,
