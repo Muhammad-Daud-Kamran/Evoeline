@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../widgets/vendor_category_list_item.dart';
+import '../viewmodels/photography_category_viewmodel.dart';
 
-class Screen36PhotographyCategory extends StatelessWidget {
+class Screen36PhotographyCategory extends ConsumerWidget {
   const Screen36PhotographyCategory({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(photographyCategoryProvider);
+    final viewModel = ref.read(photographyCategoryProvider.notifier);
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -21,8 +26,10 @@ class Screen36PhotographyCategory extends StatelessWidget {
         title: const Text('Photography', style: AppTextStyles.heading2),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
+      body: state.isLoading
+          ? const Center(child: CircularProgressIndicator(color: AppColors.primaryGreen))
+          : SingleChildScrollView(
+              child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,25 +49,13 @@ class Screen36PhotographyCategory extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    _buildFilterChip('All', Icons.photo_library_outlined, true),
+                    _buildFilterChip('All', Icons.photo_library_outlined, state.selectedFilter == 'All', viewModel),
                     const SizedBox(width: 8),
-                    _buildFilterChip(
-                      'Wedding',
-                      Icons.camera_alt_outlined,
-                      false,
-                    ),
+                    _buildFilterChip('Wedding', Icons.camera_alt_outlined, state.selectedFilter == 'Wedding', viewModel),
                     const SizedBox(width: 8),
-                    _buildFilterChip(
-                      'Corporate',
-                      Icons.business_outlined,
-                      false,
-                    ),
+                    _buildFilterChip('Corporate', Icons.business_outlined, state.selectedFilter == 'Corporate', viewModel),
                     const SizedBox(width: 8),
-                    _buildFilterChip(
-                      'Fashion',
-                      Icons.checkroom_outlined,
-                      false,
-                    ),
+                    _buildFilterChip('Fashion', Icons.checkroom_outlined, state.selectedFilter == 'Fashion', viewModel),
                   ],
                 ),
               ),
@@ -82,37 +77,23 @@ class Screen36PhotographyCategory extends StatelessWidget {
               const SizedBox(height: 32),
 
               // Vendor List
-              const VendorCategoryListItem(
-                title: 'Capture Moments\nPhotography',
-                categories: 'Wedding, Corporate, Fashion',
-                badge: 'Top Rated',
-                badgeColor: AppColors.primaryGreen,
-                imagePath: 'assets/images/s36image2.jpg',
-              ),
-              const VendorCategoryListItem(
-                title: 'EventSnap Studios',
-                categories: 'Wedding, Corporate, Fashion',
-                badge: 'Popular',
-                badgeColor: AppColors.primaryGreen,
-                imagePath: 'assets/images/s36image3.jpg',
-              ),
-              const VendorCategoryListItem(
-                title: 'PixelPerfect Photography',
-                categories: 'Wedding, Corporate, Fashion',
-                badgeColor: AppColors.primaryGreen,
-                imagePath: 'assets/images/s36image4.jpg',
-              ),
-              const VendorCategoryListItem(
-                title: 'FrameMasters Photography',
-                categories: 'Wedding, Corporate, Fashion',
-                badgeColor: AppColors.primaryGreen,
-                imagePath: 'assets/images/s36image5.jpg',
-              ),
-              const VendorCategoryListItem(
-                title: 'VisualVibes Photography',
-                categories: 'Wedding, Corporate, Fashion',
-                badgeColor: AppColors.primaryGreen,
-                imagePath: 'assets/images/s36image6.jpg',
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: state.filteredPhotographers.length,
+                itemBuilder: (context, index) {
+                  final vendor = state.filteredPhotographers[index];
+                  final categoriesString = vendor.serviceCategories.join(', ');
+                  final badgeText = vendor.verificationBadges.isNotEmpty ? vendor.verificationBadges.first : null;
+                  
+                  return VendorCategoryListItem(
+                    title: vendor.businessName,
+                    categories: categoriesString,
+                    badge: badgeText,
+                    badgeColor: AppColors.primaryGreen,
+                    imagePath: vendor.logoImage,
+                  );
+                },
               ),
               const SizedBox(height: 16),
 
@@ -184,28 +165,31 @@ class Screen36PhotographyCategory extends StatelessWidget {
     );
   }
 
-  Widget _buildFilterChip(String label, IconData icon, bool isSelected) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: AppColors.lightGreyBackground,
-        border: Border.all(
-          color: isSelected ? AppColors.dividerColor : Colors.transparent,
-        ),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 16, color: AppColors.darkText),
-          const SizedBox(width: 8),
-          Text(
-            label,
-            style: AppTextStyles.bodyText.copyWith(
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            ),
+  Widget _buildFilterChip(String label, IconData icon, bool isSelected, PhotographyCategoryViewModel viewModel) {
+    return GestureDetector(
+      onTap: () => viewModel.selectFilter(label),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.lightGreyBackground,
+          border: Border.all(
+            color: isSelected ? AppColors.dividerColor : Colors.transparent,
           ),
-        ],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 16, color: AppColors.darkText),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: AppTextStyles.bodyText.copyWith(
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

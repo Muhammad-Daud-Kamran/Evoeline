@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../widgets/review_list_item.dart';
+import '../viewmodels/vendor_reviews_viewmodel.dart';
 
-class Screen38VendorReviews extends StatelessWidget {
+class Screen38VendorReviews extends ConsumerWidget {
   const Screen38VendorReviews({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(vendorReviewsProvider);
+
+    if (state.isLoading) {
+      return const Scaffold(
+        backgroundColor: AppColors.background,
+        body: Center(child: CircularProgressIndicator(color: AppColors.primaryGreen)),
+      );
+    }
+    
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -41,9 +52,9 @@ class Screen38VendorReviews extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        '4.8',
-                        style: TextStyle(
+                      Text(
+                        state.averageRating.toStringAsFixed(1),
+                        style: const TextStyle(
                           fontSize: 48,
                           fontWeight: FontWeight.bold,
                           color: AppColors.darkText,
@@ -52,14 +63,14 @@ class Screen38VendorReviews extends StatelessWidget {
                       Row(
                         children: List.generate(5, (index) {
                           return Icon(
-                            index < 4 ? Icons.star : Icons.star_border,
-                            color: Color(0xFF8CC9EB),
+                            index < state.averageRating.round() ? Icons.star : Icons.star_border,
+                            color: const Color(0xFF8CC9EB),
                             size: 16,
                           );
                         }),
                       ),
                       const SizedBox(height: 4),
-                      const Text('230 reviews', style: AppTextStyles.label),
+                      Text('${state.totalReviews} reviews', style: AppTextStyles.label),
                     ],
                   ),
                   const SizedBox(width: 24),
@@ -68,15 +79,15 @@ class Screen38VendorReviews extends StatelessWidget {
                   Expanded(
                     child: Column(
                       children: [
-                        _buildProgressBar(5, 0.70, '70%'),
+                        _buildProgressBar(5, state.getRatingPercentage(5), '${(state.getRatingPercentage(5) * 100).toInt()}%'),
                         const SizedBox(height: 4),
-                        _buildProgressBar(4, 0.20, '20%'),
+                        _buildProgressBar(4, state.getRatingPercentage(4), '${(state.getRatingPercentage(4) * 100).toInt()}%'),
                         const SizedBox(height: 4),
-                        _buildProgressBar(3, 0.05, '5%'),
+                        _buildProgressBar(3, state.getRatingPercentage(3), '${(state.getRatingPercentage(3) * 100).toInt()}%'),
                         const SizedBox(height: 4),
-                        _buildProgressBar(2, 0.03, '3%'),
+                        _buildProgressBar(2, state.getRatingPercentage(2), '${(state.getRatingPercentage(2) * 100).toInt()}%'),
                         const SizedBox(height: 4),
-                        _buildProgressBar(1, 0.02, '2%'),
+                        _buildProgressBar(1, state.getRatingPercentage(1), '${(state.getRatingPercentage(1) * 100).toInt()}%'),
                       ],
                     ),
                   ),
@@ -107,7 +118,7 @@ class Screen38VendorReviews extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Most popular', style: AppTextStyles.bodyText),
+                    Text(state.selectedSortOption, style: AppTextStyles.bodyText),
                     const Icon(Icons.arrow_drop_up, color: AppColors.darkText),
                   ],
                 ),
@@ -115,45 +126,20 @@ class Screen38VendorReviews extends StatelessWidget {
               const SizedBox(height: 32),
 
               // 3. Review List
-              const ReviewListItem(
-                authorName: 'Sophia Bennett',
-                reviewText:
-                    'The vendor was professional and delivered the setup perfectly on time. Highly recommend! ...Read more',
-                ratingTimestampInfo: '5 stars • Corporate Gala',
-                avatarColor: Color(0xFFDCC8B3),
-                avatarInitials: 'SB',
-              ),
-              const ReviewListItem(
-                authorName: 'Ethan Carter',
-                reviewText:
-                    'Good service, but there were some minor delays. Overall, satisfied. ...Read more',
-                ratingTimestampInfo: '4 stars • University Workshop',
-                avatarColor: Color(0xFFC4D5D9),
-                avatarInitials: 'EC',
-              ),
-              const ReviewListItem(
-                authorName: 'Olivia Davis',
-                reviewText:
-                    'Absolutely fantastic! The team went above and beyond to make our day special. ...Read more',
-                ratingTimestampInfo: '5 stars • Wedding Reception',
-                avatarColor: Color(0xFFD9A683),
-                avatarInitials: 'OD',
-              ),
-              const ReviewListItem(
-                authorName: 'Liam Foster',
-                reviewText:
-                    'Decent, but communication could have been better. Some issues with the setup. ...Read more',
-                ratingTimestampInfo: '3 stars • Birthday Party',
-                avatarColor: Color(0xFF1E3636),
-                avatarInitials: 'LF',
-              ),
-              const ReviewListItem(
-                authorName: 'Ava Green',
-                reviewText:
-                    'Exceptional service! The vendor was punctual, organized, and the quality was top-notch. ...Read more',
-                ratingTimestampInfo: '5 stars • Conference',
-                avatarColor: Color(0xFFDCC8B3),
-                avatarInitials: 'AG',
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: state.reviews.length,
+                itemBuilder: (context, index) {
+                  final review = state.reviews[index];
+                  return ReviewListItem(
+                    authorName: review.authorName,
+                    reviewText: review.reviewText,
+                    ratingTimestampInfo: '${review.overallRating.toInt()} stars • ${review.eventContext}',
+                    avatarColor: Color(review.avatarColorValue),
+                    avatarInitials: review.authorInitials,
+                  );
+                },
               ),
               const SizedBox(height: 16),
 

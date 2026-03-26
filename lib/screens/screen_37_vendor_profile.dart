@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
+import '../viewmodels/vendor_profile_viewmodel.dart';
 
-class Screen37VendorProfile extends StatelessWidget {
+class Screen37VendorProfile extends ConsumerWidget {
   const Screen37VendorProfile({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(vendorProfileProvider);
+    final viewModel = ref.read(vendorProfileProvider.notifier);
+    final vendor = state.vendor;
+
+    if (state.isLoading) {
+      return const Scaffold(
+        backgroundColor: AppColors.background,
+        body: Center(child: CircularProgressIndicator(color: AppColors.primaryGreen)),
+      );
+    }
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SingleChildScrollView(
@@ -77,12 +90,10 @@ class Screen37VendorProfile extends StatelessWidget {
                       color: AppColors.background,
                       shape: BoxShape.circle,
                     ),
-                    child: const CircleAvatar(
+                    child: CircleAvatar(
                       radius: 36,
-                      backgroundColor: Color(0xFFBCAAA4), // Brownish
-                      backgroundImage: AssetImage(
-                        'assets/images/s37image2.jpg',
-                      ),
+                      backgroundColor: const Color(0xFFBCAAA4), // Brownish
+                      backgroundImage: AssetImage(vendor.logoImage.isNotEmpty ? vendor.logoImage : 'assets/images/placeholder.jpg'),
                     ),
                   ),
                 ),
@@ -94,7 +105,7 @@ class Screen37VendorProfile extends StatelessWidget {
             Center(
               child: Column(
                 children: [
-                  const Text('Cuisine Catering', style: AppTextStyles.heading1),
+                  Text(vendor.businessName, style: AppTextStyles.heading1),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -102,7 +113,7 @@ class Screen37VendorProfile extends StatelessWidget {
                       const Icon(Icons.star, color: Colors.amber, size: 16),
                       const SizedBox(width: 4),
                       Text(
-                        '4.8/5.0 (230 reviews)',
+                        '${vendor.averageRating}/5.0 (${vendor.totalReviews} reviews)',
                         style: AppTextStyles.label.copyWith(
                           color: Colors.blueAccent,
                         ),
@@ -122,8 +133,8 @@ class Screen37VendorProfile extends StatelessWidget {
                           color: AppColors.lightGreyBackground,
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: const Text(
-                          'Catering Service',
+                        child: Text(
+                          vendor.serviceCategories.isNotEmpty ? vendor.serviceCategories.first : 'Service',
                           style: AppTextStyles.label,
                         ),
                       ),
@@ -139,7 +150,7 @@ class Screen37VendorProfile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Text(
-                          'Active',
+                          vendor.status,
                           style: AppTextStyles.label.copyWith(
                             color: Colors.green,
                             fontWeight: FontWeight.bold,
@@ -174,19 +185,22 @@ class Screen37VendorProfile extends StatelessWidget {
                         const SizedBox(height: 4),
                         Text('WhatsApp', style: AppTextStyles.label),
                         const SizedBox(height: 16),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.lightGreyBackground,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text('Heart', style: AppTextStyles.label),
-                              SizedBox(width: 4),
-                              Icon(Icons.favorite_border, size: 16),
-                            ],
+                        InkWell(
+                          onTap: () => viewModel.toggleFavorite(),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: AppColors.lightGreyBackground,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('Heart', style: AppTextStyles.label),
+                                SizedBox(width: 4),
+                                Icon(Icons.favorite_border, size: 16),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -218,11 +232,11 @@ class Screen37VendorProfile extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
                 children: [
-                  _buildTab('About', true),
-                  _buildTab('Services', false),
-                  _buildTab('Portfolio', false),
-                  _buildTab('Reviews', false),
-                  _buildTab('Avail...', false),
+                  _buildTab('About', 0, state.activeTabIndex, viewModel),
+                  _buildTab('Services', 1, state.activeTabIndex, viewModel),
+                  _buildTab('Portfolio', 2, state.activeTabIndex, viewModel),
+                  _buildTab('Reviews', 3, state.activeTabIndex, viewModel),
+                  _buildTab('Availability', 4, state.activeTabIndex, viewModel),
                 ],
               ),
             ),
@@ -245,14 +259,14 @@ class Screen37VendorProfile extends StatelessWidget {
                   const SizedBox(height: 24),
 
                   // Stats List
-                  _buildStatRow('Established', '2010'),
+                  _buildStatRow('Established', '2010'), // Mock constant
                   const SizedBox(height: 12),
-                  _buildStatRow('Team Size', '25+'),
+                  _buildStatRow('Team Size', '25+'), // Mock constant
                   const SizedBox(height: 12),
                   // Added Business Stats based on Schema
-                  _buildStatRow('Total Bookings', '45'),
+                  _buildStatRow('Total Bookings', '${vendor.totalBookings}'),
                   const SizedBox(height: 12),
-                  _buildStatRow('Completed Bookings', '42'),
+                  _buildStatRow('Completed Bookings', '${vendor.completedBookings}'),
                   const SizedBox(height: 24),
 
                   // Service Areas
@@ -275,10 +289,7 @@ class Screen37VendorProfile extends StatelessWidget {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: [
-                      _buildChip('Certified Event Planner'),
-                      _buildChip('Food Safety Certified'),
-                    ],
+                    children: vendor.verificationBadges.map((badge) => _buildChip(badge)).toList(),
                   ),
                   const SizedBox(height: 24),
 
@@ -288,33 +299,31 @@ class Screen37VendorProfile extends StatelessWidget {
                     style: AppTextStyles.heading3,
                   ),
                   const SizedBox(height: 16),
-                  // Primary Phone
-                  _buildContactRow(Icons.phone_outlined, '+92 300 1234567'),
-                  const SizedBox(height: 16),
-                  // Secondary Phone
-                  _buildContactRow(
-                    Icons.phone_android_outlined,
-                    '+92 300 1234568',
-                  ),
-                  const SizedBox(height: 16),
-                  // Business Email
-                  _buildContactRow(
-                    Icons.mail_outline,
-                    'info@perfectcatering.pk',
-                  ),
-                  const SizedBox(height: 16),
-                  // Website
-                  _buildContactRow(
-                    Icons.language,
-                    'https://perfectcatering.pk',
-                  ),
-                  const SizedBox(height: 16),
-                  // Address
-                  _buildContactRow(
-                    Icons.location_on_outlined,
-                    '123 Commercial Area, Karachi, Pakistan',
-                  ),
-                  const SizedBox(height: 32),
+                  if (vendor.primaryPhone.isNotEmpty) ...[
+                    // Primary Phone
+                    _buildContactRow(Icons.phone_outlined, vendor.primaryPhone),
+                    const SizedBox(height: 16),
+                  ],
+                  if (vendor.secondaryPhone.isNotEmpty) ...[
+                    // Secondary Phone
+                    _buildContactRow(Icons.phone_android_outlined, vendor.secondaryPhone),
+                    const SizedBox(height: 16),
+                  ],
+                  if (vendor.businessEmail.isNotEmpty) ...[
+                    // Business Email
+                    _buildContactRow(Icons.mail_outline, vendor.businessEmail),
+                    const SizedBox(height: 16),
+                  ],
+                  if (vendor.website.isNotEmpty) ...[
+                    // Website
+                    _buildContactRow(Icons.language, vendor.website),
+                    const SizedBox(height: 16),
+                  ],
+                  if (vendor.addressStreet.isNotEmpty || vendor.addressCity.isNotEmpty) ...[
+                    // Address
+                    _buildContactRow(Icons.location_on_outlined, '${vendor.addressStreet}, ${vendor.addressCity}'),
+                    const SizedBox(height: 32),
+                  ],
 
                   // Bottom Action Button
                   SizedBox(
@@ -359,23 +368,27 @@ class Screen37VendorProfile extends StatelessWidget {
     );
   }
 
-  Widget _buildTab(String title, bool isActive) {
-    return Container(
-      margin: const EdgeInsets.only(right: 24),
-      padding: const EdgeInsets.only(bottom: 8),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: isActive ? AppColors.darkText : Colors.transparent,
-            width: 2,
+  Widget _buildTab(String title, int index, int activeIndex, VendorProfileViewModel viewModel) {
+    bool isActive = index == activeIndex;
+    return InkWell(
+      onTap: () => viewModel.setTab(index),
+      child: Container(
+        margin: const EdgeInsets.only(right: 24),
+        padding: const EdgeInsets.only(bottom: 8),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: isActive ? AppColors.darkText : Colors.transparent,
+              width: 2,
+            ),
           ),
         ),
-      ),
-      child: Text(
-        title,
-        style: AppTextStyles.bodyText.copyWith(
-          fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
-          color: isActive ? AppColors.darkText : AppColors.lightText,
+        child: Text(
+          title,
+          style: AppTextStyles.bodyText.copyWith(
+            fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+            color: isActive ? AppColors.darkText : AppColors.lightText,
+          ),
         ),
       ),
     );

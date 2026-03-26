@@ -1,57 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_field.dart';
+import '../viewmodels/generate_certificates_viewmodel.dart';
 
-class Screen34GenerateCertificates extends StatefulWidget {
-  const Screen34GenerateCertificates({super.key});
-
+class Screen34GenerateCertificates extends ConsumerWidget {
+  const Screen34GenerateCertificates({Key? key}) : super(key: key);
   @override
-  State<Screen34GenerateCertificates> createState() =>
-      _Screen34GenerateCertificatesState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(generateCertificatesProvider);
+    final viewModel = ref.read(generateCertificatesProvider.notifier);
 
-class _Screen34GenerateCertificatesState
-    extends State<Screen34GenerateCertificates> {
-  final List<Map<String, dynamic>> _attendees = [
-    {
-      'name': 'Olivia Smith',
-      'email': 'olivia.smith@email.com',
-      'avatar': 'OS',
-      'selected': false,
-    },
-    {
-      'name': 'Liam Johnson',
-      'email': 'liam.johnson@email.com',
-      'avatar': 'LJ',
-      'selected': false,
-    },
-    {
-      'name': 'Emma Williams',
-      'email': 'emma.williams@email.com',
-      'avatar': 'EW',
-      'selected': false,
-    },
-    {
-      'name': 'Noah Brown',
-      'email': 'noah.brown@email.com',
-      'avatar': 'NB',
-      'selected': false,
-    },
-    {
-      'name': 'Ava Davis',
-      'email': 'ava.davis@email.com',
-      'avatar': 'AD',
-      'selected': false,
-    },
-  ];
-
-  bool _isBlockchainEnabled = false;
-
-  @override
-  Widget build(BuildContext context) {
+    // Show Snackbar on Success or Error
+    ref.listen<GenerateCertificatesState>(generateCertificatesProvider, (previous, next) {
+      if (next.errorMessage.isNotEmpty && (previous?.errorMessage != next.errorMessage)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(next.errorMessage)),
+        );
+      }
+      if (next.isSuccess && (previous?.isSuccess != true)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Certificates generated successfully!')),
+        );
+        viewModel.resetSuccess();
+        // Navigator.pop(context); // Optional
+      }
+    });
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -105,13 +82,7 @@ class _Screen34GenerateCertificatesState
                     style: AppTextStyles.heading3,
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        for (var attendee in _attendees) {
-                          attendee['selected'] = true;
-                        }
-                      });
-                    },
+                    onPressed: () => viewModel.selectAllAttendees(),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryGreen,
                       foregroundColor: Colors.white,
@@ -130,43 +101,44 @@ class _Screen34GenerateCertificatesState
               ),
               const SizedBox(height: 8),
 
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: _attendees.length,
-                itemBuilder: (context, index) {
-                  final attendee = _attendees[index];
-                  return ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.grey.shade300,
-                      child: Text(
-                        attendee['avatar'],
-                        style: const TextStyle(color: AppColors.darkText),
-                      ),
-                    ),
-                    title: Text(
-                      attendee['name'],
-                      style: AppTextStyles.bodyText.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    subtitle: Text(
-                      attendee['email'],
-                      style: AppTextStyles.subtitle.copyWith(fontSize: 12),
-                    ),
-                    trailing: Checkbox(
-                      value: attendee['selected'],
-                      onChanged: (val) {
-                        setState(() {
-                          attendee['selected'] = val;
-                        });
+              state.isLoading && state.attendees.isEmpty
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: state.attendees.length,
+                      itemBuilder: (context, index) {
+                        final attendee = state.attendees[index];
+                        final isSelected = state.selectedAttendeeIds.contains(attendee.userId);
+                        return ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.grey.shade300,
+                            child: Text(
+                              attendee.name.isNotEmpty ? attendee.name.substring(0, 2).toUpperCase() : '',
+                              style: const TextStyle(color: AppColors.darkText),
+                            ),
+                          ),
+                          title: Text(
+                            attendee.name,
+                            style: AppTextStyles.bodyText.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          subtitle: Text(
+                            attendee.email,
+                            style: AppTextStyles.subtitle.copyWith(fontSize: 12),
+                          ),
+                          trailing: Checkbox(
+                            value: isSelected,
+                            onChanged: (val) {
+                              viewModel.toggleAttendeeSelection(attendee.userId);
+                            },
+                            activeColor: AppColors.primaryGreen,
+                          ),
+                        );
                       },
-                      activeColor: AppColors.primaryGreen,
                     ),
-                  );
-                },
-              ),
               const SizedBox(height: 24),
 
               const Text('Choose Template', style: AppTextStyles.heading3),
@@ -177,11 +149,20 @@ class _Screen34GenerateCertificatesState
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    _buildTemplateItem('Modern', true, 'assets/images/s34image2.jpg'),
+                    GestureDetector(
+                      onTap: () => viewModel.selectTemplate('Modern'),
+                      child: _buildTemplateItem('Modern', state.selectedTemplate == 'Modern', 'assets/images/s34image2.jpg'),
+                    ),
                     const SizedBox(width: 12),
-                    _buildTemplateItem('Classic', false, 'assets/images/s34image3.jpg'),
+                    GestureDetector(
+                      onTap: () => viewModel.selectTemplate('Classic'),
+                      child: _buildTemplateItem('Classic', state.selectedTemplate == 'Classic', 'assets/images/s34image3.jpg'),
+                    ),
                     const SizedBox(width: 12),
-                    _buildTemplateItem('Minimal', false, 'assets/images/s34image4.png'),
+                    GestureDetector(
+                      onTap: () => viewModel.selectTemplate('Minimal'),
+                      child: _buildTemplateItem('Minimal', state.selectedTemplate == 'Minimal', 'assets/images/s34image4.png'),
+                    ),
                   ],
                 ),
               ),
@@ -207,12 +188,18 @@ class _Screen34GenerateCertificatesState
 
               const Text('Signatory Name', style: AppTextStyles.label),
               const SizedBox(height: 4),
-              const CustomTextField(hintText: 'Enter name'),
+              CustomTextField(
+                hintText: 'Enter name', 
+                onChanged: viewModel.updateSignatoryName,
+              ),
               const SizedBox(height: 16),
 
               const Text('Signatory Title', style: AppTextStyles.label),
               const SizedBox(height: 4),
-              const CustomTextField(hintText: 'e.g., Event Director'),
+              CustomTextField(
+                hintText: 'e.g., Event Director',
+                onChanged: viewModel.updateSignatoryTitle,
+              ),
               const SizedBox(height: 16),
 
               InkWell(
@@ -251,9 +238,7 @@ class _Screen34GenerateCertificatesState
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  _buildSkillChip('Leadership'),
-                  _buildSkillChip('Communication'),
-                  _buildSkillChip('Teamwork'),
+                  ...state.skills.map((skill) => _buildSkillChip(skill)),
                   _buildSkillChip('+ Add Skill', isAdd: true),
                 ],
               ),
@@ -266,6 +251,7 @@ class _Screen34GenerateCertificatesState
               const SizedBox(height: 8),
               TextField(
                 maxLines: 4,
+                onChanged: viewModel.updateCustomMessage,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: AppColors.lightGreyBackground,
@@ -291,12 +277,8 @@ class _Screen34GenerateCertificatesState
                     style: AppTextStyles.bodyText,
                   ),
                   Switch(
-                    value: _isBlockchainEnabled,
-                    onChanged: (val) {
-                      setState(() {
-                        _isBlockchainEnabled = val;
-                      });
-                    },
+                    value: state.isBlockchainEnabled,
+                    onChanged: (val) => viewModel.toggleBlockchain(val),
                     activeThumbColor: AppColors.primaryGreen,
                   ),
                 ],
@@ -311,7 +293,10 @@ class _Screen34GenerateCertificatesState
 
               const Text('Network', style: AppTextStyles.label),
               const SizedBox(height: 4),
-              const CustomTextField(hintText: 'Polygon'),
+              CustomTextField(
+                hintText: 'Polygon',
+                onChanged: viewModel.updateNetwork,
+              ),
               const SizedBox(height: 8),
               const Text(
                 'Blockchain verification will generate a permanent, verifiable record on Polygon.',
@@ -350,20 +335,21 @@ class _Screen34GenerateCertificatesState
                 width: double.infinity,
                 height: 48,
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: state.isLoading ? null : () => viewModel.generateCertificates(),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryGreen,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  icon: const Icon(
-                    Icons.insert_drive_file_outlined,
-                    color: Colors.black,
-                  ),
+                  icon: state.isLoading 
+                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.black, strokeWidth: 2))
+                      : const Icon(
+                          Icons.insert_drive_file_outlined,
+                          color: Colors.black,
+                        ),
                   label: Text(
-                    'Generate Certificates',
-
+                    state.isLoading ? 'Generating...' : 'Generate Certificates',
                     style: AppTextStyles.buttonText.copyWith(
                       color: Colors.black,
                     ),

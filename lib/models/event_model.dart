@@ -128,6 +128,24 @@ class EventModel {
 
   // matches: events.pricing.groupDiscount
   final DiscountModel groupDiscount;
+  final String       organizerName;  // "Tech Innovators Inc."
+
+  // NOT in schema — added for Screen 26
+  final List<String> coOrganizers;   // ['Sarah Chen', 'David Lee']
+  final List<String> sponsors;       // ['Innovate Solutions', 'FutureTech']
+  final List<String> partners;       // ['Global Partners Network']
+
+  // ── SECTION 9: Budget ─────────────────────────────
+  // NOT in schema — schema has revenue but not budget
+  // Added for Screen 26 budget progress bar
+  // budgetProgress = budgetSpent / budgetTotal
+
+  final double budgetSpent;   // 15000
+  final double budgetTotal;   // 20000
+  // budgetProgress is CALCULATED not stored
+  // → budgetSpent / budgetTotal = 0.75
+  // → calculated in ViewModel, NOT stored in model
+
 
   // ── SECTION 8: Certificate Config ─────────────────
   // kept FLAT — simple fields, only used in Screen 24
@@ -216,6 +234,12 @@ class EventModel {
     this.tiers                 = const [],
     this.studentDiscount       = const DiscountModel(),
     this.groupDiscount         = const DiscountModel(),
+    this.organizerName          = '',
+    this.coOrganizers           = const [],
+    this.sponsors               = const [],
+    this.partners               = const [],
+    this.budgetSpent            = 0.0,
+    this.budgetTotal            = 0.0,
 
     // Certificates
     this.issueCertificates     = false,
@@ -299,6 +323,12 @@ class EventModel {
     List<PricingTierModel>? tiers,
     DiscountModel?          studentDiscount,
     DiscountModel?          groupDiscount,
+    String?                 organizerName,
+    List<String>?           coOrganizers,
+    List<String>?           sponsors,
+    List<String>?           partners,
+    double?                 budgetSpent,
+    double?                 budgetTotal,
     bool?                   issueCertificates,
     String?                 certificateType,
     int?                    minAttendance,
@@ -347,6 +377,12 @@ class EventModel {
       tiers:                 tiers                 ?? this.tiers,
       studentDiscount:       studentDiscount       ?? this.studentDiscount,
       groupDiscount:         groupDiscount         ?? this.groupDiscount,
+      organizerName:         organizerName         ?? this.organizerName,
+      coOrganizers:          coOrganizers          ?? this.coOrganizers,
+      sponsors:              sponsors              ?? this.sponsors,
+      partners:              partners              ?? this.partners,
+      budgetSpent:           budgetSpent           ?? this.budgetSpent,
+      budgetTotal:           budgetTotal           ?? this.budgetTotal,
       issueCertificates:     issueCertificates     ?? this.issueCertificates,
       certificateType:       certificateType       ?? this.certificateType,
       minAttendance:         minAttendance         ?? this.minAttendance,

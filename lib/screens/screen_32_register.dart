@@ -1,16 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/outlined_text_field.dart';
+import '../viewmodels/register_viewmodel.dart';
 
 /// Screen 31: Register for Event
-class Screen32Register extends StatelessWidget {
+class Screen32Register extends ConsumerWidget {
   const Screen32Register({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(registerProvider);
+    final viewModel = ref.read(registerProvider.notifier);
+
+    // Show Snackbar on Success or Error
+    ref.listen<RegisterState>(registerProvider, (previous, next) {
+      if (next.errorMessage.isNotEmpty && (previous?.errorMessage != next.errorMessage)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(next.errorMessage)),
+        );
+      }
+      if (next.isSuccess && (previous?.isSuccess != true)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Registration Successful!')),
+        );
+        viewModel.resetSuccess();
+        // Optional: Navigate to next page or pop
+        // Navigator.pop(context);
+      }
+    });
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -164,27 +186,35 @@ class Screen32Register extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
 
-                  const OutlinedTextField(
+                  OutlinedTextField(
                     label: 'Full Name',
-                    hintText: 'Enter yourfullname',
+                    hintText: 'Enter your fullname',
+                    initialValue: state.fullName,
+                    onChanged: viewModel.updateFullName,
                   ),
                   const SizedBox(height: 16),
-                  const OutlinedTextField(
+                  OutlinedTextField(
                     label: 'Email',
-                    hintText: 'Enter youremail',
+                    hintText: 'Enter your email',
+                    initialValue: state.email,
+                    onChanged: viewModel.updateEmail,
                   ),
                   const SizedBox(height: 16),
-                  const OutlinedTextField(
+                  OutlinedTextField(
                     label: 'Phone Number',
-                    hintText: 'Enter yourphonenumber',
+                    hintText: 'Enter your phone number',
+                    initialValue: state.phoneNumber,
+                    onChanged: viewModel.updatePhoneNumber,
                   ),
                   const SizedBox(height: 16),
 
                   // Gender Field (From Schema)
-                  const OutlinedTextField(
+                  OutlinedTextField(
                     label: 'Gender',
                     hintText: 'Select your gender',
-                    trailingIcon: Icon(
+                    initialValue: state.gender,
+                    onChanged: viewModel.updateGender,
+                    trailingIcon: const Icon(
                       Icons.arrow_drop_down,
                       color: AppColors.iconColor,
                     ),
@@ -192,51 +222,64 @@ class Screen32Register extends StatelessWidget {
                   const SizedBox(height: 16),
 
                   // Location Fields (From Schema)
-                  const Row(
+                  Row(
                     children: [
                       Expanded(
                         child: OutlinedTextField(
                           label: 'City',
                           hintText: 'Enter city',
+                          initialValue: state.city,
+                          onChanged: viewModel.updateCity,
                         ),
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                       Expanded(
                         child: OutlinedTextField(
                           label: 'Country',
                           hintText: 'Enter country',
+                          initialValue: state.country,
+                          onChanged: viewModel.updateCountry,
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
 
-                  const OutlinedTextField(
+                  OutlinedTextField(
                     label: 'Dietary Preferences',
                     hintText: 'Select',
-                    trailingIcon: Icon(
+                    initialValue: state.dietaryPreferences,
+                    onChanged: viewModel.updateDietary,
+                    trailingIcon: const Icon(
                       Icons.arrow_drop_down,
                       color: AppColors.iconColor,
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const OutlinedTextField(
+                  OutlinedTextField(
                     label: 'Accessibility Requirements',
                     hintText: '',
                     maxLines: 4,
+                    initialValue: state.accessibilityRequirements,
+                    onChanged: viewModel.updateAccessibility,
                   ),
                   const SizedBox(height: 16),
 
                   // Terms Checkbox
-                  const _TermsCheckbox(),
+                  _TermsCheckbox(
+                    value: state.termsAccepted,
+                    onChanged: (val) => viewModel.updateTerms(val ?? false),
+                  ),
                   const SizedBox(height: 24),
 
                   // Register Button
-                  CustomButton(
-                    text: 'Register',
-                    backgroundColor: AppColors.primaryGreen,
-                    onPressed: () {},
-                  ),
+                  state.isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : CustomButton(
+                          text: 'Register',
+                          backgroundColor: AppColors.primaryGreen,
+                          onPressed: () => viewModel.submitRegistration(),
+                        ),
                   const SizedBox(height: 16),
 
                   // Login Link
@@ -307,16 +350,16 @@ class Screen32Register extends StatelessWidget {
   }
 }
 
-/// A localized stateful widget to handle the checkbox toggle without making the whole screen stateful
-class _TermsCheckbox extends StatefulWidget {
-  const _TermsCheckbox({Key? key}) : super(key: key);
+/// A stateless widget to handle the checkbox toggle via state
+class _TermsCheckbox extends StatelessWidget {
+  final bool value;
+  final ValueChanged<bool?> onChanged;
 
-  @override
-  State<_TermsCheckbox> createState() => _TermsCheckboxState();
-}
-
-class _TermsCheckboxState extends State<_TermsCheckbox> {
-  bool _isChecked = false;
+  const _TermsCheckbox({
+    Key? key,
+    required this.value,
+    required this.onChanged,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -327,12 +370,8 @@ class _TermsCheckboxState extends State<_TermsCheckbox> {
           width: 24,
           height: 24,
           child: Checkbox(
-            value: _isChecked,
-            onChanged: (val) {
-              setState(() {
-                _isChecked = val ?? false;
-              });
-            },
+            value: value,
+            onChanged: onChanged,
             activeColor: AppColors.primaryGreen,
           ),
         ),

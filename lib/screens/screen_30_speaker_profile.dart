@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/speaker_session_item.dart';
 import '../widgets/past_event_card.dart';
+import '../viewmodels/speaker_viewmodel.dart';
 
 /// Screen 30: Speaker Profile
-class Screen30SpeakerProfile extends StatelessWidget {
+class Screen30SpeakerProfile extends ConsumerWidget {
   const Screen30SpeakerProfile({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // 1. Watch the state from our new ViewModel
+    final speakerState = ref.watch(speakerProvider);
+    final data = speakerState.speaker;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -30,27 +36,30 @@ class Screen30SpeakerProfile extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: speakerState.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(height: 16),
             // Avatar
-            const CircleAvatar(
+            CircleAvatar(
               radius: 50,
               backgroundColor: AppColors.cardBackground, // Peach background
-              backgroundImage: AssetImage('assets/images/screen30speakerprofile.jpg'),
+              // 2. Use image from the model
+              backgroundImage: AssetImage(data.profileImage.isNotEmpty ? data.profileImage : 'assets/images/screen30speakerprofile.jpg'),
             ),
             const SizedBox(height: 16),
 
             // Name and Title
-            const Text('Dr. Anya Sharma', style: AppTextStyles.heading2),
+            Text(data.name.isEmpty ? 'Loading Name...' : data.name, style: AppTextStyles.heading2),
             const SizedBox(height: 4),
             Text(
-              'Chief Innovation Officer\nInnovateTech Solutions',
+              data.designation.isEmpty ? 'Loading Designation...' : data.designation,
               textAlign: TextAlign.center,
               style: AppTextStyles.bodyText.copyWith(
                 color: AppColors.lightText,
-              ), 
+              ),
             ),
             const SizedBox(height: 24),
 
@@ -85,7 +94,7 @@ class Screen30SpeakerProfile extends StatelessWidget {
                   const Text('About Speaker', style: AppTextStyles.heading3),
                   const SizedBox(height: 8),
                   Text(
-                    'Dr. Anya Sharma is a visionary leader with over 10 years of experience in mobile development and tech innovation. She currently serves as the Chief Innovation Officer at InnovateTech Solutions, where she leads the development of cutting-edge solutions for global enterprises.',
+                    data.bio.isEmpty ? 'Loading bio...' : data.bio,
                     style: AppTextStyles.bodyText.copyWith(
                       color: AppColors.darkText,
                       height: 1.5,
@@ -120,18 +129,13 @@ class Screen30SpeakerProfile extends StatelessWidget {
                 children: [
                   const Text('Sessions', style: AppTextStyles.heading2),
                   const SizedBox(height: 12),
-                  const SpeakerSessionItem(
-                    title: 'The Future of Tech Innovation',
-                    dateTime: 'July 15, 2024 · 2:00 PM',
-                    imagePath: 'assets/images/screen30image3.png',
-                    isLive: true,
-                  ),
-                  const SpeakerSessionItem(
-                    title: 'Building Sustainable Solutions',
-                    dateTime: 'July 16, 2024 · 10:00 AM',
-                    imagePath: 'assets/images/screen30image4.jpg',
-                    isLive: true,
-                  ),
+                  // Render Sessions dynamically from model
+                  ...data.sessions.map((session) => SpeakerSessionItem(
+                    title: session.title,
+                    dateTime: session.dateTime,
+                    imagePath: session.imagePath,
+                    isLive: session.isLive,
+                  )).toList(),
                   const SizedBox(height: 32),
 
                   // Past Events Section
@@ -141,17 +145,12 @@ class Screen30SpeakerProfile extends StatelessWidget {
                     height: 220, 
                     child: ListView(
                       scrollDirection: Axis.horizontal,
-                      children: const [
-                        PastEventCard(
-                            imagePath: 'assets/images/screen29image1.jpg',
-                            title: 'Tech Summit 2023',
-                            year: '2023'),
-                        PastEventCard(
-                          title: 'Innovate Conference 2022',
-                          imagePath: 'assets/images/screen26image1.jpg',
-                          year: '2022',
-                        ),
-                      ],
+                      // Render Past Events dynamically from model
+                      children: data.pastEvents.map((event) => PastEventCard(
+                        title: event.title,
+                        year: event.year,
+                        imagePath: event.imagePath,
+                      )).toList(),
                     ),
                   ),
                   const SizedBox(height: 36),

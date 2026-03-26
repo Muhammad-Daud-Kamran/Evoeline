@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../widgets/solid_stat_card.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/attendee_list_item.dart';
+import '../viewmodels/attendees_viewmodel.dart';
 
 
-class Screen33CheckIn extends StatelessWidget {
+class Screen33CheckIn extends ConsumerWidget {
   const Screen33CheckIn({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(attendeesProvider);
+    final viewModel = ref.read(attendeesProvider.notifier);
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -30,65 +34,53 @@ class Screen33CheckIn extends StatelessWidget {
             const SizedBox(height: 16),
             // Stat Cards Row
             Row(
-              children: const [
+              children: [
                 Expanded(
-                  child: SolidStatCard(title: 'Total Expected', value: '250'),
+                  child: SolidStatCard(title: 'Total Expected', value: '${state.totalRegistered}'),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
-                  child: SolidStatCard(title: 'Checked In', value: '185'),
+                  child: SolidStatCard(title: 'Checked In', value: '${state.checkedInCount}'),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            const SizedBox(
+            SizedBox(
               width: double.infinity,
-              child: SolidStatCard(title: 'Pending', value: '65'),
+              child: SolidStatCard(
+                  title: 'Pending',
+                  value: '${state.totalRegistered - state.checkedInCount}'),
             ),
             const SizedBox(height: 24),
 
             // Search Box
-            const CustomTextField(hintText: 'Search', prefixIcon: Icons.search),
+            CustomTextField(
+                hintText: 'Search',
+                prefixIcon: Icons.search,
+                onChanged: (val) => viewModel.searchAttendees(val),
+            ),
             const SizedBox(height: 16),
 
             // Attendee List
             Expanded(
-              child: ListView(
-                children: const [
-                  // TODO: To use image assets for avatars, pass avatarImagePath argument
-                  // e.g. avatarImagePath: 'assets/images/user_ayesha.png',
-                  AttendeeListItem(
-                    name: 'Ayesha Khan',
-                    subtitle: 'Ticket ID: 12345',
-                    isCheckedIn: true,
-                    subtitleColor: AppColors.lightText,
-                  ),
-                  AttendeeListItem(
-                    name: 'Ethan Carter',
-                    subtitle: 'Ticket ID: 67890',
-                    isCheckedIn: true,
-                    subtitleColor: AppColors.lightText,
-                  ),
-                  AttendeeListItem(
-                    name: 'Olivia Bennett',
-                    subtitle: 'Ticket ID: 11223',
-                    isCheckedIn: true,
-                    subtitleColor: AppColors.lightText,
-                  ),
-                  AttendeeListItem(
-                    name: 'Noah Thompson',
-                    subtitle: 'Ticket ID: 33445',
-                    isCheckedIn: true,
-                    subtitleColor: AppColors.lightText,
-                  ),
-                  AttendeeListItem(
-                    name: 'Sophia Ramirez',
-                    subtitle: 'Ticket ID: 55667',
-                    isCheckedIn: true,
-                    subtitleColor: AppColors.lightText,
-                  ),
-                ],
-              ),
+              child: state.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      itemCount: state.filteredAttendees.length,
+                      itemBuilder: (context, index) {
+                        final attendee = state.filteredAttendees[index];
+                        return AttendeeListItem(
+                          name: attendee.name,
+                          subtitle: attendee.email,
+                          isCheckedIn: attendee.isCheckedIn,
+                          statusText: attendee.statusText,
+                          paymentStatus: attendee.paymentStatus,
+                          paymentAmount: attendee.paymentAmount,
+                          subtitleColor: AppColors.lightText,
+                          // Optional avatar handling from attendee.avatarImagePath if valid
+                        );
+                      },
+                    ),
             ),
           ],
         ),

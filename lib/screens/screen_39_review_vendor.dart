@@ -1,33 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants/app_colors.dart';
 import '../widgets/custom_button.dart';
+import '../viewmodels/submit_review_viewmodel.dart';
 
 /// Screen 39: Rate & Review Vendor
-class Screen39ReviewVendor extends StatefulWidget {
+class Screen39ReviewVendor extends ConsumerWidget {
   const Screen39ReviewVendor({super.key});
 
-  @override
-  State<Screen39ReviewVendor> createState() => _Screen39ReviewVendorState();
-}
-
-class _Screen39ReviewVendorState extends State<Screen39ReviewVendor> {
-  int _overallRating = 5;
-  int _qualityRating = 5;
-  int _professionalismRating = 5;
-  int _valueRating = 5;
-  int _communicationRating = 5;
-  int _timelinessRating = 5;
-
-  bool _recommendVendor = true;
-  String _reviewText = '';
-
-  final List<String> _selectedProsCons = [
-    'High Quality',
-    'On-time Delivery',
-    'Smooth Setup',
-  ];
-
-  final List<String> _prosConsOptions = [
+  final List<String> _prosConsOptions = const [
     'Professional Staff',
     'On-time Delivery',
     'High Quality',
@@ -42,7 +23,10 @@ class _Screen39ReviewVendorState extends State<Screen39ReviewVendor> {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(submitReviewProvider);
+    final viewModel = ref.read(submitReviewProvider.notifier);
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -82,8 +66,8 @@ class _Screen39ReviewVendorState extends State<Screen39ReviewVendor> {
               child: Column(
                 children: [
                   _buildStarRating(
-                    _overallRating,
-                    (rating) => setState(() => _overallRating = rating),
+                    state.overallRating,
+                    (rating) => viewModel.setOverallRating(rating),
                     size: 32,
                   ),
                   const SizedBox(height: 8),
@@ -104,28 +88,28 @@ class _Screen39ReviewVendorState extends State<Screen39ReviewVendor> {
             const SizedBox(height: 16),
             _buildDetailedRatingRow(
               'Quality of Service',
-              _qualityRating,
-              (r) => setState(() => _qualityRating = r),
+              state.qualityRating,
+              (r) => viewModel.setDetailedRating('quality', r),
             ),
             _buildDetailedRatingRow(
               'Professionalism',
-              _professionalismRating,
-              (r) => setState(() => _professionalismRating = r),
+              state.professionalismRating,
+              (r) => viewModel.setDetailedRating('professionalism', r),
             ),
             _buildDetailedRatingRow(
               'Value for Money',
-              _valueRating,
-              (r) => setState(() => _valueRating = r),
+              state.valueRating,
+              (r) => viewModel.setDetailedRating('value', r),
             ),
             _buildDetailedRatingRow(
               'Communication',
-              _communicationRating,
-              (r) => setState(() => _communicationRating = r),
+              state.communicationRating,
+              (r) => viewModel.setDetailedRating('communication', r),
             ),
             _buildDetailedRatingRow(
               'Timeliness',
-              _timelinessRating,
-              (r) => setState(() => _timelinessRating = r),
+              state.timelinessRating,
+              (r) => viewModel.setDetailedRating('timeliness', r),
             ),
             const SizedBox(height: 24),
 
@@ -139,7 +123,7 @@ class _Screen39ReviewVendorState extends State<Screen39ReviewVendor> {
               child: TextField(
                 maxLines: 5,
                 maxLength: 500,
-                onChanged: (val) => setState(() => _reviewText = val),
+                onChanged: (val) => viewModel.setReviewText(val),
                 decoration: const InputDecoration(
                   hintText: '',
                   border: InputBorder.none,
@@ -150,7 +134,7 @@ class _Screen39ReviewVendorState extends State<Screen39ReviewVendor> {
             ),
             const SizedBox(height: 8),
             Text(
-              '${_reviewText.length}/500',
+              '${state.reviewText.length}/500',
               style: const TextStyle(color: AppColors.lightText, fontSize: 12),
             ),
             const SizedBox(height: 24),
@@ -168,7 +152,7 @@ class _Screen39ReviewVendorState extends State<Screen39ReviewVendor> {
               spacing: 8,
               runSpacing: 8,
               children: _prosConsOptions.map((option) {
-                final isSelected = _selectedProsCons.contains(option);
+                final isSelected = state.selectedProsCons.contains(option);
                 return ChoiceChip(
                   label: Text(
                     option,
@@ -181,15 +165,7 @@ class _Screen39ReviewVendorState extends State<Screen39ReviewVendor> {
                     ),
                   ),
                   selected: isSelected,
-                  onSelected: (selected) {
-                    setState(() {
-                      if (selected) {
-                        _selectedProsCons.add(option);
-                      } else {
-                        _selectedProsCons.remove(option);
-                      }
-                    });
-                  },
+                  onSelected: (_) => viewModel.toggleProCon(option),
                   backgroundColor: AppColors.lightGreyBackground,
                   selectedColor: AppColors.lightGreyBackground,
                   shape: RoundedRectangleBorder(
@@ -212,11 +188,9 @@ class _Screen39ReviewVendorState extends State<Screen39ReviewVendor> {
                   style: TextStyle(color: AppColors.darkText, fontSize: 14),
                 ),
                 Switch(
-                  value: _recommendVendor,
-                  onChanged: (val) => setState(() => _recommendVendor = val),
-                  activeTrackColor: AppColors.primaryGreen.withValues(
-                    alpha: 0.5,
-                  ),
+                  value: state.recommendVendor,
+                  onChanged: (val) => viewModel.setRecommendVendor(val),
+                  activeTrackColor: AppColors.primaryGreen.withOpacity(0.5),
                   activeThumbColor: AppColors.primaryGreen,
                 ),
               ],
@@ -224,7 +198,7 @@ class _Screen39ReviewVendorState extends State<Screen39ReviewVendor> {
             const SizedBox(height: 32),
 
             // Submit Button
-            CustomButton(text: 'Submit Review', onPressed: () {}),
+            CustomButton(text: state.isSubmitting ? 'Submitting...' : 'Submit Review', onPressed: () => viewModel.submitReview()),
             const SizedBox(height: 24),
           ],
         ),

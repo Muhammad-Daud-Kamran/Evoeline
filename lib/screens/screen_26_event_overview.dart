@@ -1,17 +1,67 @@
+// lib/screens/screen_26_event_overview.dart
+
+// ─────────────────────────────────────────────────────
+// Screen 26 — Event Overview (Organizer View)
+//
+// TWO PROVIDERS:
+//   eventProvider     → EventViewModel (event_viewmodel.dart)
+//   analyticsProvider → AnalyticsViewModel (analytics_viewmodel.dart)
+//
+// FROM eventProvider + EventViewModel GETTERS:
+//   event.title                → header title
+//   event.bannerImage          → header image
+//   event.checkIns             → Checked In stat card
+//   vm.budgetStatusLabel       → Budget stat card value
+//   vm.budgetPercentageLabel   → Budget stat card percentage
+//   vm.budgetProgress          → progress bar value
+//   event.organizerName        → Key Information
+//   vm.coOrganizersText        → Key Information
+//   vm.sponsorsText            → Key Information
+//   vm.partnersText            → Key Information
+//   event.registrationOpenDate → Important Dates
+//   event.startDate/endDate    → Important Dates
+//
+// FROM analyticsProvider:
+//   analytics.totalRegistrations  → Total Registered stat card
+//   analytics.certificatesIssued  → Certificates Issued stat card
+// ─────────────────────────────────────────────────────
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
+import '../viewmodels/event_viewmodel.dart';     // 👈 your existing VM
+import '../viewmodels/event_overview_viewmodel.dart'; // 👈 analytics VM
 import '../widgets/custom_button.dart';
 import '../widgets/overview_stat_card.dart';
 import '../widgets/info_list_tile.dart';
 
-/// Screen 26: Event Overview
-class Screen26EventOverview extends StatelessWidget {
+class Screen26EventOverview extends ConsumerWidget {
   const Screen26EventOverview({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    // ── PROVIDER 1 — Event Data ──────────────────────
+    // ref.watch → reads state AND rebuilds when changed
+    final eventState = ref.watch(eventProvider);
+    final event      = eventState.event;
+
+    // ── ACCESS VIEWMODEL GETTERS ─────────────────────
+    // ref.read → access computed getters from EventViewModel
+    // we use read here because getters don't need to rebuild
+    // they compute from state which watch already handles
+    final eventVM = ref.read(eventProvider.notifier);
+
+    // ── PROVIDER 2 — Analytics Data ──────────────────
+    final analyticsState = ref.watch(analyticsProvider);
+    final analytics      = analyticsState.analytics;
+
+    // ── COMBINED LOADING ──────────────────────────────
+    // show spinner if either provider is still loading
+    final isLoading = eventState.isLoading || analyticsState.isLoading;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -24,91 +74,168 @@ class Screen26EventOverview extends StatelessWidget {
         title: const Text('Event Overview', style: AppTextStyles.heading2),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
+
+      // ── LOADING STATE ──────────────────────────────
+      body: isLoading
+          ? const Center(
+        child: CircularProgressIndicator(
+          color: AppColors.primaryGreen,
+        ),
+      )
+
+      // ── ERROR STATE ────────────────────────────
+          : eventState.errorMessage.isNotEmpty ||
+          analyticsState.errorMessage.isNotEmpty
+          ? Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline,
+                color: Colors.red, size: 48),
+            const SizedBox(height: 16),
+            Text(
+              eventState.errorMessage.isNotEmpty
+                  ? eventState.errorMessage
+                  : analyticsState.errorMessage,
+              style: AppTextStyles.bodyText,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                // retry both providers
+                ref.read(eventProvider.notifier).loadEvent();
+                ref.read(analyticsProvider.notifier).loadAnalytics();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryGreen,
+              ),
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      )
+
+      // ── CONTENT STATE ──────────────────────────
+          : SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top Image Header Placeholder
-            // TODO: Ensure you add a building header image to assets/images.
-            // e.g., Replace this Stack/Container with:
-            // Stack(children: [
-            //   Image.asset('assets/images/building.jpg', height: 200, width: double.infinity, fit: BoxFit.cover),
-            //   ...
-            // ])
+
+            // ── Header Banner ──────────────────
+            // event.bannerImage → schema: events.bannerImage
+            // event.title       → schema: events.title
             Container(
               height: 200,
               width: double.infinity,
               color: AppColors.iconColor,
               child: Stack(
                 children: [
+
+                  // Banner from EventModel
+                  Image.asset(
+                    event.bannerImage, // ← eventProvider
+                    height: 200,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+
+                  // Title from EventModel
                   Positioned(
                     bottom: 26,
                     left: 16,
                     child: Text(
-                      'Tech Summit 2024',
+                      event.title, // ← eventProvider
                       style: AppTextStyles.heading1.copyWith(
                         color: Colors.white,
                       ),
                     ),
                   ),
-                  Image.asset('assets/images/screen26image1.jpg', height: 200, width: double.infinity, fit: BoxFit.cover),
+
                 ],
               ),
             ),
+
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Stat Cards Grid
+
+                  // ── Row 1: Stat Cards ──────────
                   Row(
-                    children: const [
+                    children: [
+
+                      // Total Registered
+                      // analytics.totalRegistrations
+                      // schema: analytics.registrations.total
                       Expanded(
                         child: OverviewStatCard(
                           title: 'Total Registered',
-                          value: '2,450',
+                          value: analytics.totalRegistrations
+                              .toString(), // ← analyticsProvider
                           percentage: '+10%',
                         ),
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
+
+                      // Checked In
+                      // event.checkIns
+                      // schema: events.analytics.checkIns
                       Expanded(
                         child: OverviewStatCard(
                           title: 'Checked In',
-                          value: '1,875',
+                          value: event.checkIns
+                              .toString(), // ← eventProvider
                           percentage: '+5%',
                         ),
                       ),
+
                     ],
                   ),
                   const SizedBox(height: 16),
+
                   Row(
-                    children: const [
+                    children: [
+
+                      // Certificates Issued
+                      // analytics.certificatesIssued
+                      // schema: analytics.certificates.issued
                       Expanded(
                         child: OverviewStatCard(
                           title: 'Certificates Issued',
-                          value: '1,500',
+                          value: analytics.certificatesIssued
+                              .toString(), // ← analyticsProvider
                           percentage: '+8%',
                         ),
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
+
+                      // Budget Status
+                      // eventVM.budgetStatusLabel
+                      // computed getter in EventViewModel
+                      // formats budgetSpent/budgetTotal as string
                       Expanded(
                         child: OverviewStatCard(
                           title: 'Budget Status',
-                          value: '\$15,000 / \$20,000',
-                          percentage: '+75%',
+                          value: eventVM.budgetStatusLabel,      // ← EventViewModel getter
+                          percentage: eventVM.budgetPercentageLabel, // ← EventViewModel getter
                         ),
                       ),
+
                     ],
                   ),
                   const SizedBox(height: 24),
 
-                  // Progress Bar for Budget
+                  // ── Budget Progress Bar ────────
+                  // eventVM.budgetProgress
+                  // computed getter in EventViewModel
+                  // = budgetSpent / budgetTotal = 0.75
                   ClipRRect(
                     borderRadius: BorderRadius.circular(4),
-                    child: const LinearProgressIndicator(
-                      value: 0.75,
+                    child: LinearProgressIndicator(
+                      value: eventVM.budgetProgress, // ← EventViewModel getter
                       backgroundColor: AppColors.dividerColor,
-                      valueColor: AlwaysStoppedAnimation<Color>(
+                      valueColor: const AlwaysStoppedAnimation<Color>(
                         AppColors.darkText,
                       ),
                       minHeight: 8,
@@ -116,131 +243,147 @@ class Screen26EventOverview extends StatelessWidget {
                   ),
                   const SizedBox(height: 32),
 
-                  // Key Information
-                  const Text('Key Information', style: AppTextStyles.heading2),
+                  // ── Key Information ────────────
+                  const Text('Key Information',
+                      style: AppTextStyles.heading2),
                   const SizedBox(height: 12),
-                  const InfoListTile(
-                    icon: Icons.person_outline,
-                    title: 'Organizer',
-                    subtitle: 'Tech Innovators Inc.',
+
+                  // Organizer
+                  // event.organizerName from EventModel
+                  InfoListTile(
+                    icon:     Icons.person_outline,
+                    title:    'Organizer',
+                    subtitle: event.organizerName, // ← eventProvider
                   ),
-                  const InfoListTile(
-                    icon: Icons.group_outlined,
-                    title: 'Co-Organizers',
-                    subtitle: 'Sarah Chen, David Lee',
+
+                  // Co-Organizers
+                  // eventVM.coOrganizersText
+                  // computed getter joins coOrganizers list → string
+                  // 'Sarah Chen, David Lee'
+                  InfoListTile(
+                    icon:     Icons.group_outlined,
+                    title:    'Co-Organizers',
+                    subtitle: eventVM.coOrganizersText, // ← EventViewModel getter
                   ),
-                  const InfoListTile(
-                    icon: Icons.campaign_outlined,
-                    title: 'Sponsors',
-                    subtitle: 'Innovate Solutions, FutureTech',
+
+                  // Sponsors
+                  // eventVM.sponsorsText
+                  // computed getter joins sponsors list → string
+                  InfoListTile(
+                    icon:     Icons.campaign_outlined,
+                    title:    'Sponsors',
+                    subtitle: eventVM.sponsorsText, // ← EventViewModel getter
                   ),
-                  const InfoListTile(
-                    icon: Icons.handshake_outlined,
-                    title: 'Partners',
-                    subtitle: 'Global Partners Network',
+
+                  // Partners
+                  // eventVM.partnersText
+                  // computed getter joins partners list → string
+                  InfoListTile(
+                    icon:     Icons.handshake_outlined,
+                    title:    'Partners',
+                    subtitle: eventVM.partnersText, // ← EventViewModel getter
                   ),
                   const SizedBox(height: 24),
 
-                  // Important Dates
-                  const Text('Important Dates', style: AppTextStyles.heading2),
+                  // ── Important Dates ────────────
+                  const Text('Important Dates',
+                      style: AppTextStyles.heading2),
                   const SizedBox(height: 12),
-                  const InfoListTile(
-                    icon: Icons.calendar_month_outlined,
-                    title: 'Registration Opens',
-                    subtitle: 'July 15, 2024',
+
+                  // Registration Opens
+                  // event.registrationOpenDate
+                  // schema: registration.registrationOpenDate
+                  InfoListTile(
+                    icon:     Icons.calendar_month_outlined,
+                    title:    'Registration Opens',
+                    subtitle: event.registrationOpenDate, // ← eventProvider
                   ),
-                  const InfoListTile(
-                    icon: Icons.event_outlined,
-                    title: 'Event Dates',
-                    subtitle: 'August 20-22, 2024',
+
+                  // Event Dates
+                  // event.startDate + event.endDate
+                  // schema: schedule.startDate + schedule.endDate
+                  InfoListTile(
+                    icon:     Icons.event_outlined,
+                    title:    'Event Dates',
+                    subtitle: '${event.startDate} - ${event.endDate}', // ← eventProvider
                   ),
                   const SizedBox(height: 32),
 
-                  // Buttons
+                  // ── Action Buttons ─────────────
+                  // navigation only — no ViewModel method needed
                   CustomButton(
-                    text: 'View Public Page',
+                    text:            'View Public Page',
                     backgroundColor: AppColors.lightGreyBackground,
-                    textColor: AppColors.darkText,
-                    onPressed: () {},
+                    textColor:       AppColors.darkText,
+                    onPressed:       () {},
                   ),
                   const SizedBox(height: 12),
                   CustomButton(
-                    text: 'Share Event',
+                    text:            'Share Event',
                     backgroundColor: AppColors.lightGreyBackground,
-                    textColor: AppColors.darkText,
-                    onPressed: () {},
+                    textColor:       AppColors.darkText,
+                    onPressed:       () {},
                   ),
                   const SizedBox(height: 12),
                   CustomButton(
-                    text: 'Edit Details',
+                    text:            'Edit Details',
                     backgroundColor: AppColors.primaryGreen,
-                    onPressed: () {},
+                    onPressed:       () {},
                   ),
                   const SizedBox(height: 16),
+
                 ],
               ),
             ),
           ],
         ),
       ),
-        bottomNavigationBar: Container(
-          height: 65,
-          decoration: const BoxDecoration(
-            color: AppColors.background,
-            border: Border(top: BorderSide(color: Color(0xFFEEEEEE), width: 1)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              // HOW TO USE CUSTOM SVG ICONS:
-              // 1. Place your .svg file in 'assets/images/' folder (or any folder declared in pubspec.yaml)
-              // 2. Use SvgPicture.asset('assets/images/your_icon.svg')
-              // 3. Example commented out below:
 
-              /*
-            SvgPicture.asset(
-              'assets/images/home_icon.svg',
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
-              width: 28,
-            ),
-            */
-
-              SvgPicture.asset(
-                'assets/images/screen26overviewicon.svg',
-                colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
-                width: 44,
-                height: 44,
-              ),
-              SvgPicture.asset(
-                'assets/images/s26 attendeeicon.svg',
-                colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
-                width: 44,
-                height: 44,
-              ),
-
-                SvgPicture.asset(
-                  'assets/images/s26scheduleicon.svg',
-                  colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
-                  width: 44,
-                  height: 44,
-                ),
-
-              SvgPicture.asset(
-                'assets/images/s26promoteicon.svg',
-                colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
-                width: 44,
-                height: 44,
-              ),
-              SvgPicture.asset(
-                'assets/images/s26settingsicon.svg',
-                colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
-                width: 44,
-                height: 44,
-              ),
-            ],
+      // ── Bottom Navigation Bar ──────────────────────
+      bottomNavigationBar: Container(
+        height: 65,
+        decoration: const BoxDecoration(
+          color:  AppColors.background,
+          border: Border(
+            top: BorderSide(color: Color(0xFFEEEEEE), width: 1),
           ),
         ),
-          // Assuming 'Overview' maps to first tab
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            SvgPicture.asset(
+              'assets/images/screen26overviewicon.svg',
+              colorFilter: const ColorFilter.mode(
+                  AppColors.lightText, BlendMode.srcIn),
+              width: 44, height: 44,
+            ),
+            SvgPicture.asset(
+              'assets/images/s26 attendeeicon.svg',
+              colorFilter: const ColorFilter.mode(
+                  AppColors.lightText, BlendMode.srcIn),
+              width: 44, height: 44,
+            ),
+            SvgPicture.asset(
+              'assets/images/s26scheduleicon.svg',
+              colorFilter: const ColorFilter.mode(
+                  AppColors.lightText, BlendMode.srcIn),
+              width: 44, height: 44,
+            ),
+            SvgPicture.asset(
+              'assets/images/s26promoteicon.svg',
+              colorFilter: const ColorFilter.mode(
+                  AppColors.lightText, BlendMode.srcIn),
+              width: 44, height: 44,
+            ),
+            SvgPicture.asset(
+              'assets/images/s26settingsicon.svg',
+              colorFilter: const ColorFilter.mode(
+                  AppColors.lightText, BlendMode.srcIn),
+              width: 44, height: 44,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

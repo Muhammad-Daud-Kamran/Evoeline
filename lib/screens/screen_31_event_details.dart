@@ -1,16 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../widgets/agenda_timeline_item.dart';
 import '../widgets/speaker_avatar_item.dart';
+import '../viewmodels/event_viewmodel.dart';
+import '../viewmodels/agenda_viewmodel.dart';
+import '../viewmodels/speaker_viewmodel.dart';
 
-/// Screen 31: Event Details / Tech Summit 2024
-class Screen31EventDetails extends StatelessWidget {
+/// Screen 31: Event Details (Attendee View)
+/// This screen uses three independent providers:
+/// 1. eventProvider   → For the main event information (Header, Hero image, Venue)
+/// 2. agendaProvider  → For the Agenda timeline section
+/// 3. speakerProvider → For the Speakers horizontal list
+class Screen31EventDetails extends ConsumerWidget {
   const Screen31EventDetails({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // ── STEP 1: WATCH THE PROVIDERS ──────────────────
+    final eventState = ref.watch(eventProvider);
+    final agendaState = ref.watch(agendaProvider);
+    final speakerState = ref.watch(speakerProvider);
+
+    // If any core data is loading, show a loader
+    if (eventState.isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator(color: AppColors.primaryGreen)),
+      );
+    }
+
+    final event = eventState.event;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -39,36 +61,36 @@ class Screen31EventDetails extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Header Info
-            const Text(
-              'Tech Summit 2024',
+            // ── STEP 2: DYNAMIC HEADER ──────────────────────
+            Text(
+              event.title,
               style: AppTextStyles.heading1,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Innovate, Connect, Transform',
+            Text(
+              event.shortDescription,
               style: AppTextStyles.label,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
 
-            // Info Chips
+            // Info Chips (Schedule & Location)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    _buildInfoChip(Icons.calendar_today, 'Oct 20, 2024'),
+                    _buildInfoChip(Icons.calendar_today, event.startDate),
                     const SizedBox(width: 8),
-                    _buildInfoChip(Icons.access_time, '9:00 AM - 5:00 PM'),
+                    _buildInfoChip(Icons.access_time, '${event.startTime} - ${event.endTime}'),
                   ],
                 ),
                 const SizedBox(height: 8),
                 _buildInfoChip(
                   Icons.location_on_outlined,
-                  'FAST University, Lahore',
+                  event.venueName,
                 ),
               ],
             ),
@@ -101,36 +123,31 @@ class Screen31EventDetails extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.heroPlaceholderDark,
                 borderRadius: BorderRadius.circular(16),
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/screen31image1.jpg'),
+                image: DecorationImage(
+                  image: AssetImage(event.bannerImage),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
             const SizedBox(height: 32),
 
-            // Agenda
+            // ── STEP 3: DYNAMIC AGENDA ──────────────────────
             const Align(
               alignment: Alignment.centerLeft,
               child: Text('Agenda', style: AppTextStyles.heading2),
             ),
             const SizedBox(height: 16),
-            const AgendaTimelineItem(
-              title: 'Opening Keynote',
-              time: '10:00 AM - 11:00 AM',
-            ),
-            const AgendaTimelineItem(
-              title: 'Panel Discussion: Future of AI',
-              time: '11:30 AM - 12:30 PM',
-            ),
-            const AgendaTimelineItem(
-              title: 'Networking Lunch',
-              time: '12:30 PM - 1:30 PM',
-              isLast: true,
-            ),
+            if (agendaState.isLoading)
+              const Center(child: CircularProgressIndicator())
+            else
+              ...agendaState.items.map((item) => AgendaTimelineItem(
+                    title: item.title,
+                    time: item.time,
+                    isLast: item.isLast,
+                  )),
             const SizedBox(height: 32),
 
-            // Speakers
+            // ── STEP 4: DYNAMIC SPEAKERS ────────────────────
             const Align(
               alignment: Alignment.centerLeft,
               child: Text('Speakers', style: AppTextStyles.heading2),
@@ -138,33 +155,25 @@ class Screen31EventDetails extends StatelessWidget {
             const SizedBox(height: 16),
             SizedBox(
               height: 140,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: const [
-                  SpeakerAvatarItem(
-                    name: 'Ethan Carter',
-                    role: 'CEO, TechCorp',
-                    avatarColor: AppColors.avatarGreen1,
-                    imagepath: 'assets/images/screen31circularimage1.jpg',
-                  ),
-                  SpeakerAvatarItem(
-                    name: 'Sophia Bennett',
-                    role: 'CTO, InnovateAI',
-                    avatarColor: AppColors.avatarGreen2,
-                    imagepath: 'assets/images/screen31circularimage2.jpg',
-                  ),
-                  SpeakerAvatarItem(
-                    name: 'Liam',
-                    role: 'Future..',
-                    avatarColor: AppColors.avatarGrey,
-                    imagepath: 'assets/images/screen31circularimage3.png',
-                  ),
-                ],
-              ),
+              child: speakerState.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: speakerState.speakers.length,
+                      itemBuilder: (context, index) {
+                        final speaker = speakerState.speakers[index];
+                        return SpeakerAvatarItem(
+                          name: speaker.name,
+                          role: speaker.designation,
+                          avatarColor: index == 0 ? AppColors.avatarGreen1 : (index == 1 ? AppColors.avatarGreen2 : AppColors.avatarGrey),
+                          imagepath: speaker.profileImage,
+                        );
+                      },
+                    ),
             ),
             const SizedBox(height: 32),
 
-            // NEW: Sponsors Section (Schema Addition)
+            // Sponsors Section
             const Align(
               alignment: Alignment.centerLeft,
               child: Text('Sponsors', style: AppTextStyles.heading2),
@@ -174,11 +183,7 @@ class Screen31EventDetails extends StatelessWidget {
               height: 100,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                children: [
-                  _buildSponsorCard('Innovate Solutions'),
-                  _buildSponsorCard('FutureTech'),
-                  _buildSponsorCard('Global Partners'),
-                ],
+                children: event.sponsors.map((s) => _buildSponsorCard(s)).toList(),
               ),
             ),
             const SizedBox(height: 32),
@@ -189,10 +194,10 @@ class Screen31EventDetails extends StatelessWidget {
               child: Text('Venue Information', style: AppTextStyles.heading2),
             ),
             const SizedBox(height: 8),
-            const Align(
+            Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Main Hall, FAST University, Lahore',
+                event.address,
                 style: AppTextStyles.bodyText,
               ),
             ),
@@ -227,18 +232,23 @@ class Screen31EventDetails extends StatelessWidget {
             const SizedBox(height: 48),
 
             // Action Icons
-            const _BuildActionIcon(svgPath: 'assets/images/whatsapp.svg'),
-            const SizedBox(height: 24),
-            const _BuildActionIcon(svgPath: 'assets/images/linkedin.svg'),
-            const SizedBox(height: 24),
-            const _BuildActionIcon(svgPath: 'assets/images/facebook.svg'),
-            const SizedBox(height: 24),
-            const _BuildActionIcon(svgPath: 'assets/images/link.svg'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const _BuildActionIcon(svgPath: 'assets/images/whatsapp.svg'),
+                const SizedBox(width: 24),
+                const _BuildActionIcon(svgPath: 'assets/images/linkedin.svg'),
+                const SizedBox(width: 24),
+                const _BuildActionIcon(svgPath: 'assets/images/facebook.svg'),
+                const SizedBox(width: 24),
+                const _BuildActionIcon(svgPath: 'assets/images/link.svg'),
+              ],
+            ),
             const SizedBox(height: 48),
 
             // Back Button
             TextButton(
-              onPressed: () {},
+              onPressed: () => Navigator.of(context).pop(),
               child: const Text(
                 'Back to Dashboard',
                 style: TextStyle(

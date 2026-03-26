@@ -12,13 +12,12 @@
 // ─────────────────────────────────────────────────────
 
 class PricingTierModel {
-
   // Every tier has these 5 fields — matching the schema exactly
-  final String id;             // unique ID like T001, T002
-  final String name;           // Early Bird | Regular | VIP
-  final double price;          // 1500.0
+  final String id; // unique ID like T001, T002
+  final String name; // Early Bird | Regular | VIP
+  final double price; // 1500.0
   final String availableUntil; // "2024-03-15"
-  final int    seats;          // 30
+  final int seats; // 30
 
   // Constructor — how you create a PricingTierModel object
   const PricingTierModel({
@@ -36,14 +35,14 @@ class PricingTierModel {
     String? name,
     double? price,
     String? availableUntil,
-    int?    seats,
+    int? seats,
   }) {
     return PricingTierModel(
-      id:             id,                       // id never changes
-      name:           name           ?? this.name,
-      price:          price          ?? this.price,
+      id: id, // id never changes
+      name: name ?? this.name,
+      price: price ?? this.price,
       availableUntil: availableUntil ?? this.availableUntil,
-      seats:          seats          ?? this.seats,
+      seats: seats ?? this.seats,
     );
   }
 }
