@@ -21,10 +21,11 @@ import 'registration_models/discount_model.dart';
 import 'registration_models/custom_field_model.dart';
 
 class EventModel {
+
   // ── SECTION 1: Core Identity ───────────────────────
   // matches: events.eventId, organizerId, title etc
-  final String eventId; // EVT001, EVT002
-  final String organizerId; // ref to users/
+  final String eventId;       // EVT001, EVT002
+  final String organizerId;   // ref to users/
   final String title;
   final String description;
   final String shortDescription;
@@ -66,12 +67,12 @@ class EventModel {
   // kept FLAT — simple string fields, no submodel needed
   // matches: events.schedule.*
 
-  final String startDate; // "2024-04-15"
-  final String endDate; // "2024-04-16"
-  final String startTime; // "10:00 AM"
-  final String endTime; // "5:00 PM"
-  final String timezone; // "PKT"
-  final bool isRecurring;
+  final String startDate;         // "2024-04-15"
+  final String endDate;           // "2024-04-16"
+  final String startTime;         // "10:00 AM"
+  final String endTime;           // "5:00 PM"
+  final String timezone;          // "PKT"
+  final bool   isRecurring;
   final String recurrencePattern; // weekly | monthly | null
 
   // ── SECTION 4: Location ───────────────────────────
@@ -97,7 +98,7 @@ class EventModel {
   // matches: events.capacity.*
 
   final int totalSeats;
-  final int reservedSeats; // for VIPs/speakers
+  final int reservedSeats;   // for VIPs/speakers
   final int availableSeats;
 
   // ── SECTION 6: Registration ───────────────────────
@@ -105,7 +106,7 @@ class EventModel {
 
   final String registrationOpenDate;
   final String registrationCloseDate;
-  final bool requiresApproval;
+  final bool   requiresApproval;
 
   // Custom form fields → submodel because complex + reused
   // matches: events.registration.customForm[]
@@ -114,8 +115,8 @@ class EventModel {
   // ── SECTION 7: Pricing ────────────────────────────
   // matches: events.pricing.*
 
-  final bool isFree;
-  final String currency; // PKR
+  final bool   isFree;
+  final String currency;   // PKR
 
   // Pricing tiers → submodel because complex + reused in 3 screens
   // matches: events.pricing.tiers[]
@@ -127,45 +128,46 @@ class EventModel {
 
   // matches: events.pricing.groupDiscount
   final DiscountModel groupDiscount;
-  final String organizerName; // "Tech Innovators Inc."
+  final String       organizerName;  // "Tech Innovators Inc."
 
   // NOT in schema — added for Screen 26
-  final List<String> coOrganizers; // ['Sarah Chen', 'David Lee']
-  final List<String> sponsors; // ['Innovate Solutions', 'FutureTech']
-  final List<String> partners; // ['Global Partners Network']
+  final List<String> coOrganizers;   // ['Sarah Chen', 'David Lee']
+  final List<String> sponsors;       // ['Innovate Solutions', 'FutureTech']
+  final List<String> partners;       // ['Global Partners Network']
 
   // ── SECTION 9: Budget ─────────────────────────────
   // NOT in schema — schema has revenue but not budget
   // Added for Screen 26 budget progress bar
   // budgetProgress = budgetSpent / budgetTotal
 
-  final double budgetSpent; // 15000
-  final double budgetTotal; // 20000
+  final double budgetSpent;   // 15000
+  final double budgetTotal;   // 20000
   // budgetProgress is CALCULATED not stored
   // → budgetSpent / budgetTotal = 0.75
   // → calculated in ViewModel, NOT stored in model
+
 
   // ── SECTION 8: Certificate Config ─────────────────
   // kept FLAT — simple fields, only used in Screen 24
   // matches: events.certificateConfig.*
 
-  final bool issueCertificates;
+  final bool   issueCertificates;
 
   // digital | blockchain | both
   final String certificateType;
   final String templateId;
 
   // requirements
-  final int minAttendance; // percentage e.g. 80
+  final int  minAttendance;      // percentage e.g. 80
   final bool mustCompleteSurvey;
 
   // ── SECTION 9: Analytics ──────────────────────────
   // read only — kept FLAT — no submodel needed
   // matches: events.analytics.*
 
-  final int views;
-  final int registrations;
-  final int checkIns;
+  final int    views;
+  final int    registrations;
+  final int    checkIns;
   final double completionRate;
   final double revenue;
 
@@ -181,105 +183,105 @@ class EventModel {
     required this.organizerId,
     required this.title,
     required this.description,
-    this.shortDescription = '',
+    this.shortDescription      = '',
     required this.category,
     required this.eventType,
     required this.format,
     required this.status,
-    this.visibility = 'public',
-    this.accessCode = '',
+    this.visibility            = 'public',
+    this.accessCode            = '',
 
     // Media
     required this.bannerImage,
-    this.galleryImages = const [],
-    this.promoVideoUrl = '',
+    this.galleryImages         = const [],
+    this.promoVideoUrl         = '',
 
     // Schedule
     required this.startDate,
     required this.endDate,
     required this.startTime,
     required this.endTime,
-    this.timezone = 'PKT',
-    this.isRecurring = false,
-    this.recurrencePattern = '',
+    this.timezone              = 'PKT',
+    this.isRecurring           = false,
+    this.recurrencePattern     = '',
 
     // Location
     required this.venueName,
-    this.address = '',
-    this.city = '',
-    this.country = 'Pakistan',
-    this.latitude = 0.0,
-    this.longitude = 0.0,
-    this.meetingPlatform = '',
-    this.meetingLink = '',
-    this.meetingId = '',
-    this.meetingPassword = '',
+    this.address               = '',
+    this.city                  = '',
+    this.country               = 'Pakistan',
+    this.latitude              = 0.0,
+    this.longitude             = 0.0,
+    this.meetingPlatform       = '',
+    this.meetingLink           = '',
+    this.meetingId             = '',
+    this.meetingPassword       = '',
 
     // Capacity
     required this.totalSeats,
-    this.reservedSeats = 0,
+    this.reservedSeats         = 0,
     required this.availableSeats,
 
     // Registration
-    this.registrationOpenDate = '',
+    this.registrationOpenDate  = '',
     this.registrationCloseDate = '',
-    this.requiresApproval = false,
-    this.customFields = const [],
+    this.requiresApproval      = false,
+    this.customFields          = const [],
 
     // Pricing
     required this.isFree,
-    this.currency = 'PKR',
-    this.tiers = const [],
-    this.studentDiscount = const DiscountModel(),
-    this.groupDiscount = const DiscountModel(),
-    this.organizerName = '',
-    this.coOrganizers = const [],
-    this.sponsors = const [],
-    this.partners = const [],
-    this.budgetSpent = 0.0,
-    this.budgetTotal = 0.0,
+    this.currency              = 'PKR',
+    this.tiers                 = const [],
+    this.studentDiscount       = const DiscountModel(),
+    this.groupDiscount         = const DiscountModel(),
+    this.organizerName          = '',
+    this.coOrganizers           = const [],
+    this.sponsors               = const [],
+    this.partners               = const [],
+    this.budgetSpent            = 0.0,
+    this.budgetTotal            = 0.0,
 
     // Certificates
-    this.issueCertificates = false,
-    this.certificateType = 'digital',
-    this.templateId = '',
-    this.minAttendance = 80,
-    this.mustCompleteSurvey = false,
+    this.issueCertificates     = false,
+    this.certificateType       = 'digital',
+    this.templateId            = '',
+    this.minAttendance         = 80,
+    this.mustCompleteSurvey    = false,
 
     // Analytics
-    this.views = 0,
-    this.registrations = 0,
-    this.checkIns = 0,
-    this.completionRate = 0.0,
-    this.revenue = 0.0,
+    this.views                 = 0,
+    this.registrations         = 0,
+    this.checkIns              = 0,
+    this.completionRate        = 0.0,
+    this.revenue               = 0.0,
 
     // Timestamps
-    this.createdAt = '',
-    this.updatedAt = '',
-    this.publishedAt = '',
+    this.createdAt             = '',
+    this.updatedAt             = '',
+    this.publishedAt           = '',
   });
 
   // ── empty() ───────────────────────────────────────
   // Used when creating a brand new event from scratch
   factory EventModel.empty() {
     return const EventModel(
-      eventId: '',
-      organizerId: '',
-      title: '',
-      description: '',
-      category: '',
-      eventType: '',
-      format: 'physical',
-      status: 'draft',
-      bannerImage: '',
-      startDate: '',
-      endDate: '',
-      startTime: '',
-      endTime: '',
-      venueName: '',
-      totalSeats: 0,
-      availableSeats: 0,
-      isFree: true,
+      eventId:         '',
+      organizerId:     '',
+      title:           '',
+      description:     '',
+      category:        '',
+      eventType:       '',
+      format:          'physical',
+      status:          'draft',
+      bannerImage:     '',
+      startDate:       '',
+      endDate:         '',
+      startTime:       '',
+      endTime:         '',
+      venueName:       '',
+      totalSeats:      0,
+      availableSeats:  0,
+      isFree:          true,
     );
   }
 
@@ -287,113 +289,110 @@ class EventModel {
   // Updates ONE field without changing the rest
   // REQUIRED by Riverpod — needs a new object on every change
   EventModel copyWith({
-    String? eventId,
-    String? organizerId,
-    String? title,
-    String? description,
-    String? shortDescription,
-    String? category,
-    String? eventType,
-    String? format,
-    String? status,
-    String? visibility,
-    String? bannerImage,
-    List<String>? galleryImages,
-    String? startDate,
-    String? endDate,
-    String? startTime,
-    String? endTime,
-    String? venueName,
-    String? address,
-    String? city,
-    String? country,
-    double? latitude,
-    double? longitude,
-    String? meetingPlatform,
-    String? meetingLink,
-    int? totalSeats,
-    int? reservedSeats,
-    int? availableSeats,
-    String? registrationOpenDate,
-    String? registrationCloseDate,
-    bool? requiresApproval,
+    String?                 title,
+    String?                 description,
+    String?                 shortDescription,
+    String?                 category,
+    String?                 eventType,
+    String?                 format,
+    String?                 status,
+    String?                 visibility,
+    String?                 bannerImage,
+    List<String>?           galleryImages,
+    String?                 startDate,
+    String?                 endDate,
+    String?                 startTime,
+    String?                 endTime,
+    String?                 venueName,
+    String?                 address,
+    String?                 city,
+    String?                 country,
+    double?                 latitude,
+    double?                 longitude,
+    String?                 meetingPlatform,
+    String?                 meetingLink,
+    int?                    totalSeats,
+    int?                    reservedSeats,
+    int?                    availableSeats,
+    String?                 registrationOpenDate,
+    String?                 registrationCloseDate,
+    bool?                   requiresApproval,
     List<CustomFieldModel>? customFields,
-    bool? isFree,
-    String? currency,
+    bool?                   isFree,
+    String?                 currency,
     List<PricingTierModel>? tiers,
-    DiscountModel? studentDiscount,
-    DiscountModel? groupDiscount,
-    String? organizerName,
-    List<String>? coOrganizers,
-    List<String>? sponsors,
-    List<String>? partners,
-    double? budgetSpent,
-    double? budgetTotal,
-    bool? issueCertificates,
-    String? certificateType,
-    int? minAttendance,
-    bool? mustCompleteSurvey,
-    int? views,
-    int? registrations,
-    int? checkIns,
-    double? completionRate,
-    double? revenue,
-    String? publishedAt,
+    DiscountModel?          studentDiscount,
+    DiscountModel?          groupDiscount,
+    String?                 organizerName,
+    List<String>?           coOrganizers,
+    List<String>?           sponsors,
+    List<String>?           partners,
+    double?                 budgetSpent,
+    double?                 budgetTotal,
+    bool?                   issueCertificates,
+    String?                 certificateType,
+    int?                    minAttendance,
+    bool?                   mustCompleteSurvey,
+    int?                    views,
+    int?                    registrations,
+    int?                    checkIns,
+    double?                 completionRate,
+    double?                 revenue,
+    String?                 publishedAt,
   }) {
     return EventModel(
-      eventId: eventId ?? this.eventId,
-      organizerId: organizerId ?? this.organizerId,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      shortDescription: shortDescription ?? this.shortDescription,
-      category: category ?? this.category,
-      eventType: eventType ?? this.eventType,
-      format: format ?? this.format,
-      status: status ?? this.status,
-      visibility: visibility ?? this.visibility,
-      bannerImage: bannerImage ?? this.bannerImage,
-      galleryImages: galleryImages ?? this.galleryImages,
-      startDate: startDate ?? this.startDate,
-      endDate: endDate ?? this.endDate,
-      startTime: startTime ?? this.startTime,
-      endTime: endTime ?? this.endTime,
-      venueName: venueName ?? this.venueName,
-      address: address ?? this.address,
-      city: city ?? this.city,
-      country: country ?? this.country,
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
-      meetingPlatform: meetingPlatform ?? this.meetingPlatform,
-      meetingLink: meetingLink ?? this.meetingLink,
-      totalSeats: totalSeats ?? this.totalSeats,
-      reservedSeats: reservedSeats ?? this.reservedSeats,
-      availableSeats: availableSeats ?? this.availableSeats,
-      registrationOpenDate: registrationOpenDate ?? this.registrationOpenDate,
-      registrationCloseDate:
-          registrationCloseDate ?? this.registrationCloseDate,
-      requiresApproval: requiresApproval ?? this.requiresApproval,
-      customFields: customFields ?? this.customFields,
-      isFree: isFree ?? this.isFree,
-      currency: currency ?? this.currency,
-      tiers: tiers ?? this.tiers,
-      studentDiscount: studentDiscount ?? this.studentDiscount,
-      groupDiscount: groupDiscount ?? this.groupDiscount,
-      organizerName: organizerName ?? this.organizerName,
-      coOrganizers: coOrganizers ?? this.coOrganizers,
-      sponsors: sponsors ?? this.sponsors,
-      partners: partners ?? this.partners,
-      budgetSpent: budgetSpent ?? this.budgetSpent,
-      budgetTotal: budgetTotal ?? this.budgetTotal,
-      issueCertificates: issueCertificates ?? this.issueCertificates,
-      certificateType: certificateType ?? this.certificateType,
-      minAttendance: minAttendance ?? this.minAttendance,
-      mustCompleteSurvey: mustCompleteSurvey ?? this.mustCompleteSurvey,
-      views: views ?? this.views,
-      registrations: registrations ?? this.registrations,
-      checkIns: checkIns ?? this.checkIns,
-      completionRate: completionRate ?? this.completionRate,
-      revenue: revenue ?? this.revenue,
-      publishedAt: publishedAt ?? this.publishedAt,
+      eventId:               eventId,
+      organizerId:           organizerId,
+      title:                 title                 ?? this.title,
+      description:           description           ?? this.description,
+      shortDescription:      shortDescription      ?? this.shortDescription,
+      category:              category              ?? this.category,
+      eventType:             eventType             ?? this.eventType,
+      format:                format                ?? this.format,
+      status:                status                ?? this.status,
+      visibility:            visibility            ?? this.visibility,
+      bannerImage:           bannerImage           ?? this.bannerImage,
+      galleryImages:         galleryImages         ?? this.galleryImages,
+      startDate:             startDate             ?? this.startDate,
+      endDate:               endDate               ?? this.endDate,
+      startTime:             startTime             ?? this.startTime,
+      endTime:               endTime               ?? this.endTime,
+      venueName:             venueName             ?? this.venueName,
+      address:               address               ?? this.address,
+      city:                  city                  ?? this.city,
+      country:               country               ?? this.country,
+      latitude:              latitude              ?? this.latitude,
+      longitude:             longitude             ?? this.longitude,
+      meetingPlatform:       meetingPlatform       ?? this.meetingPlatform,
+      meetingLink:           meetingLink           ?? this.meetingLink,
+      totalSeats:            totalSeats            ?? this.totalSeats,
+      reservedSeats:         reservedSeats         ?? this.reservedSeats,
+      availableSeats:        availableSeats        ?? this.availableSeats,
+      registrationOpenDate:  registrationOpenDate  ?? this.registrationOpenDate,
+      registrationCloseDate: registrationCloseDate ?? this.registrationCloseDate,
+      requiresApproval:      requiresApproval      ?? this.requiresApproval,
+      customFields:          customFields          ?? this.customFields,
+      isFree:                isFree                ?? this.isFree,
+      currency:              currency              ?? this.currency,
+      tiers:                 tiers                 ?? this.tiers,
+      studentDiscount:       studentDiscount       ?? this.studentDiscount,
+      groupDiscount:         groupDiscount         ?? this.groupDiscount,
+      organizerName:         organizerName         ?? this.organizerName,
+      coOrganizers:          coOrganizers          ?? this.coOrganizers,
+      sponsors:              sponsors              ?? this.sponsors,
+      partners:              partners              ?? this.partners,
+      budgetSpent:           budgetSpent           ?? this.budgetSpent,
+      budgetTotal:           budgetTotal           ?? this.budgetTotal,
+      issueCertificates:     issueCertificates     ?? this.issueCertificates,
+      certificateType:       certificateType       ?? this.certificateType,
+      minAttendance:         minAttendance         ?? this.minAttendance,
+      mustCompleteSurvey:    mustCompleteSurvey    ?? this.mustCompleteSurvey,
+      views:                 views                 ?? this.views,
+      registrations:         registrations         ?? this.registrations,
+      checkIns:              checkIns              ?? this.checkIns,
+      completionRate:        completionRate        ?? this.completionRate,
+      revenue:               revenue               ?? this.revenue,
+      publishedAt:           publishedAt           ?? this.publishedAt,
     );
   }
 }
