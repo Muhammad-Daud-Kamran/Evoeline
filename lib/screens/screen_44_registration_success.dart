@@ -1,14 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../constants/app_colors.dart';
 import '../widgets/custom_button.dart';
+import '../viewmodels/registration_success_viewmodel.dart';
 
-/// Screen 44: Registration Success
-class Screen44RegistrationSuccess extends StatelessWidget {
+/// Screen 44: Registration Success (MVVM Architecture)
+class Screen44RegistrationSuccess extends ConsumerWidget {
   const Screen44RegistrationSuccess({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(registrationSuccessProvider);
+
+    if (state.isLoading) {
+      return const Scaffold(
+        backgroundColor: AppColors.background,
+        body: Center(child: CircularProgressIndicator(color: AppColors.primaryGreen)),
+      );
+    }
+
+    if (state.errorMessage.isNotEmpty) {
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        body: Center(child: Text(state.errorMessage, style: const TextStyle(color: Colors.red))),
+      );
+    }
+
+    final event = state.event;
+    final reg = state.registration;
+
+    // Format the event type label
+    final formatLabel = event.format == 'virtual' ? 'Online' : 'In-person';
+
+    // Displayed schedule line
+    final scheduleText = '${event.startDate} · ${event.startTime} – ${event.endTime}';
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -24,33 +51,28 @@ class Screen44RegistrationSuccess extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Success Graphic - Full Width
+            // ── Success Graphic ──────────────────────────
             Container(
               height: 240,
               width: double.infinity,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/s44image1.jpg'),
+                  image: AssetImage(event.bannerImage.isNotEmpty ? event.bannerImage : 'assets/images/s44image1.jpg'),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            
-            // Padded Content
+
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
                   const SizedBox(height: 24),
 
-                  // Success Header
+                  // ── Success Header ───────────────────────
                   const Text(
                     '🎉 You\'re Registered!',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.darkText,
-                    ),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.darkText),
                   ),
                   const SizedBox(height: 8),
                   const Text(
@@ -59,38 +81,27 @@ class Screen44RegistrationSuccess extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
 
-                  // Event Details Section
+                  // ── Event Details ────────────────────────
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
-                              'In-person',
-                              style: TextStyle(
-                                color: AppColors.primaryGreen,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                              ),
+                              formatLabel,
+                              style: const TextStyle(color: AppColors.primaryGreen, fontSize: 12, fontWeight: FontWeight.w600),
                             ),
-                            SizedBox(height: 4),
+                            const SizedBox(height: 4),
                             Text(
-                              'Tech Summit 2024',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: AppColors.darkText,
-                              ),
+                              event.title,
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.darkText),
                             ),
-                            SizedBox(height: 4),
+                            const SizedBox(height: 4),
                             Text(
-                              'Sat, Dec 20 · 10:00 AM – 4:00 PM',
-                              style: TextStyle(
-                                color: AppColors.lightText,
-                                fontSize: 12,
-                              ),
+                              scheduleText,
+                              style: const TextStyle(color: AppColors.lightText, fontSize: 12),
                             ),
                           ],
                         ),
@@ -103,26 +114,24 @@ class Screen44RegistrationSuccess extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Center(
-                          child: Icon(
-                            Icons.emoji_events,
-                            color: Colors.white,
-                            size: 24,
-                          ),
+                          child: Icon(Icons.emoji_events, color: Colors.white, size: 24),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
-                  const Align(
+
+                  // Registration ID
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Registration ID: #EV12345',
-                      style: TextStyle(color: AppColors.primaryGreen, fontSize: 12),
+                      'Registration ID: #${reg.registrationId}',
+                      style: const TextStyle(color: AppColors.primaryGreen, fontSize: 12),
                     ),
                   ),
                   const SizedBox(height: 16),
 
-                  // QR Code Image (s44image2)
+                  // ── QR Code ─────────────────────────────
                   Container(
                     width: double.infinity,
                     height: 200,
@@ -133,15 +142,17 @@ class Screen44RegistrationSuccess extends StatelessWidget {
                         end: Alignment.bottomCenter,
                       ),
                       borderRadius: BorderRadius.circular(12),
-                      image: const DecorationImage(
-                        image: AssetImage('assets/images/s44image2.jpg'),
+                      image: DecorationImage(
+                        image: AssetImage(
+                          reg.qrCodeImageUrl.isNotEmpty ? reg.qrCodeImageUrl : 'assets/images/s44image2.jpg',
+                        ),
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
                   const SizedBox(height: 24),
 
-                  // Action Buttons
+                  // ── Action Buttons ───────────────────────
                   Row(
                     children: [
                       Expanded(
@@ -152,17 +163,9 @@ class Screen44RegistrationSuccess extends StatelessWidget {
                             backgroundColor: AppColors.lightGreyBackground,
                             side: BorderSide.none,
                             padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
-                          child: const Text(
-                            'Add to Calendar',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13,
-                            ),
-                          ),
+                          child: const Text('Add to Calendar', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -174,37 +177,24 @@ class Screen44RegistrationSuccess extends StatelessWidget {
                             foregroundColor: Colors.white,
                             elevation: 0,
                             padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
-                          child: const Text(
-                            'Share with Friends',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13,
-                            ),
-                          ),
+                          child: const Text('Share with Friends', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 32),
 
-                  // What's Next?
+                  // ── What's Next? ─────────────────────────
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'What\'s Next?',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.darkText,
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.darkText),
                     ),
                   ),
                   const SizedBox(height: 16),
-
                   _buildNextStepItem(
                     Icons.mail_outline,
                     'Email Confirmation',
@@ -222,27 +212,19 @@ class Screen44RegistrationSuccess extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
 
-                  // Bottom Flow Buttons
+                  // ── Bottom Buttons ───────────────────────
                   CustomButton(text: 'View My Events', onPressed: () {}),
                   const SizedBox(height: 12),
                   SizedBox(
                     width: double.infinity,
                     height: 48,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () => Navigator.pop(context),
                       style: TextButton.styleFrom(
                         backgroundColor: AppColors.lightGreyBackground,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       ),
-                      child: const Text(
-                        'Back to Home',
-                        style: TextStyle(
-                          color: AppColors.darkText,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      child: const Text('Back to Home', style: TextStyle(color: AppColors.darkText, fontWeight: FontWeight.bold)),
                     ),
                   ),
                   const SizedBox(height: 32),
@@ -252,6 +234,8 @@ class Screen44RegistrationSuccess extends StatelessWidget {
           ],
         ),
       ),
+
+      // Bottom Nav Bar
       bottomNavigationBar: Container(
         height: 65,
         decoration: const BoxDecoration(
@@ -261,30 +245,14 @@ class Screen44RegistrationSuccess extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            SvgPicture.asset(
-              'assets/images/s32icon1home.svg',
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
-              width: 46,
-              height: 46,
-            ),
-            SvgPicture.asset(
-              'assets/images/s41iconeventbold.svg',
-              colorFilter: const ColorFilter.mode(AppColors.darkText, BlendMode.srcIn),
-              width: 44,
-              height: 44,
-            ),
-            SvgPicture.asset(
-              'assets/images/s32icon3tickets.svg',
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
-              width: 44,
-              height: 44,
-            ),
-            SvgPicture.asset(
-              'assets/images/s32icon4profile.svg',
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
-              width: 44,
-              height: 44,
-            ),
+            SvgPicture.asset('assets/images/s32icon1home.svg',
+                colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn), width: 46, height: 46),
+            SvgPicture.asset('assets/images/s41iconeventbold.svg',
+                colorFilter: const ColorFilter.mode(AppColors.darkText, BlendMode.srcIn), width: 44, height: 44),
+            SvgPicture.asset('assets/images/s32icon3tickets.svg',
+                colorFilter: const ColorFilter.mode(AppColors.primaryGreen, BlendMode.srcIn), width: 44, height: 44),
+            SvgPicture.asset('assets/images/s32icon4profile.svg',
+                colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn), width: 44, height: 44),
           ],
         ),
       ),
@@ -310,23 +278,9 @@ class Screen44RegistrationSuccess extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                    color: AppColors.darkText,
-                  ),
-                ),
+                Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.darkText)),
                 const SizedBox(height: 4),
-                Text(
-                  description,
-                  style: const TextStyle(
-                    color: AppColors.lightText,
-                    fontSize: 12,
-                    height: 1.4,
-                  ),
-                ),
+                Text(description, style: const TextStyle(color: AppColors.lightText, fontSize: 12, height: 1.4)),
               ],
             ),
           ),

@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import '../constants/app_colors.dart';
 import '../widgets/custom_button.dart';
+import '../models/event_model.dart';
+import '../viewmodels/event_details_viewmodel.dart';
 
-/// Screen 41: Event Details
-class Screen41EventDetails extends StatefulWidget {
+/// Screen 41: Event Details (MVVM Architecture)
+class Screen41EventDetails extends ConsumerStatefulWidget {
   const Screen41EventDetails({super.key});
 
   @override
-  State<Screen41EventDetails> createState() => _Screen41EventDetailsState();
+  ConsumerState<Screen41EventDetails> createState() =>
+      _Screen41EventDetailsState();
 }
 
-class _Screen41EventDetailsState extends State<Screen41EventDetails>
+class _Screen41EventDetailsState extends ConsumerState<Screen41EventDetails>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -19,6 +23,14 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
+    // Keep local tab controller in sync with ViewModel if needed
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        ref
+            .read(eventDetailsProvider.notifier)
+            .setTabIndex(_tabController.index);
+      }
+    });
   }
 
   @override
@@ -27,8 +39,41 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
     super.dispose();
   }
 
+  String _getPriceText(EventModel event) {
+    if (event.isFree) return 'Free';
+    if (event.tiers.isNotEmpty) {
+      return '\$${event.tiers.first.price.toStringAsFixed(2)}';
+    }
+    return 'Paid';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(eventDetailsProvider);
+
+    if (state.isLoading) {
+      return const Scaffold(
+        backgroundColor: AppColors.background,
+        body: Center(
+          child: CircularProgressIndicator(color: AppColors.primaryGreen),
+        ),
+      );
+    }
+
+    if (state.errorMessage.isNotEmpty) {
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        body: Center(
+          child: Text(
+            state.errorMessage,
+            style: const TextStyle(color: Colors.red),
+          ),
+        ),
+      );
+    }
+
+    final event = state.event;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: CustomScrollView(
@@ -58,9 +103,13 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
             ],
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/s41image1.jpg'),
+                    image: AssetImage(
+                      event.bannerImage.isNotEmpty
+                          ? event.bannerImage
+                          : 'assets/images/s41image1.jpg',
+                    ),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -75,9 +124,9 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Category, Event Title & Organizer
-                  const Text(
-                    'TECHNOLOGY',
-                    style: TextStyle(
+                  Text(
+                    event.category.toUpperCase(),
+                    style: const TextStyle(
                       color: AppColors.primaryGreen,
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -85,18 +134,21 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    'Tech Summit 2024',
-                    style: TextStyle(
+                  Text(
+                    event.title,
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: AppColors.darkText,
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    'By Innovate Events',
-                    style: TextStyle(fontSize: 14, color: AppColors.lightText),
+                  Text(
+                    'By ${event.organizerName}',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.lightText,
+                    ),
                   ),
                   const SizedBox(height: 16),
 
@@ -109,9 +161,9 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
                         color: AppColors.iconColor,
                       ),
                       const SizedBox(width: 8),
-                      const Text(
-                        'Oct 15, 2024 • 9:00 AM - 5:00 PM',
-                        style: TextStyle(
+                      Text(
+                        '${event.startDate} • ${event.startTime} - ${event.endTime}',
+                        style: const TextStyle(
                           fontSize: 13,
                           color: AppColors.darkText,
                         ),
@@ -127,9 +179,9 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
                         color: AppColors.iconColor,
                       ),
                       const SizedBox(width: 8),
-                      const Text(
-                        'San Francisco Convention Center',
-                        style: TextStyle(
+                      Text(
+                        event.venueName,
+                        style: const TextStyle(
                           fontSize: 13,
                           color: AppColors.darkText,
                         ),
@@ -163,7 +215,7 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
                       Expanded(
                         flex: 2,
                         child: CustomButton(
-                          text: 'Register - \$150.00',
+                          text: 'Register - ${_getPriceText(event)}',
                           onPressed: () {},
                         ),
                       ),
@@ -207,7 +259,7 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
             child: TabBarView(
               controller: _tabController,
               children: [
-                _buildAboutTab(),
+                _buildAboutTab(event, state.similarEvents),
                 const Center(child: Text('Agenda Content')),
                 const Center(child: Text('Speakers Content')),
                 const Center(child: Text('Venue Content')),
@@ -246,7 +298,7 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
             SvgPicture.asset(
               'assets/images/s41iconeventbold.svg',
               colorFilter: const ColorFilter.mode(
-                AppColors.darkText,
+                AppColors.primaryGreen, // Active color
                 BlendMode.srcIn,
               ),
               width: 44,
@@ -267,8 +319,8 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
     );
   }
 
-  /// Builds the "About" tab content
-  Widget _buildAboutTab() {
+  /// Builds the "About" tab content using dynamic data
+  Widget _buildAboutTab(EventModel event, List<EventModel> similarEvents) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -276,9 +328,9 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
         children: [
           _buildSectionHeader('About'),
           const SizedBox(height: 8),
-          const Text(
-            'Join us for Tech Summit 2024, a premier event for tech enthusiasts and professionals. Explore the latest trends, network with industry leaders, and gain insights into the future of technology.',
-            style: TextStyle(
+          Text(
+            event.description,
+            style: const TextStyle(
               height: 1.5,
               color: AppColors.darkText,
               fontSize: 13,
@@ -288,6 +340,7 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
 
           _buildSectionHeader('What You\'ll Learn'),
           const SizedBox(height: 8),
+          // Hardcoded dummy requirements as they aren't in the DB schema for pure display
           _buildChecklistItem('Emerging Technologies'),
           _buildChecklistItem('Industry Best Practices'),
           _buildChecklistItem('Networking Strategies'),
@@ -329,24 +382,25 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
           const SizedBox(height: 12),
           Row(
             children: [
-              CircleAvatar(
+              const CircleAvatar(
                 radius: 20,
                 backgroundColor: AppColors.heroPlaceholderDark,
-                backgroundImage: const AssetImage(
-                  'assets/images/s41image2.jpg',
-                ),
+                backgroundImage: AssetImage('assets/images/s41image2.jpg'),
               ),
               const SizedBox(width: 12),
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Organizer',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    'Innovate Events',
-                    style: TextStyle(color: AppColors.lightText, fontSize: 12),
+                    event.organizerName,
+                    style: const TextStyle(
+                      color: AppColors.lightText,
+                      fontSize: 12,
+                    ),
                   ),
                 ],
               ),
@@ -380,7 +434,7 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
 
           _buildSectionHeader('You Might Also Like'),
           const SizedBox(height: 12),
-          _buildSimilarEventsList(),
+          _buildSimilarEventsList(similarEvents),
           const SizedBox(height: 32),
         ],
       ),
@@ -495,27 +549,21 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
     );
   }
 
-  Widget _buildSimilarEventsList() {
+  Widget _buildSimilarEventsList(List<EventModel> similarEvents) {
+    if (similarEvents.isEmpty) {
+      return const Text(
+        'No similar events found.',
+        style: TextStyle(color: AppColors.lightText),
+      );
+    }
     return SizedBox(
       height: 160,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: 4,
+        itemCount: similarEvents.length,
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
-          final titles = [
-            'AI in Business',
-            'Design Thinking Workshop',
-            'Sustainable Energy Expo',
-            'Cybersecurity Summit',
-          ];
-          final dates = ['Oct 15', 'Nov 5', 'Nov 20', 'Dec 12'];
-          final images = [
-            'assets/images/s40image6.jpg',
-            'assets/images/s40image11.jpg',
-            'assets/images/s41image3.jpg', // Added
-            'assets/images/s41image4.jpg', // Added
-          ];
+          final event = similarEvents[index];
           return SizedBox(
             width: 160,
             child: Column(
@@ -526,14 +574,14 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     image: DecorationImage(
-                      image: AssetImage(images[index]),
+                      image: AssetImage(event.bannerImage),
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  titles[index],
+                  event.title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 13,
@@ -542,7 +590,7 @@ class _Screen41EventDetailsState extends State<Screen41EventDetails>
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  dates[index],
+                  event.startDate,
                   style: const TextStyle(
                     color: AppColors.lightText,
                     fontSize: 11,

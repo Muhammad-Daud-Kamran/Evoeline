@@ -9,6 +9,7 @@ class OutlinedTextField extends StatelessWidget {
   final Widget? trailingIcon;
   final ValueChanged<String>? onChanged;
   final String? initialValue;
+  final TextEditingController? controller;
 
   const OutlinedTextField({
     Key? key,
@@ -18,6 +19,7 @@ class OutlinedTextField extends StatelessWidget {
     this.trailingIcon,
     this.onChanged,
     this.initialValue,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -35,7 +37,8 @@ class OutlinedTextField extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         TextFormField(
-          initialValue: initialValue,
+          controller: controller,
+          initialValue: controller != null ? null : initialValue,
           onChanged: onChanged,
           maxLines: maxLines,
           decoration: InputDecoration(

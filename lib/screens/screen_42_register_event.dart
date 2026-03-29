@@ -1,38 +1,78 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants/app_colors.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/outlined_text_field.dart';
+import '../viewmodels/event_registration_viewmodel.dart';
 
-/// Screen 42: Register for Event
-class Screen42RegisterEvent extends StatefulWidget {
+/// Screen 42: Register for Event (MVVM Architecture)
+class Screen42RegisterEvent extends ConsumerStatefulWidget {
   const Screen42RegisterEvent({super.key});
 
   @override
-  State<Screen42RegisterEvent> createState() => _Screen42RegisterEventState();
+  ConsumerState<Screen42RegisterEvent> createState() =>
+      _Screen42RegisterEventState();
 }
 
-class _Screen42RegisterEventState extends State<Screen42RegisterEvent> {
-  // State variables for form fields
-  bool _previousAttendance = false;
-  bool _session1 = false;
-  bool _session2 = false;
-  bool _session3 = false;
+class _Screen42RegisterEventState extends ConsumerState<Screen42RegisterEvent> {
+  // TextEditingControllers for text inputs (avoids rebuild on every keystroke)
+  final _fullNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _companyController = TextEditingController();
+  final _designationController = TextEditingController();
+  final _expectationsController = TextEditingController();
+  final _accessibilityController = TextEditingController();
+  final _emergencyNameController = TextEditingController();
+  final _emergencyPhoneController = TextEditingController();
 
-  bool _agreeTerms = false;
-  bool _agreePrivacy = false;
-  bool _agreeMarketing = false;
+  @override
+  void dispose() {
+    _fullNameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _companyController.dispose();
+    _designationController.dispose();
+    _expectationsController.dispose();
+    _accessibilityController.dispose();
+    _emergencyNameController.dispose();
+    _emergencyPhoneController.dispose();
+    super.dispose();
+  }
 
-  final List<String> _hearAboutUsOptions = [
-    'Social Media',
-    'University Club',
-    'Email Newsletter',
-    'Friend/Colleague',
-    'Other',
-  ];
-  String? _selectedHearAboutUs;
+  void _handleSubmit() {
+    ref.read(eventRegistrationProvider.notifier).submitRegistration(
+      fullName: _fullNameController.text,
+      email: _emailController.text,
+      phone: _phoneController.text,
+      companyName: _companyController.text,
+      designation: _designationController.text,
+      expectations: _expectationsController.text,
+      accessibilityRequirements: _accessibilityController.text,
+      emergencyContactName: _emergencyNameController.text,
+      emergencyContactPhone: _emergencyPhoneController.text,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(eventRegistrationProvider);
+    final vm = ref.read(eventRegistrationProvider.notifier);
+
+    // Show success snackbar
+    ref.listen<EventRegistrationState>(eventRegistrationProvider, (prev, next) {
+      if (next.successMessage != null &&
+          prev?.successMessage != next.successMessage) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.successMessage!),
+            backgroundColor: AppColors.primaryGreen,
+          ),
+        );
+        Navigator.pop(context);
+      }
+    });
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -63,48 +103,59 @@ class _Screen42RegisterEventState extends State<Screen42RegisterEvent> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Personal Information
+            // ── Personal Information ─────────────────────
             _buildSectionTitle('Personal Information'),
             const SizedBox(height: 16),
-            const OutlinedTextField(
+            OutlinedTextField(
               label: 'Full Name',
               hintText: 'Enter your full name',
+              controller: _fullNameController,
             ),
             const SizedBox(height: 16),
-            const OutlinedTextField(
+            OutlinedTextField(
               label: 'Email',
               hintText: 'Enter your email',
+              controller: _emailController,
             ),
             const SizedBox(height: 16),
-            const OutlinedTextField(
+            OutlinedTextField(
               label: 'Phone Number',
               hintText: 'Enter your phone number',
+              controller: _phoneController,
             ),
             const SizedBox(height: 24),
 
-            // Professional Information
+            // ── Professional Information ──────────────────
             _buildSectionTitle('Professional Information'),
             const SizedBox(height: 16),
-            const OutlinedTextField(
+            OutlinedTextField(
               label: 'Company Name',
               hintText: 'Enter your company name',
+              controller: _companyController,
             ),
             const SizedBox(height: 16),
-            const OutlinedTextField(
+            OutlinedTextField(
               label: 'Designation',
               hintText: 'Enter your designation',
+              controller: _designationController,
             ),
             const SizedBox(height: 16),
-            _buildDropdownField('Industry'),
+            _buildDropdownField(
+              label: 'Industry',
+              value: state.industry,
+              options: EventRegistrationViewModel.industryOptions,
+              onChanged: vm.updateIndustry,
+            ),
             const SizedBox(height: 24),
 
-            // Event-Specific Questions
+            // ── Event-Specific Questions ──────────────────
             _buildSectionTitle('Event-Specific Questions'),
             const SizedBox(height: 16),
-            const OutlinedTextField(
+            OutlinedTextField(
               label: 'What are your expectations from this event?',
               hintText: '',
               maxLines: 4,
+              controller: _expectationsController,
             ),
             const SizedBox(height: 16),
             Row(
@@ -131,8 +182,8 @@ class _Screen42RegisterEventState extends State<Screen42RegisterEvent> {
                   ],
                 ),
                 Switch(
-                  value: _previousAttendance,
-                  onChanged: (val) => setState(() => _previousAttendance = val),
+                  value: state.previousAttendance,
+                  onChanged: vm.togglePreviousAttendance,
                   activeTrackColor: AppColors.primaryGreen.withValues(
                     alpha: 0.5,
                   ),
@@ -143,112 +194,137 @@ class _Screen42RegisterEventState extends State<Screen42RegisterEvent> {
             const SizedBox(height: 16),
             _buildCheckboxTile(
               'Session 1',
-              _session1,
-              (val) => setState(() => _session1 = val!),
+              state.session1,
+              (val) => vm.updateSession(1, val!),
             ),
             _buildCheckboxTile(
               'Session 2',
-              _session2,
-              (val) => setState(() => _session2 = val!),
+              state.session2,
+              (val) => vm.updateSession(2, val!),
             ),
             _buildCheckboxTile(
               'Session 3',
-              _session3,
-              (val) => setState(() => _session3 = val!),
+              state.session3,
+              (val) => vm.updateSession(3, val!),
             ),
             const SizedBox(height: 24),
 
-            // Preferences & Requirements
+            // ── Preferences & Requirements ────────────────
             _buildSectionTitle('Preferences & Requirements'),
             const SizedBox(height: 16),
-            _buildDropdownField('Dietary Preferences'),
+            _buildDropdownField(
+              label: 'Dietary Preferences',
+              value: state.dietaryPreference,
+              options: EventRegistrationViewModel.dietaryOptions,
+              onChanged: vm.updateDietary,
+            ),
             const SizedBox(height: 16),
-            const OutlinedTextField(
+            OutlinedTextField(
               label: 'Accessibility Requirements',
               hintText: '',
               maxLines: 4,
+              controller: _accessibilityController,
             ),
             const SizedBox(height: 16),
             Row(
-              children: const [
+              children: [
                 Expanded(
                   child: OutlinedTextField(
                     label: 'Emergency Contact Name',
                     hintText: 'Enter name',
+                    controller: _emergencyNameController,
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: OutlinedTextField(
                     label: 'Emergency Contact Phone',
                     hintText: 'Enter phone',
+                    controller: _emergencyPhoneController,
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 24),
 
-            // How Did You Hear About Us?
+            // ── How Did You Hear About Us? ────────────────
             _buildSectionTitle('How Did You Hear About Us?'),
             const SizedBox(height: 16),
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children: _hearAboutUsOptions.map((option) {
-                final isSelected = _selectedHearAboutUs == option;
-                return ChoiceChip(
-                  label: Text(
-                    option,
-                    style: TextStyle(
-                      color: isSelected ? Colors.white : AppColors.darkText,
-                      fontWeight: isSelected
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                    ),
-                  ),
-                  selected: isSelected,
-                  onSelected: (selected) {
-                    setState(
-                      () => _selectedHearAboutUs = selected ? option : null,
+              children:
+                  EventRegistrationViewModel.hearAboutUsOptions.map((option) {
+                    final isSelected = state.selectedHearAboutUs == option;
+                    return ChoiceChip(
+                      label: Text(
+                        option,
+                        style: TextStyle(
+                          color:
+                              isSelected ? Colors.white : AppColors.darkText,
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        ),
+                      ),
+                      selected: isSelected,
+                      onSelected: (selected) =>
+                          vm.toggleHearAboutUs(option, selected),
+                      selectedColor: AppColors.primaryGreen,
+                      backgroundColor: AppColors.background,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: BorderSide(
+                          color: isSelected
+                              ? AppColors.primaryGreen
+                              : AppColors.dividerColor,
+                        ),
+                      ),
                     );
-                  },
-                  selectedColor: AppColors.primaryGreen,
-                  backgroundColor: AppColors.background,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    side: BorderSide(
-                      color: isSelected
-                          ? AppColors.primaryGreen
-                          : AppColors.dividerColor,
-                    ),
-                  ),
-                );
-              }).toList(),
+                  }).toList(),
             ),
             const SizedBox(height: 24),
 
-            // Terms, Privacy, and Marketing Consent
+            // ── Consents ─────────────────────────────────
             _buildSectionTitle('Terms, Privacy, and Marketing Consent'),
             const SizedBox(height: 16),
             _buildCheckboxTile(
               'I agree to the Terms and Conditions',
-              _agreeTerms,
-              (val) => setState(() => _agreeTerms = val!),
+              state.agreeTerms,
+              (val) => vm.toggleConsent(terms: val!),
             ),
             _buildCheckboxTile(
               'I have read and accept the Privacy Policy',
-              _agreePrivacy,
-              (val) => setState(() => _agreePrivacy = val!),
+              state.agreePrivacy,
+              (val) => vm.toggleConsent(privacy: val!),
             ),
             _buildCheckboxTile(
               'I agree to receive marketing communications (optional)',
-              _agreeMarketing,
-              (val) => setState(() => _agreeMarketing = val!),
+              state.agreeMarketing,
+              (val) => vm.toggleConsent(marketing: val!),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 12),
+
+            // Error Message
+            if (state.errorMessage != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Text(
+                  state.errorMessage!,
+                  style: const TextStyle(color: Colors.red, fontSize: 13),
+                ),
+              ),
+
+            const SizedBox(height: 20),
 
             // Register Now Button
-            CustomButton(text: 'Register Now', onPressed: () {}),
+            state.isSubmitting
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.primaryGreen,
+                    ),
+                  )
+                : CustomButton(text: 'Register Now', onPressed: _handleSubmit),
             const SizedBox(height: 24),
           ],
         ),
@@ -267,7 +343,12 @@ class _Screen42RegisterEventState extends State<Screen42RegisterEvent> {
     );
   }
 
-  Widget _buildDropdownField(String label) {
+  Widget _buildDropdownField({
+    required String label,
+    required String? value,
+    required List<String> options,
+    required ValueChanged<String?> onChanged,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -289,16 +370,18 @@ class _Screen42RegisterEventState extends State<Screen42RegisterEvent> {
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               isExpanded: true,
+              value: value,
               hint: const Text(
                 'Select',
                 style: TextStyle(color: AppColors.lightText),
               ),
-              icon: const Icon(
-                Icons.arrow_drop_down,
-                color: AppColors.iconColor,
-              ),
-              items: const [],
-              onChanged: (value) {},
+              icon: const Icon(Icons.arrow_drop_down, color: AppColors.iconColor),
+              items: options
+                  .map(
+                    (opt) => DropdownMenuItem(value: opt, child: Text(opt)),
+                  )
+                  .toList(),
+              onChanged: onChanged,
             ),
           ),
         ),
