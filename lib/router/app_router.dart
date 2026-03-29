@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 // Import screens
 import '../screens1-22/screen_1_splash.dart';
 import '../screens1-22/screen_2_onboarding_1.dart';
