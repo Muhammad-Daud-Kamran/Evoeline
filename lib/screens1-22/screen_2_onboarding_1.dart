@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../widgets/custom_button.dart';
-import 'screen_3_onboarding_2.dart';
+import 'package:go_router/go_router.dart';
 
 class Screen2Onboarding1 extends StatelessWidget {
   const Screen2Onboarding1({super.key});
@@ -90,12 +90,7 @@ class Screen2Onboarding1 extends StatelessWidget {
                       text: 'Next',
                       onPressed: () {
                         // Navigate to next onboarding
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const Screen3Onboarding2(),
-                          ),
-                        );
+                        context.goNamed('onboarding2');
                       },
                     ),
                   ),

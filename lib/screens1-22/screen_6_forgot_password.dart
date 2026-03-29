@@ -3,6 +3,7 @@ import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/auth_text_field.dart';
+import 'package:go_router/go_router.dart';
 
 class Screen6ForgotPassword extends StatelessWidget {
   const Screen6ForgotPassword({super.key});
@@ -16,7 +17,7 @@ class Screen6ForgotPassword extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.darkText),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(),
         ),
       ),
       body: SafeArea(
@@ -79,7 +80,7 @@ class Screen6ForgotPassword extends StatelessWidget {
                 style: AppTextStyles.subtitle,
               ),
               GestureDetector(
-                onTap: () => Navigator.pop(context),
+                onTap: () => context.pop(),
                 child: const Text(
                   'Back to Login',
                   style: TextStyle(

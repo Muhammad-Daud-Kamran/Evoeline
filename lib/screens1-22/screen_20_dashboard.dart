@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
+import 'package:go_router/go_router.dart';
 
 class Screen20Dashboard extends StatelessWidget {
   const Screen20Dashboard({super.key});
@@ -93,18 +94,21 @@ class Screen20Dashboard extends StatelessWidget {
                   'Tech Summit 2024',
                   'July 15, 2024',
                   const Color(0xFF80CBC4),
+                  () => context.pushNamed('eventDetails'),
                 ),
                 const SizedBox(width: 16),
                 _buildEventCard(
                   'Summer Jam Fest',
                   'August 5, 2024',
                   const Color(0xFFFFF59D),
+                  () => context.pushNamed('eventDetails'),
                 ),
                 const SizedBox(width: 16),
                 _buildEventCard(
                   'Business Growth Seminar',
                   'September 20, 2024',
                   const Color(0xFF90CAF9),
+                  () => context.pushNamed('eventDetails'),
                 ),
               ],
             ),
@@ -142,30 +146,35 @@ class Screen20Dashboard extends StatelessWidget {
                   'My Events',
                   Icons.calendar_today,
                   const Color(0xFFFFCCBC),
+                  () => context.pushNamed('myEvents'),
                 ),
                 const SizedBox(width: 12),
                 _buildActionCard(
                   'Vendors',
                   Icons.storefront,
                   const Color(0xFFF5F5F5),
+                  () => context.pushNamed('vendors'),
                 ),
                 const SizedBox(width: 12),
                 _buildActionCard(
                   'Analytics',
                   Icons.bar_chart,
                   const Color(0xFF4DB6AC),
+                  () => context.pushNamed('analytics'),
                 ),
                 const SizedBox(width: 12),
                 _buildActionCard(
                   'Certificates',
                   Icons.workspace_premium,
                   const Color(0xFFFFCCBC),
+                  () => context.pushNamed('certificates'),
                 ),
                 const SizedBox(width: 12),
                 _buildActionCard(
                   'Settings',
                   Icons.settings,
                   const Color(0xFFEEEEEE),
+                  () => context.pushNamed('settings'),
                 ),
               ],
             ),
@@ -281,35 +290,43 @@ class Screen20Dashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildEventCard(String title, String date, Color color) {
-    return SizedBox(
-      width: 200,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 100,
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(12),
+  Widget _buildEventCard(
+    String title,
+    String date,
+    Color color,
+    VoidCallback onTap,
+  ) {
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
+        width: 200,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 100,
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-              color: AppColors.darkText,
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+                color: AppColors.darkText,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          Text(
-            date,
-            style: const TextStyle(color: AppColors.lightText, fontSize: 12),
-          ),
-        ],
+            Text(
+              date,
+              style: const TextStyle(color: AppColors.lightText, fontSize: 12),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -355,31 +372,39 @@ class Screen20Dashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildActionCard(String title, IconData icon, Color color) {
-    return SizedBox(
-      width: 100,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            height: 100,
-            width: 100,
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(12),
+  Widget _buildActionCard(
+    String title,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
+        width: 100,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: 100,
+              width: 100,
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: AppColors.darkText, size: 40),
             ),
-            child: Icon(icon, color: AppColors.darkText, size: 40),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 13,
-              color: AppColors.darkText,
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 13,
+                color: AppColors.darkText,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

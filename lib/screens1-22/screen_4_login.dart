@@ -3,7 +3,7 @@ import '../constants/app_colors.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/social_auth_button.dart';
-import 'screen_5_sign_up.dart';
+import 'package:go_router/go_router.dart';
 
 class Screen4Login extends StatefulWidget {
   const Screen4Login({super.key});
@@ -80,7 +80,7 @@ class _Screen4LoginState extends State<Screen4Login> {
                 alignment: Alignment.centerLeft,
                 child: GestureDetector(
                   onTap: () {
-                    // Forgot Password Action
+                    context.pushNamed('forgotPassword');
                   },
                   child: const Text(
                     'Forgot Password?',
@@ -98,7 +98,7 @@ class _Screen4LoginState extends State<Screen4Login> {
               CustomButton(
                 text: 'Login',
                 onPressed: () {
-                  // Login Action
+                  context.goNamed('dashboard');
                 },
               ),
               const SizedBox(height: 24),
@@ -148,12 +148,7 @@ class _Screen4LoginState extends State<Screen4Login> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const Screen5SignUp(),
-                        ),
-                      );
+                      context.goNamed('signup');
                     },
                     child: const Text(
                       'Sign Up',
