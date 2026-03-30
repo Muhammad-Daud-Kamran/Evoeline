@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 // lib/screens/screen_27_attendees.dart
 
 // ─────────────────────────────────────────────────────
@@ -56,7 +57,7 @@ class Screen27Attendees extends ConsumerWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.darkText),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pop(),
         ),
         title: const Text('Attendees', style: AppTextStyles.heading2),
         centerTitle: true,

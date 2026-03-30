@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 // lib/features/events/screens/screen_25_event_details.dart
 
 // ─────────────────────────────────────────────────────
@@ -42,7 +43,7 @@ class Screen25EventDetails extends ConsumerWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.darkText),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pop(),
         ),
         title: const Text('Event Details', style: AppTextStyles.heading2),
         centerTitle: true,

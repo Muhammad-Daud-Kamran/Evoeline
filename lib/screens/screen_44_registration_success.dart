@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -44,7 +45,7 @@ class Screen44RegistrationSuccess extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.close, color: AppColors.darkText),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.pop(),
           ),
         ],
       ),
@@ -219,7 +220,7 @@ class Screen44RegistrationSuccess extends ConsumerWidget {
                     width: double.infinity,
                     height: 48,
                     child: TextButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => context.pop(),
                       style: TextButton.styleFrom(
                         backgroundColor: AppColors.lightGreyBackground,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

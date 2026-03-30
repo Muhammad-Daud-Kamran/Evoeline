@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 // lib/features/registration/screens/review_screen.dart
 
 import 'package:flutter/material.dart';
@@ -17,8 +18,6 @@ class Screen24Review extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
-    // ✅ Correct provider usage
     final state = ref.watch(registrationSetupProvider);
     final eventState = ref.watch(eventProvider);
     final event = eventState.event;
@@ -26,7 +25,7 @@ class Screen24Review extends ConsumerWidget {
     // Navigate after publish
     if (state.isPublished) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        context.goNamed('dashboard');
       });
     }
 
@@ -37,7 +36,7 @@ class Screen24Review extends ConsumerWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.darkText),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pop(),
         ),
         title: const Text('Review', style: AppTextStyles.heading2),
         centerTitle: true,
@@ -48,7 +47,6 @@ class Screen24Review extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const Text('Step 5 of 5', style: AppTextStyles.bodyText),
             const SizedBox(height: 8),
             const StepProgressIndicator(
@@ -107,7 +105,10 @@ class Screen24Review extends ConsumerWidget {
               child: Column(
                 children: [
                   _SummaryRow(label: 'Venue', value: 'Convention Center, NY'),
-                  _SummaryRow(label: 'Address', value: '123 Innovation Way, NY'),
+                  _SummaryRow(
+                    label: 'Address',
+                    value: '123 Innovation Way, NY',
+                  ),
                 ],
               ),
             ),
@@ -120,7 +121,6 @@ class Screen24Review extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   _SummaryRow(
                     label: 'Pricing',
                     value: state.isFree
@@ -130,14 +130,13 @@ class Screen24Review extends ConsumerWidget {
 
                   if (!state.isFree) ...[
                     const SizedBox(height: 8),
-                    const Text('Pricing Tiers',
-                        style: AppTextStyles.heading3),
+                    const Text('Pricing Tiers', style: AppTextStyles.heading3),
 
                     ...state.tiers.map(
-                          (tier) => _SummaryRow(
+                      (tier) => _SummaryRow(
                         label: tier.name,
                         value:
-                        '${state.currency} ${tier.price.toInt()} (${tier.seats} seats)',
+                            '${state.currency} ${tier.price.toInt()} (${tier.seats} seats)',
                       ),
                     ),
                   ],
@@ -149,7 +148,7 @@ class Screen24Review extends ConsumerWidget {
                     label: 'Student Discount',
                     value: state.studentDiscount.isEnabled
                         ? '${state.studentDiscount.percentage}% '
-                        '(${state.studentDiscount.requiresVerification ? 'Verification Required' : 'No Verification'})'
+                              '(${state.studentDiscount.requiresVerification ? 'Verification Required' : 'No Verification'})'
                         : 'Disabled',
                   ),
 
@@ -157,7 +156,7 @@ class Screen24Review extends ConsumerWidget {
                     label: 'Group Discount',
                     value: state.groupDiscount.isEnabled
                         ? '${state.groupDiscount.percentage}% '
-                        '(Min ${state.groupDiscount.minGroupSize} people)'
+                              '(Min ${state.groupDiscount.minGroupSize} people)'
                         : 'Disabled',
                   ),
                 ],
@@ -179,16 +178,18 @@ class Screen24Review extends ConsumerWidget {
                   const SizedBox(height: 8),
 
                   ...state.customFields.map(
-                        (field) => _SummaryRow(
+                    (field) => _SummaryRow(
                       label: field.label,
                       value:
-                      '${field.type} | ${field.isRequired ? 'Required' : 'Optional'}',
+                          '${field.type} | ${field.isRequired ? 'Required' : 'Optional'}',
                     ),
                   ),
 
                   if (state.customFields.isEmpty)
-                    const Text('No custom fields added',
-                        style: AppTextStyles.label),
+                    const Text(
+                      'No custom fields added',
+                      style: AppTextStyles.label,
+                    ),
                 ],
               ),
             ),
@@ -207,14 +208,16 @@ class Screen24Review extends ConsumerWidget {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.error_outline,
-                        color: Colors.red, size: 18),
+                    const Icon(
+                      Icons.error_outline,
+                      color: Colors.red,
+                      size: 18,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         state.errorMessage,
-                        style: const TextStyle(
-                            color: Colors.red, fontSize: 13),
+                        style: const TextStyle(color: Colors.red, fontSize: 13),
                       ),
                     ),
                   ],
@@ -232,22 +235,20 @@ class Screen24Review extends ConsumerWidget {
                     onPressed: state.isLoading
                         ? () {}
                         : () => ref
-                        .read(registrationSetupProvider.notifier)
-                        .saveAsDraft(),
+                              .read(registrationSetupProvider.notifier)
+                              .saveAsDraft(),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: CustomButton(
-                    text: state.isLoading
-                        ? 'Publishing...'
-                        : 'Publish Event',
+                    text: state.isLoading ? 'Publishing...' : 'Publish Event',
                     backgroundColor: AppColors.oliveGreen,
                     onPressed: state.isLoading
                         ? () {}
                         : () => ref
-                        .read(registrationSetupProvider.notifier)
-                        .publishEvent(),
+                              .read(registrationSetupProvider.notifier)
+                              .publishEvent(),
                   ),
                 ),
               ],
@@ -267,8 +268,7 @@ class Screen24Review extends ConsumerWidget {
       height: 70,
       decoration: const BoxDecoration(
         color: AppColors.background,
-        border: Border(
-            top: BorderSide(color: Color(0xFFEEEEEE), width: 1)),
+        border: Border(top: BorderSide(color: Color(0xFFEEEEEE), width: 1)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -281,8 +281,7 @@ class Screen24Review extends ConsumerWidget {
               color: AppColors.darkText,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: SvgPicture.asset('assets/images/addicon.svg',
-                width: 24),
+            child: SvgPicture.asset('assets/images/addicon.svg', width: 24),
           ),
           SvgPicture.asset('assets/images/ticketicon.svg', width: 28),
           SvgPicture.asset('assets/images/profileicon.svg', width: 28),
@@ -297,10 +296,7 @@ class _SummaryRow extends StatelessWidget {
   final String label;
   final String value;
 
-  const _SummaryRow({
-    required this.label,
-    required this.value,
-  });
+  const _SummaryRow({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -313,8 +309,9 @@ class _SummaryRow extends StatelessWidget {
           Flexible(
             child: Text(
               value,
-              style: AppTextStyles.bodyText
-                  .copyWith(fontWeight: FontWeight.w600),
+              style: AppTextStyles.bodyText.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
               textAlign: TextAlign.right,
             ),
           ),

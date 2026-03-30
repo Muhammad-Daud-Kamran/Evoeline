@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 // lib/features/registration/screens/registration_setup_screen.dart
 
 // ─────────────────────────────────────────────────────
@@ -47,7 +48,7 @@ class RegistrationSetupScreen extends ConsumerWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.darkText),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pop(),
         ),
         title: const Text('Create Event', style: AppTextStyles.heading2),
         centerTitle: true,
@@ -262,7 +263,7 @@ class RegistrationSetupScreen extends ConsumerWidget {
                 backgroundColor: AppColors.lightGreyBackground,
                 textColor:       AppColors.darkText,
                 width:           100,
-                onPressed:       () => Navigator.of(context).pop(),
+                onPressed:       () => context.pop(),
               ),
               CustomButton(
                 text:  'Next',
@@ -271,12 +272,7 @@ class RegistrationSetupScreen extends ConsumerWidget {
                   // Navigate to Screen 24 (Review)
                   // Both screens share the SAME provider
                   // so Screen 24 automatically sees all the data
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const Screen24Review(),
-                    ),
-                  );
+                  context.pushNamed('review');
                 },
               ),
             ],
@@ -330,7 +326,7 @@ class RegistrationSetupScreen extends ConsumerWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.pop(),
             child: const Text('Cancel'),
           ),
           TextButton(
@@ -348,7 +344,7 @@ class RegistrationSetupScreen extends ConsumerWidget {
                   seats:          int.tryParse(seatsController.text) ?? 0,
                   availableUntil: untilController.text,
                 );
-                Navigator.pop(context);
+                context.pop();
               }
             },
             child: const Text('Add'),
@@ -410,7 +406,7 @@ class RegistrationSetupScreen extends ConsumerWidget {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => context.pop(),
               child: const Text('Cancel'),
             ),
             TextButton(
@@ -424,7 +420,7 @@ class RegistrationSetupScreen extends ConsumerWidget {
                     type:       selectedType,
                     isRequired: isRequired,
                   );
-                  Navigator.pop(context);
+                  context.pop();
                 }
               },
               child: const Text('Add'),

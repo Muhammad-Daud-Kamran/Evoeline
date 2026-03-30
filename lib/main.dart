@@ -1,32 +1,31 @@
-import 'package:evoeline/screens/screen_39_review_vendor.dart';
-import 'package:evoeline/screens/screen_40_discover_events.dart';
-import 'package:evoeline/screens/screen_41_event_details.dart';
-import 'package:evoeline/screens/screen_42_register_event.dart';
-import 'package:evoeline/screens/screen_43_checkout.dart';
-import 'package:evoeline/screens/screen_44_registration_success.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:evoeline/router/app_router.dart';
+
 void main() {
-  runApp(const ProviderScope( // ← MUST wrap entire app
-    child: MyApp(),
-  ),);
+  runApp(
+    const ProviderScope(
+      // ← MUST wrap entire app
+      child: MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'My App',
+      title: 'Evoeline App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-
-      home:
-          const Screen44RegistrationSuccess(), // 👈 Changed to the latest screen
+      routerConfig: router,
     );
   }
 }

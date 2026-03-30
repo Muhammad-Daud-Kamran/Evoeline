@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
@@ -22,7 +23,7 @@ class _Screen19CreateEventStep1State extends State<Screen19CreateEventStep1> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close, color: AppColors.darkText),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(),
         ),
       ),
       body: SingleChildScrollView(

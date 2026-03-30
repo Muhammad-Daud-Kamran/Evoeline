@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,7 +50,7 @@ class Screen37VendorProfile extends ConsumerWidget {
                   top: MediaQuery.of(context).padding.top + 10,
                   left: 16,
                   child: InkWell(
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => context.pop(),
                     child: const CircleAvatar(
                       backgroundColor: Colors.white,
                       radius: 18,

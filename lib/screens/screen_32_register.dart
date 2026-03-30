@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,7 +30,7 @@ class Screen32Register extends ConsumerWidget {
         );
         viewModel.resetSuccess();
         // Optional: Navigate to next page or pop
-        // Navigator.pop(context);
+        // context.pop();
       }
     });
 
@@ -40,7 +41,7 @@ class Screen32Register extends ConsumerWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.darkText),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pop(),
         ),
         actions: [
           IconButton(
