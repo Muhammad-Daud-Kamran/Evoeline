@@ -155,7 +155,7 @@ class _Screen12MyCertificatesState extends State<Screen12MyCertificates>
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => context.pushNamed('discoverEvents'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.analyticsLightGreen,
                     foregroundColor: AppColors.darkText,
@@ -187,53 +187,56 @@ class _Screen12MyCertificatesState extends State<Screen12MyCertificates>
     String? type,
     Color imageColor,
   ) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (type != null)
+    return GestureDetector(
+      onTap: () => context.pushNamed('certificateDetails'),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (type != null)
+                    Text(
+                      type,
+                      style: const TextStyle(
+                        color: AppColors.lightText,
+                        fontSize: 12,
+                      ),
+                    ),
+                  const SizedBox(height: 4),
                   Text(
-                    type,
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: AppColors.darkText,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    date,
                     style: const TextStyle(
                       color: AppColors.lightText,
                       fontSize: 12,
                     ),
                   ),
-                const SizedBox(height: 4),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: AppColors.darkText,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  date,
-                  style: const TextStyle(
-                    color: AppColors.lightText,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: 16),
-          Container(
-            width: 120,
-            height: 70,
-            decoration: BoxDecoration(
-              color: imageColor,
-              borderRadius: BorderRadius.circular(8),
+            const SizedBox(width: 16),
+            Container(
+              width: 120,
+              height: 70,
+              decoration: BoxDecoration(
+                color: imageColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

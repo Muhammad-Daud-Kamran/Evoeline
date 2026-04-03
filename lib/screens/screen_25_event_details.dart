@@ -79,7 +79,7 @@ class Screen25EventDetails extends ConsumerWidget {
           : _buildContent(context, ref, state),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => context.pushNamed('createEventStep1'),
         backgroundColor: AppColors.primaryGreen,
         child: const Icon(Icons.add, color: Colors.white),
       ),
@@ -264,7 +264,7 @@ class Screen25EventDetails extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: OutlinedButton.icon(
-                        onPressed: () {},
+                        onPressed: () => context.pushNamed('attendees'),
                         icon: const Icon(
                           Icons.people_outline,
                           color: AppColors.darkText,
@@ -286,7 +286,7 @@ class Screen25EventDetails extends ConsumerWidget {
                     const SizedBox(width: 16),
                     Expanded(
                       child: OutlinedButton.icon(
-                        onPressed: () {},
+                        onPressed: () => context.goNamed('certificates'),
                         icon: const Icon(
                           Icons.workspace_premium_outlined,
                           color: AppColors.darkText,

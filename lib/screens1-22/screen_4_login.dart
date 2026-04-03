@@ -128,13 +128,17 @@ class _Screen4LoginState extends State<Screen4Login> {
                 text: 'Sign in with Google',
                 icon: Icons
                     .g_mobiledata_rounded, // Assuming material icons for placeholder
-                onPressed: () {},
+                onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Google Sign In coming soon')),
+                ),
               ),
               const SizedBox(height: 16),
               SocialAuthButton(
                 text: 'Sign in with LinkedIn',
                 icon: Icons.link, // Placeholder for LinkedIn icon
-                onPressed: () {},
+                onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('LinkedIn Sign In coming soon')),
+                ),
               ),
               const SizedBox(height: 48),
 

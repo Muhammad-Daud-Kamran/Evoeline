@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 
@@ -37,7 +38,9 @@ class _Screen17MyEventsState extends State<Screen17MyEvents>
         actions: [
           IconButton(
             icon: const Icon(Icons.more_vert, color: AppColors.darkText),
-            onPressed: () {},
+            onPressed: () => ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Menu tapped'))),
           ),
         ],
         bottom: PreferredSize(
@@ -68,7 +71,7 @@ class _Screen17MyEventsState extends State<Screen17MyEvents>
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => context.pushNamed('createEventStep1'),
         backgroundColor: AppColors.primaryGreen,
         child: const Icon(Icons.add, color: Colors.white),
       ),
@@ -165,69 +168,75 @@ class _Screen17MyEventsState extends State<Screen17MyEvents>
     Color statusColor,
     Color imageColor,
   ) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(status, style: TextStyle(color: statusColor, fontSize: 12)),
-              const SizedBox(height: 4),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: AppColors.darkText,
+    return GestureDetector(
+      onTap: () => context.pushNamed('eventOverview'),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  status,
+                  style: TextStyle(color: statusColor, fontSize: 12),
                 ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                date,
-                style: const TextStyle(
-                  color: AppColors.lightText,
-                  fontSize: 12,
+                const SizedBox(height: 4),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: AppColors.darkText,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
+                const SizedBox(height: 4),
+                Text(
+                  date,
+                  style: const TextStyle(
+                    color: AppColors.lightText,
+                    fontSize: 12,
+                  ),
                 ),
-                decoration: BoxDecoration(
-                  color: AppColors.searchBarFillColor,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Actions',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.searchBarFillColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Actions',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 4),
-                    Icon(Icons.more_horiz, size: 16),
-                  ],
+                      SizedBox(width: 4),
+                      Icon(Icons.more_horiz, size: 16),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        const SizedBox(width: 16),
-        Container(
-          width: 130,
-          height: 120,
-          decoration: BoxDecoration(
-            color: imageColor,
-            borderRadius: BorderRadius.circular(12),
+          const SizedBox(width: 16),
+          Container(
+            width: 130,
+            height: 120,
+            decoration: BoxDecoration(
+              color: imageColor,
+              borderRadius: BorderRadius.circular(12),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

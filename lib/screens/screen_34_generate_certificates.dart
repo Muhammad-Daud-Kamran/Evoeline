@@ -16,11 +16,15 @@ class Screen34GenerateCertificates extends ConsumerWidget {
     final viewModel = ref.read(generateCertificatesProvider.notifier);
 
     // Show Snackbar on Success or Error
-    ref.listen<GenerateCertificatesState>(generateCertificatesProvider, (previous, next) {
-      if (next.errorMessage.isNotEmpty && (previous?.errorMessage != next.errorMessage)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(next.errorMessage)),
-        );
+    ref.listen<GenerateCertificatesState>(generateCertificatesProvider, (
+      previous,
+      next,
+    ) {
+      if (next.errorMessage.isNotEmpty &&
+          (previous?.errorMessage != next.errorMessage)) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(next.errorMessage)));
       }
       if (next.isSuccess && (previous?.isSuccess != true)) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -47,7 +51,9 @@ class Screen34GenerateCertificates extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.info_outline, color: AppColors.iconColor),
-            onPressed: () {},
+            onPressed: () => ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Showing info'))),
           ),
         ],
       ),
@@ -110,13 +116,17 @@ class Screen34GenerateCertificates extends ConsumerWidget {
                       itemCount: state.attendees.length,
                       itemBuilder: (context, index) {
                         final attendee = state.attendees[index];
-                        final isSelected = state.selectedAttendeeIds.contains(attendee.userId);
+                        final isSelected = state.selectedAttendeeIds.contains(
+                          attendee.userId,
+                        );
                         return ListTile(
                           contentPadding: EdgeInsets.zero,
                           leading: CircleAvatar(
                             backgroundColor: Colors.grey.shade300,
                             child: Text(
-                              attendee.name.isNotEmpty ? attendee.name.substring(0, 2).toUpperCase() : '',
+                              attendee.name.isNotEmpty
+                                  ? attendee.name.substring(0, 2).toUpperCase()
+                                  : '',
                               style: const TextStyle(color: AppColors.darkText),
                             ),
                           ),
@@ -128,12 +138,16 @@ class Screen34GenerateCertificates extends ConsumerWidget {
                           ),
                           subtitle: Text(
                             attendee.email,
-                            style: AppTextStyles.subtitle.copyWith(fontSize: 12),
+                            style: AppTextStyles.subtitle.copyWith(
+                              fontSize: 12,
+                            ),
                           ),
                           trailing: Checkbox(
                             value: isSelected,
                             onChanged: (val) {
-                              viewModel.toggleAttendeeSelection(attendee.userId);
+                              viewModel.toggleAttendeeSelection(
+                                attendee.userId,
+                              );
                             },
                             activeColor: AppColors.primaryGreen,
                           ),
@@ -152,17 +166,29 @@ class Screen34GenerateCertificates extends ConsumerWidget {
                   children: [
                     GestureDetector(
                       onTap: () => viewModel.selectTemplate('Modern'),
-                      child: _buildTemplateItem('Modern', state.selectedTemplate == 'Modern', 'assets/images/s34image2.jpg'),
+                      child: _buildTemplateItem(
+                        'Modern',
+                        state.selectedTemplate == 'Modern',
+                        'assets/images/s34image2.jpg',
+                      ),
                     ),
                     const SizedBox(width: 12),
                     GestureDetector(
                       onTap: () => viewModel.selectTemplate('Classic'),
-                      child: _buildTemplateItem('Classic', state.selectedTemplate == 'Classic', 'assets/images/s34image3.jpg'),
+                      child: _buildTemplateItem(
+                        'Classic',
+                        state.selectedTemplate == 'Classic',
+                        'assets/images/s34image3.jpg',
+                      ),
                     ),
                     const SizedBox(width: 12),
                     GestureDetector(
                       onTap: () => viewModel.selectTemplate('Minimal'),
-                      child: _buildTemplateItem('Minimal', state.selectedTemplate == 'Minimal', 'assets/images/s34image4.png'),
+                      child: _buildTemplateItem(
+                        'Minimal',
+                        state.selectedTemplate == 'Minimal',
+                        'assets/images/s34image4.png',
+                      ),
                     ),
                   ],
                 ),
@@ -180,7 +206,6 @@ class Screen34GenerateCertificates extends ConsumerWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-
               ),
               const SizedBox(height: 24),
 
@@ -190,7 +215,7 @@ class Screen34GenerateCertificates extends ConsumerWidget {
               const Text('Signatory Name', style: AppTextStyles.label),
               const SizedBox(height: 4),
               CustomTextField(
-                hintText: 'Enter name', 
+                hintText: 'Enter name',
                 onChanged: viewModel.updateSignatoryName,
               ),
               const SizedBox(height: 16),
@@ -309,7 +334,9 @@ class Screen34GenerateCertificates extends ConsumerWidget {
                 width: double.infinity,
                 height: 48,
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Opening preview...')),
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.background,
                     shape: RoundedRectangleBorder(
@@ -336,15 +363,24 @@ class Screen34GenerateCertificates extends ConsumerWidget {
                 width: double.infinity,
                 height: 48,
                 child: ElevatedButton.icon(
-                  onPressed: state.isLoading ? null : () => viewModel.generateCertificates(),
+                  onPressed: state.isLoading
+                      ? null
+                      : () => viewModel.generateCertificates(),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryGreen,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  icon: state.isLoading 
-                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.black, strokeWidth: 2))
+                  icon: state.isLoading
+                      ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            color: Colors.black,
+                            strokeWidth: 2,
+                          ),
+                        )
                       : const Icon(
                           Icons.insert_drive_file_outlined,
                           color: Colors.black,
@@ -379,13 +415,13 @@ class Screen34GenerateCertificates extends ConsumerWidget {
               color: isSelected ? AppColors.primaryGreen : Colors.transparent,
               width: 2,
             ),
-            image: DecorationImage(          // 👈 replaced color with image
+            image: DecorationImage(
+              // 👈 replaced color with image
               image: AssetImage(imagePath),
               fit: BoxFit.cover,
             ),
           ),
-
-          ),
+        ),
 
         const SizedBox(height: 4),
         Text(

@@ -103,7 +103,15 @@ class _Screen11NotificationSettingsState
               const SizedBox(height: 48),
               SizedBox(
                 width: double.infinity,
-                child: CustomButton(text: 'Save Preferences', onPressed: () {}),
+                child: CustomButton(
+                  text: 'Save Preferences',
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Preferences saved')),
+                    );
+                    context.pop();
+                  },
+                ),
               ),
             ],
           ),

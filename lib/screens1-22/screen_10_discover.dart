@@ -15,7 +15,9 @@ class Screen10Discover extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.menu, color: AppColors.darkText),
-          onPressed: () {},
+          onPressed: () => ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Menu toggled'))),
         ),
         title: const Text('EventFlow', style: AppTextStyles.heading2),
         centerTitle: true,
@@ -25,7 +27,9 @@ class Screen10Discover extends StatelessWidget {
               Icons.notifications_none,
               color: AppColors.darkText,
             ),
-            onPressed: () {},
+            onPressed: () => ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Notifications'))),
           ),
         ],
       ),

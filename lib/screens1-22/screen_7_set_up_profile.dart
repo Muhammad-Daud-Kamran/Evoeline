@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../widgets/custom_button.dart';
@@ -94,7 +95,10 @@ class Screen8SetUpProfile extends StatelessWidget {
               // Continue Button
               SizedBox(
                 width: double.infinity,
-                child: CustomButton(text: 'Continue', onPressed: () {}),
+                child: CustomButton(
+                  text: 'Continue',
+                  onPressed: () => context.goNamed('dashboard'),
+                ),
               ),
             ],
           ),

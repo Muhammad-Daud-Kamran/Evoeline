@@ -50,7 +50,12 @@ class Screen6ForgotPassword extends StatelessWidget {
               const SizedBox(height: 32),
 
               // Send Reset Link Button
-              CustomButton(text: 'Send Reset Link', onPressed: () {}),
+              CustomButton(
+                text: 'Send Reset Link',
+                onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Reset link sent to email')),
+                ),
+              ),
               const SizedBox(height: 16),
 
               // Resend Link text button

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 
@@ -36,7 +37,11 @@ class _Screen18NotificationsState extends State<Screen18Notifications>
         centerTitle: true,
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Notifications cleared')),
+              );
+            },
             child: const Text(
               'Clear All',
               style: TextStyle(
@@ -90,7 +95,22 @@ class _Screen18NotificationsState extends State<Screen18Notifications>
         unselectedLabelStyle: const TextStyle(fontSize: 12),
         elevation: 10,
         backgroundColor: Colors.white,
-        onTap: (_) {},
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              context.goNamed('discover');
+              break;
+            case 1:
+              context.goNamed('myEvents');
+              break;
+            case 2:
+              context.goNamed('myCertificates');
+              break;
+            case 3:
+              context.goNamed('profile');
+              break;
+          }
+        },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Discover'),
           BottomNavigationBarItem(

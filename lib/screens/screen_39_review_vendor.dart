@@ -49,7 +49,9 @@ class Screen39ReviewVendor extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.help_outline, color: AppColors.iconColor),
-            onPressed: () {},
+            onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Review submitted successfully')),
+            ),
           ),
         ],
       ),
@@ -199,7 +201,10 @@ class Screen39ReviewVendor extends ConsumerWidget {
             const SizedBox(height: 32),
 
             // Submit Button
-            CustomButton(text: state.isSubmitting ? 'Submitting...' : 'Submit Review', onPressed: () => viewModel.submitReview()),
+            CustomButton(
+              text: state.isSubmitting ? 'Submitting...' : 'Submit Review',
+              onPressed: () => viewModel.submitReview(),
+            ),
             const SizedBox(height: 24),
           ],
         ),
@@ -258,7 +263,6 @@ class Screen39ReviewVendor extends ConsumerWidget {
               fit: BoxFit.cover,
             ),
           ),
-
         ),
       ],
     );

@@ -210,7 +210,7 @@ class _Screen19CreateEventStep1State extends State<Screen19CreateEventStep1> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => context.pop(),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.searchBarFillColor,
                 foregroundColor: AppColors.darkText,
@@ -229,7 +229,7 @@ class _Screen19CreateEventStep1State extends State<Screen19CreateEventStep1> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => context.pushNamed('createEventStep2'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryGreen,
                 foregroundColor: Colors.white,

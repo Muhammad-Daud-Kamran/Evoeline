@@ -26,7 +26,11 @@ class Screen16AnalyticsDashboard extends StatelessWidget {
               Icons.file_download_outlined,
               color: AppColors.darkText,
             ),
-            onPressed: () {},
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Downloading report...')),
+              );
+            },
           ),
         ],
       ),
@@ -123,13 +127,18 @@ class Screen16AnalyticsDashboard extends StatelessWidget {
             // Actions
             SizedBox(
               width: double.infinity,
-              child: CustomButton(text: 'Export Report', onPressed: () {}),
+              child: CustomButton(
+                text: 'Export Report',
+                onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Report exported!')),
+                ),
+              ),
             ),
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () => context.pushNamed('analytics'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.analyticsLightGreen,
                   foregroundColor: AppColors.darkText,

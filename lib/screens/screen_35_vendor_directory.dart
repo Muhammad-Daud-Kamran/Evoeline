@@ -1,4 +1,5 @@
-// lib/screens/screen_35_vendor_directory.dart
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 // ─────────────────────────────────────────────────────
 // Screen 35 — Vendor Directory
@@ -15,7 +16,6 @@
 //   - Categories remain static (but could be dynamic)
 // ─────────────────────────────────────────────────────
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import '../constants/app_colors.dart';
@@ -81,7 +81,9 @@ class Screen35VendorDirectory extends ConsumerWidget {
                     ),
                     const SizedBox(width: 8),
                     GestureDetector(
-                      onTap: () => viewModel.sortBy('Popularity'), // Fixed: Wrapped in anonymous function
+                      onTap: () => viewModel.sortBy(
+                        'Popularity',
+                      ), // Fixed: Wrapped in anonymous function
                       child: Row(
                         children: [
                           Text(
@@ -117,13 +119,16 @@ class Screen35VendorDirectory extends ConsumerWidget {
                       itemCount: state.featuredVendors.length,
                       itemBuilder: (_, index) {
                         final vendor = state.featuredVendors[index];
-                        return VendorFeaturedCard(
-                          title: vendor.businessName,
-                          subtitle: vendor.serviceCategories.isNotEmpty
-                              ? vendor.serviceCategories.first
-                              : '',
-                          imagepath: vendor.logoImage,
-                          imageColor: const Color(0xFF6B4226), // fallback
+                        return GestureDetector(
+                          onTap: () => context.pushNamed('vendorProfile'),
+                          child: VendorFeaturedCard(
+                            title: vendor.businessName,
+                            subtitle: vendor.serviceCategories.isNotEmpty
+                                ? vendor.serviceCategories.first
+                                : '',
+                            imagepath: vendor.logoImage,
+                            imageColor: const Color(0xFF6B4226), // fallback
+                          ),
                         );
                       },
                     ),
@@ -140,7 +145,7 @@ class Screen35VendorDirectory extends ConsumerWidget {
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                   childAspectRatio: 1.1,
-                  children: _buildCategoryGridItems(state.categories),
+                  children: _buildCategoryGridItems(context, state.categories),
                 ),
                 const SizedBox(height: 24),
 
@@ -152,14 +157,19 @@ class Screen35VendorDirectory extends ConsumerWidget {
                 else if (state.errorMessage.isNotEmpty)
                   Center(child: Text(state.errorMessage))
                 else
-                  ...state.popularVendors.map((vendor) => VendorPopularListItem(
-                    title: vendor.businessName,
-                    subtitle: vendor.serviceCategories.isNotEmpty
-                        ? vendor.serviceCategories.first
-                        : '',
-                    badgeColor: const Color(0xFFE7D1B9),
-                    imagepath: vendor.logoImage,
-                  )),
+                  ...state.popularVendors.map(
+                    (vendor) => GestureDetector(
+                      onTap: () => context.pushNamed('vendorProfile'),
+                      child: VendorPopularListItem(
+                        title: vendor.businessName,
+                        subtitle: vendor.serviceCategories.isNotEmpty
+                            ? vendor.serviceCategories.first
+                            : '',
+                        badgeColor: const Color(0xFFE7D1B9),
+                        imagepath: vendor.logoImage,
+                      ),
+                    ),
+                  ),
                 const SizedBox(height: 24),
 
                 // 5. Recently Viewed
@@ -177,11 +187,14 @@ class Screen35VendorDirectory extends ConsumerWidget {
                       itemCount: state.recentlyViewed.length,
                       itemBuilder: (_, index) {
                         final vendor = state.recentlyViewed[index];
-                        return VendorFeaturedCard(
-                          title: vendor.businessName,
-                          subtitle: '',
-                          imagepath: vendor.logoImage,
-                          imageColor: const Color(0xFF6B4226),
+                        return GestureDetector(
+                          onTap: () => context.pushNamed('vendorProfile'),
+                          child: VendorFeaturedCard(
+                            title: vendor.businessName,
+                            subtitle: '',
+                            imagepath: vendor.logoImage,
+                            imageColor: const Color(0xFF6B4226),
+                          ),
                         );
                       },
                     ),
@@ -207,50 +220,67 @@ class Screen35VendorDirectory extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            SvgPicture.asset(
-              'assets/images/s32icon1home.svg',
-              colorFilter: const ColorFilter.mode(
-                AppColors.lightText,
-                BlendMode.srcIn,
+            GestureDetector(
+              onTap: () => context.goNamed('dashboard'),
+              child: SvgPicture.asset(
+                'assets/images/s32icon1home.svg',
+                colorFilter: const ColorFilter.mode(
+                  AppColors.lightText,
+                  BlendMode.srcIn,
+                ),
+                width: 44,
+                height: 44,
               ),
-              width: 44,
-              height: 44,
             ),
-            SvgPicture.asset(
-              'assets/images/s35icon1vendors.svg',
-              colorFilter: const ColorFilter.mode(
-                AppColors.lightText,
-                BlendMode.srcIn,
+            GestureDetector(
+              onTap: () {}, // Already on vendor Directory
+              child: SvgPicture.asset(
+                'assets/images/s35icon1vendors.svg',
+                colorFilter: const ColorFilter.mode(
+                  AppColors.primaryGreen,
+                  BlendMode.srcIn,
+                ),
+                width: 44,
+                height: 44,
               ),
-              width: 44,
-              height: 44,
             ),
-            SvgPicture.asset(
-              'assets/images/s35icon2events.svg',
-              colorFilter: const ColorFilter.mode(
-                AppColors.lightText,
-                BlendMode.srcIn,
+            GestureDetector(
+              onTap: () => context.pushNamed('myEvents'),
+              child: SvgPicture.asset(
+                'assets/images/s35icon2events.svg',
+                colorFilter: const ColorFilter.mode(
+                  AppColors.lightText,
+                  BlendMode.srcIn,
+                ),
+                width: 44,
+                height: 44,
               ),
-              width: 44,
-              height: 44,
             ),
-            SvgPicture.asset(
-              'assets/images/s35icon3message.svg',
-              colorFilter: const ColorFilter.mode(
-                AppColors.lightText,
-                BlendMode.srcIn,
+            GestureDetector(
+              onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Messages feature coming soon!')),
               ),
-              width: 44,
-              height: 44,
+              child: SvgPicture.asset(
+                'assets/images/s35icon3message.svg',
+                colorFilter: const ColorFilter.mode(
+                  AppColors.lightText,
+                  BlendMode.srcIn,
+                ),
+                width: 44,
+                height: 44,
+              ),
             ),
-            SvgPicture.asset(
-              'assets/images/s32icon4profile.svg',
-              colorFilter: const ColorFilter.mode(
-                AppColors.lightText,
-                BlendMode.srcIn,
+            GestureDetector(
+              onTap: () => context.pushNamed('profile'),
+              child: SvgPicture.asset(
+                'assets/images/s32icon4profile.svg',
+                colorFilter: const ColorFilter.mode(
+                  AppColors.lightText,
+                  BlendMode.srcIn,
+                ),
+                width: 44,
+                height: 44,
               ),
-              width: 44,
-              height: 44,
             ),
           ],
         ),
@@ -259,7 +289,10 @@ class Screen35VendorDirectory extends ConsumerWidget {
   }
 
   // Helper to build category grid items (static for now)
-  List<Widget> _buildCategoryGridItems(List<String> categories) {
+  List<Widget> _buildCategoryGridItems(
+    BuildContext context,
+    List<String> categories,
+  ) {
     // Map each category to its icon/color/image (these are static)
     // You can extend this mapping as needed
     final categoryDetails = {
@@ -314,18 +347,25 @@ class Screen35VendorDirectory extends ConsumerWidget {
     };
 
     return categories.map((category) {
-      final details = categoryDetails[category] ?? {
-        'icon': Icons.category,
-        'bgColor': Colors.grey.shade200,
-        'image': '',
-        'iconColor': Colors.black54,
-      };
-      return CategoryGridItem(
-        title: category,
-        icon: details['icon'] as IconData,
-        backgroundColor: details['bgColor'] as Color,
-        imagepath: details['image'] as String,
-        iconColor: details['iconColor'] as Color,
+      final details =
+          categoryDetails[category] ??
+          {
+            'icon': Icons.category,
+            'bgColor': Colors.grey.shade200,
+            'image': '',
+            'iconColor': Colors.black54,
+          };
+      return GestureDetector(
+        onTap: () => context.pushNamed(
+          'photographyCategory',
+        ), // Maps generally to the subset category screen
+        child: CategoryGridItem(
+          title: category,
+          icon: details['icon'] as IconData,
+          backgroundColor: details['bgColor'] as Color,
+          imagepath: details['image'] as String,
+          iconColor: details['iconColor'] as Color,
+        ),
       );
     }).toList();
   }

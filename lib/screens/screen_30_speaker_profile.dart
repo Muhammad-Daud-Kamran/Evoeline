@@ -33,170 +33,211 @@ class Screen30SpeakerProfile extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.ios_share, color: AppColors.darkText),
-            onPressed: () {},
+            onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Sharing coming soon')),
+            ),
           ),
         ],
       ),
       body: speakerState.isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 16),
-            // Avatar
-            CircleAvatar(
-              radius: 50,
-              backgroundColor: AppColors.cardBackground, // Peach background
-              // 2. Use image from the model
-              backgroundImage: AssetImage(data.profileImage.isNotEmpty ? data.profileImage : 'assets/images/screen30speakerprofile.jpg'),
-            ),
-            const SizedBox(height: 16),
-
-            // Name and Title
-            Text(data.name.isEmpty ? 'Loading Name...' : data.name, style: AppTextStyles.heading2),
-            const SizedBox(height: 4),
-            Text(
-              data.designation.isEmpty ? 'Loading Designation...' : data.designation,
-              textAlign: TextAlign.center,
-              style: AppTextStyles.bodyText.copyWith(
-                color: AppColors.lightText,
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Social Links Row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _SocialLink(
-                  svgPath: 'assets/images/linkedin.svg',
-                  label: 'LinkedIn',
-                ),
-                const SizedBox(width: 40), 
-                _SocialLink(
-                  svgPath: 'assets/images/twitter.svg',
-                  label: 'Twitter',
-                ),
-                const SizedBox(width: 40),
-                _SocialLink(
-                  svgPath: 'assets/images/website.svg',
-                  label: 'Website',
-                ),
-              ],
-            ),
-            const SizedBox(height: 32),
-
-            // NEW: Bio Section (Schema: bio)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('About Speaker', style: AppTextStyles.heading3),
-                  const SizedBox(height: 8),
-                  Text(
-                    data.bio.isEmpty ? 'Loading bio...' : data.bio,
-                    style: AppTextStyles.bodyText.copyWith(
-                      color: AppColors.darkText,
-                      height: 1.5,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
-
-            // Main Picture Container
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              height: 340,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.lightGreyBackground,
-                borderRadius: BorderRadius.circular(16),
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/screen30image2.jpg'), 
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            const SizedBox(height: 32),
-
-            // Sessions Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Sessions', style: AppTextStyles.heading2),
-                  const SizedBox(height: 12),
-                  // Render Sessions dynamically from model
-                  ...data.sessions.map((session) => SpeakerSessionItem(
-                    title: session.title,
-                    dateTime: session.dateTime,
-                    imagePath: session.imagePath,
-                    isLive: session.isLive,
-                  )).toList(),
-                  const SizedBox(height: 32),
-
-                  // Past Events Section
-                  const Text('Past Events', style: AppTextStyles.heading2),
                   const SizedBox(height: 16),
-                  SizedBox(
-                    height: 220, 
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      // Render Past Events dynamically from model
-                      children: data.pastEvents.map((event) => PastEventCard(
-                        title: event.title,
-                        year: event.year,
-                        imagePath: event.imagePath,
-                      )).toList(),
+                  // Avatar
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundColor:
+                        AppColors.cardBackground, // Peach background
+                    // 2. Use image from the model
+                    backgroundImage: AssetImage(
+                      data.profileImage.isNotEmpty
+                          ? data.profileImage
+                          : 'assets/images/screen30speakerprofile.jpg',
                     ),
                   ),
-                  const SizedBox(height: 36),
+                  const SizedBox(height: 16),
 
-                  // Actions
-                  CustomButton(
-                    text: 'Add to Event',
-                    onPressed: () {},
-                    backgroundColor: AppColors.primaryGreen,
+                  // Name and Title
+                  Text(
+                    data.name.isEmpty ? 'Loading Name...' : data.name,
+                    style: AppTextStyles.heading2,
                   ),
-                  const SizedBox(height: 12),
-                  CustomButton(
-                    text: 'Contact Speaker',
-                    onPressed: () {},
-                    backgroundColor: AppColors.lightGreyBackground,
-                    textColor: AppColors.darkText,
+                  const SizedBox(height: 4),
+                  Text(
+                    data.designation.isEmpty
+                        ? 'Loading Designation...'
+                        : data.designation,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.bodyText.copyWith(
+                      color: AppColors.lightText,
+                    ),
                   ),
                   const SizedBox(height: 24),
 
-                  // Share Profile Link
-                  Center(
-                    child: TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        'Share Profile',
-                        style: TextStyle(
-                          color: AppColors.darkText,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                  // Social Links Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _SocialLink(
+                        svgPath: 'assets/images/linkedin.svg',
+                        label: 'LinkedIn',
+                      ),
+                      const SizedBox(width: 40),
+                      _SocialLink(
+                        svgPath: 'assets/images/twitter.svg',
+                        label: 'Twitter',
+                      ),
+                      const SizedBox(width: 40),
+                      _SocialLink(
+                        svgPath: 'assets/images/website.svg',
+                        label: 'Website',
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 32),
+
+                  // NEW: Bio Section (Schema: bio)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'About Speaker',
+                          style: AppTextStyles.heading3,
                         ),
+                        const SizedBox(height: 8),
+                        Text(
+                          data.bio.isEmpty ? 'Loading bio...' : data.bio,
+                          style: AppTextStyles.bodyText.copyWith(
+                            color: AppColors.darkText,
+                            height: 1.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+
+                  // Main Picture Container
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    height: 340,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppColors.lightGreyBackground,
+                      borderRadius: BorderRadius.circular(16),
+                      image: const DecorationImage(
+                        image: AssetImage('assets/images/screen30image2.jpg'),
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
                   const SizedBox(height: 32),
+
+                  // Sessions Section
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Sessions', style: AppTextStyles.heading2),
+                        const SizedBox(height: 12),
+                        // Render Sessions dynamically from model
+                        ...data.sessions
+                            .map(
+                              (session) => SpeakerSessionItem(
+                                title: session.title,
+                                dateTime: session.dateTime,
+                                imagePath: session.imagePath,
+                                isLive: session.isLive,
+                              ),
+                            )
+                            .toList(),
+                        const SizedBox(height: 32),
+
+                        // Past Events Section
+                        const Text(
+                          'Past Events',
+                          style: AppTextStyles.heading2,
+                        ),
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          height: 220,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            // Render Past Events dynamically from model
+                            children: data.pastEvents
+                                .map(
+                                  (event) => PastEventCard(
+                                    title: event.title,
+                                    year: event.year,
+                                    imagePath: event.imagePath,
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ),
+                        const SizedBox(height: 36),
+
+                        // Actions
+                        CustomButton(
+                          text: 'Add to Event',
+                          onPressed: () =>
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Added to your event'),
+                                ),
+                              ),
+                          backgroundColor: AppColors.primaryGreen,
+                        ),
+                        const SizedBox(height: 12),
+                        CustomButton(
+                          text: 'Contact Speaker',
+                          onPressed: () =>
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Opening contact form'),
+                                ),
+                              ),
+                          backgroundColor: AppColors.lightGreyBackground,
+                          textColor: AppColors.darkText,
+                        ),
+                        const SizedBox(height: 24),
+
+                        // Share Profile Link
+                        Center(
+                          child: TextButton(
+                            onPressed: () =>
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Sharing coming soon'),
+                                  ),
+                                ),
+                            child: const Text(
+                              'Share Profile',
+                              style: TextStyle(
+                                color: AppColors.darkText,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 32),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: AppColors.primaryGreen,
         unselectedItemColor: AppColors.lightText,
-        currentIndex: 2, 
+        currentIndex: 2,
         selectedFontSize: 10,
         unselectedFontSize: 10,
         items: const [

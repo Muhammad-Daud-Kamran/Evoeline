@@ -9,7 +9,6 @@ import '../widgets/custom_text_field.dart';
 import '../widgets/attendee_list_item.dart';
 import '../viewmodels/attendees_viewmodel.dart';
 
-
 class Screen33CheckIn extends ConsumerWidget {
   const Screen33CheckIn({Key? key}) : super(key: key);
   @override
@@ -37,11 +36,17 @@ class Screen33CheckIn extends ConsumerWidget {
             Row(
               children: [
                 Expanded(
-                  child: SolidStatCard(title: 'Total Expected', value: '${state.totalRegistered}'),
+                  child: SolidStatCard(
+                    title: 'Total Expected',
+                    value: '${state.totalRegistered}',
+                  ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: SolidStatCard(title: 'Checked In', value: '${state.checkedInCount}'),
+                  child: SolidStatCard(
+                    title: 'Checked In',
+                    value: '${state.checkedInCount}',
+                  ),
                 ),
               ],
             ),
@@ -49,16 +54,17 @@ class Screen33CheckIn extends ConsumerWidget {
             SizedBox(
               width: double.infinity,
               child: SolidStatCard(
-                  title: 'Pending',
-                  value: '${state.totalRegistered - state.checkedInCount}'),
+                title: 'Pending',
+                value: '${state.totalRegistered - state.checkedInCount}',
+              ),
             ),
             const SizedBox(height: 24),
 
             // Search Box
             CustomTextField(
-                hintText: 'Search',
-                prefixIcon: Icons.search,
-                onChanged: (val) => viewModel.searchAttendees(val),
+              hintText: 'Search',
+              prefixIcon: Icons.search,
+              onChanged: (val) => viewModel.searchAttendees(val),
             ),
             const SizedBox(height: 16),
 
@@ -92,7 +98,9 @@ class Screen33CheckIn extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         child: SafeArea(
           child: ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Exporting report...')),
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor:
                   AppColors.darkGreenButton, // Darker green for matching design

@@ -99,7 +99,9 @@ class _Screen41EventDetailsState extends ConsumerState<Screen41EventDetails>
                   width: 42,
                   height: 42,
                 ),
-                onPressed: () {},
+                onPressed: () => ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(const SnackBar(content: Text('Sharing...'))),
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
@@ -196,7 +198,12 @@ class _Screen41EventDetailsState extends ConsumerState<Screen41EventDetails>
                     children: [
                       Expanded(
                         child: OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () =>
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Saved to favorites'),
+                                ),
+                              ),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: AppColors.darkText,
                             backgroundColor: AppColors.lightGreyBackground,
@@ -217,7 +224,7 @@ class _Screen41EventDetailsState extends ConsumerState<Screen41EventDetails>
                         flex: 2,
                         child: CustomButton(
                           text: 'Register - ${_getPriceText(event)}',
-                          onPressed: () {},
+                          onPressed: () => context.pushNamed('registerEvent'),
                         ),
                       ),
                     ],
@@ -411,7 +418,11 @@ class _Screen41EventDetailsState extends ConsumerState<Screen41EventDetails>
           Align(
             alignment: Alignment.centerLeft,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Contact Organizer form coming soon'),
+                ),
+              ),
               style: TextButton.styleFrom(
                 backgroundColor: AppColors.lightGreyBackground,
                 shape: RoundedRectangleBorder(

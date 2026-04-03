@@ -123,12 +123,22 @@ class Screen9EditProfile extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: CustomButton(text: 'Save Changes', onPressed: () {}),
+                    child: CustomButton(
+                      text: 'Save Changes',
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Profile updated successfully'),
+                          ),
+                        );
+                        context.pop();
+                      },
+                    ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () => context.pop(),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.lightGreyBackground,
                         foregroundColor: AppColors.darkText,

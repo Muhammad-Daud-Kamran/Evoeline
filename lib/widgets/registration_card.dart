@@ -9,6 +9,7 @@ class RegistrationCard extends StatelessWidget {
   final String buttonText;
   final IconData iconData;
   final String? imagePath;
+  final VoidCallback? onPressed;
 
   const RegistrationCard({
     super.key,
@@ -17,6 +18,7 @@ class RegistrationCard extends StatelessWidget {
     required this.buttonText,
     required this.iconData,
     this.imagePath,
+    this.onPressed,
   });
 
   @override
@@ -43,11 +45,7 @@ class RegistrationCard extends StatelessWidget {
                     alignment: Alignment.center,
                   )
                 : Center(
-                    child: Icon(
-                      iconData,
-                      size: 64,
-                      color: AppColors.darkText,
-                    ),
+                    child: Icon(iconData, size: 64, color: AppColors.darkText),
                   ),
           ),
         ),
@@ -62,7 +60,7 @@ class RegistrationCard extends StatelessWidget {
             Expanded(child: Text(description, style: AppTextStyles.subtitle)),
             const SizedBox(width: 16),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: onPressed ?? () {},
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryGreen,
                 foregroundColor: Colors.white,

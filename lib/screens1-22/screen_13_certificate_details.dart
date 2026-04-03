@@ -176,13 +176,21 @@ class Screen13CertificateDetails extends StatelessWidget {
                 Expanded(
                   child: CustomButton(
                     text: 'Verify on Blockchain',
-                    onPressed: () {},
+                    onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Blockchain verification pending'),
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Opening PolygonScan explorer'),
+                      ),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.analyticsLightGreen,
                       foregroundColor: AppColors.darkText,
@@ -239,7 +247,11 @@ class Screen13CertificateDetails extends StatelessWidget {
               width: double.infinity,
               child: CustomButton(
                 text: 'Download Certificate (PDF)',
-                onPressed: () {},
+                onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Downloading Certificate (PDF)'),
+                  ),
+                ),
               ),
             ),
           ],

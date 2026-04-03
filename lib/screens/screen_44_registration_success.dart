@@ -17,14 +17,21 @@ class Screen44RegistrationSuccess extends ConsumerWidget {
     if (state.isLoading) {
       return const Scaffold(
         backgroundColor: AppColors.background,
-        body: Center(child: CircularProgressIndicator(color: AppColors.primaryGreen)),
+        body: Center(
+          child: CircularProgressIndicator(color: AppColors.primaryGreen),
+        ),
       );
     }
 
     if (state.errorMessage.isNotEmpty) {
       return Scaffold(
         backgroundColor: AppColors.background,
-        body: Center(child: Text(state.errorMessage, style: const TextStyle(color: Colors.red))),
+        body: Center(
+          child: Text(
+            state.errorMessage,
+            style: const TextStyle(color: Colors.red),
+          ),
+        ),
       );
     }
 
@@ -35,7 +42,8 @@ class Screen44RegistrationSuccess extends ConsumerWidget {
     final formatLabel = event.format == 'virtual' ? 'Online' : 'In-person';
 
     // Displayed schedule line
-    final scheduleText = '${event.startDate} · ${event.startTime} – ${event.endTime}';
+    final scheduleText =
+        '${event.startDate} · ${event.startTime} – ${event.endTime}';
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -58,7 +66,11 @@ class Screen44RegistrationSuccess extends ConsumerWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(event.bannerImage.isNotEmpty ? event.bannerImage : 'assets/images/s44image1.jpg'),
+                  image: AssetImage(
+                    event.bannerImage.isNotEmpty
+                        ? event.bannerImage
+                        : 'assets/images/s44image1.jpg',
+                  ),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -73,12 +85,19 @@ class Screen44RegistrationSuccess extends ConsumerWidget {
                   // ── Success Header ───────────────────────
                   const Text(
                     '🎉 You\'re Registered!',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.darkText),
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.darkText,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   const Text(
                     'Your spot is confirmed for this event.',
-                    style: TextStyle(fontSize: 14, color: AppColors.primaryGreen),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: AppColors.primaryGreen,
+                    ),
                   ),
                   const SizedBox(height: 24),
 
@@ -92,17 +111,28 @@ class Screen44RegistrationSuccess extends ConsumerWidget {
                           children: [
                             Text(
                               formatLabel,
-                              style: const TextStyle(color: AppColors.primaryGreen, fontSize: 12, fontWeight: FontWeight.w600),
+                              style: const TextStyle(
+                                color: AppColors.primaryGreen,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               event.title,
-                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.darkText),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: AppColors.darkText,
+                              ),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               scheduleText,
-                              style: const TextStyle(color: AppColors.lightText, fontSize: 12),
+                              style: const TextStyle(
+                                color: AppColors.lightText,
+                                fontSize: 12,
+                              ),
                             ),
                           ],
                         ),
@@ -115,7 +145,11 @@ class Screen44RegistrationSuccess extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Center(
-                          child: Icon(Icons.emoji_events, color: Colors.white, size: 24),
+                          child: Icon(
+                            Icons.emoji_events,
+                            color: Colors.white,
+                            size: 24,
+                          ),
                         ),
                       ),
                     ],
@@ -127,7 +161,10 @@ class Screen44RegistrationSuccess extends ConsumerWidget {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Registration ID: #${reg.registrationId}',
-                      style: const TextStyle(color: AppColors.primaryGreen, fontSize: 12),
+                      style: const TextStyle(
+                        color: AppColors.primaryGreen,
+                        fontSize: 12,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -145,7 +182,9 @@ class Screen44RegistrationSuccess extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(12),
                       image: DecorationImage(
                         image: AssetImage(
-                          reg.qrCodeImageUrl.isNotEmpty ? reg.qrCodeImageUrl : 'assets/images/s44image2.jpg',
+                          reg.qrCodeImageUrl.isNotEmpty
+                              ? reg.qrCodeImageUrl
+                              : 'assets/images/s44image2.jpg',
                         ),
                         fit: BoxFit.cover,
                       ),
@@ -158,29 +197,55 @@ class Screen44RegistrationSuccess extends ConsumerWidget {
                     children: [
                       Expanded(
                         child: OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () =>
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Added to Calendar'),
+                                ),
+                              ),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: AppColors.darkText,
                             backgroundColor: AppColors.lightGreyBackground,
                             side: BorderSide.none,
                             padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
-                          child: const Text('Add to Calendar', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                          child: const Text(
+                            'Add to Calendar',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () =>
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Opening Share Menu'),
+                                ),
+                              ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primaryGreen,
                             foregroundColor: Colors.white,
                             elevation: 0,
                             padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
-                          child: const Text('Share with Friends', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                          child: const Text(
+                            'Share with Friends',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -192,7 +257,11 @@ class Screen44RegistrationSuccess extends ConsumerWidget {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'What\'s Next?',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.darkText),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.darkText,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -214,7 +283,10 @@ class Screen44RegistrationSuccess extends ConsumerWidget {
                   const SizedBox(height: 24),
 
                   // ── Bottom Buttons ───────────────────────
-                  CustomButton(text: 'View My Events', onPressed: () {}),
+                  CustomButton(
+                    text: 'View My Events',
+                    onPressed: () => context.goNamed('dashboard'),
+                  ),
                   const SizedBox(height: 12),
                   SizedBox(
                     width: double.infinity,
@@ -223,9 +295,17 @@ class Screen44RegistrationSuccess extends ConsumerWidget {
                       onPressed: () => context.pop(),
                       style: TextButton.styleFrom(
                         backgroundColor: AppColors.lightGreyBackground,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
-                      child: const Text('Back to Home', style: TextStyle(color: AppColors.darkText, fontWeight: FontWeight.bold)),
+                      child: const Text(
+                        'Back to Home',
+                        style: TextStyle(
+                          color: AppColors.darkText,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 32),
@@ -246,14 +326,42 @@ class Screen44RegistrationSuccess extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            SvgPicture.asset('assets/images/s32icon1home.svg',
-                colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn), width: 46, height: 46),
-            SvgPicture.asset('assets/images/s41iconeventbold.svg',
-                colorFilter: const ColorFilter.mode(AppColors.darkText, BlendMode.srcIn), width: 44, height: 44),
-            SvgPicture.asset('assets/images/s32icon3tickets.svg',
-                colorFilter: const ColorFilter.mode(AppColors.primaryGreen, BlendMode.srcIn), width: 44, height: 44),
-            SvgPicture.asset('assets/images/s32icon4profile.svg',
-                colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn), width: 44, height: 44),
+            SvgPicture.asset(
+              'assets/images/s32icon1home.svg',
+              colorFilter: const ColorFilter.mode(
+                AppColors.lightText,
+                BlendMode.srcIn,
+              ),
+              width: 46,
+              height: 46,
+            ),
+            SvgPicture.asset(
+              'assets/images/s41iconeventbold.svg',
+              colorFilter: const ColorFilter.mode(
+                AppColors.darkText,
+                BlendMode.srcIn,
+              ),
+              width: 44,
+              height: 44,
+            ),
+            SvgPicture.asset(
+              'assets/images/s32icon3tickets.svg',
+              colorFilter: const ColorFilter.mode(
+                AppColors.primaryGreen,
+                BlendMode.srcIn,
+              ),
+              width: 44,
+              height: 44,
+            ),
+            SvgPicture.asset(
+              'assets/images/s32icon4profile.svg',
+              colorFilter: const ColorFilter.mode(
+                AppColors.lightText,
+                BlendMode.srcIn,
+              ),
+              width: 44,
+              height: 44,
+            ),
           ],
         ),
       ),
@@ -279,9 +387,23 @@ class Screen44RegistrationSuccess extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.darkText)),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: AppColors.darkText,
+                  ),
+                ),
                 const SizedBox(height: 4),
-                Text(description, style: const TextStyle(color: AppColors.lightText, fontSize: 12, height: 1.4)),
+                Text(
+                  description,
+                  style: const TextStyle(
+                    color: AppColors.lightText,
+                    fontSize: 12,
+                    height: 1.4,
+                  ),
+                ),
               ],
             ),
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import '../constants/app_colors.dart';
 import '../viewmodels/discover_events_viewmodel.dart';
 import '../models/event_model.dart';
@@ -15,7 +16,7 @@ class Screen40DiscoverEvents extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: state.isLoading
           ? const Center(
               child: CircularProgressIndicator(color: AppColors.primaryGreen),
@@ -70,14 +71,17 @@ class Screen40DiscoverEvents extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            SvgPicture.asset(
-              'assets/images/s32icon1home.svg',
-              colorFilter: const ColorFilter.mode(
-                AppColors.darkText,
-                BlendMode.srcIn,
+            GestureDetector(
+              onTap: () => context.goNamed('dashboard'),
+              child: SvgPicture.asset(
+                'assets/images/s32icon1home.svg',
+                colorFilter: const ColorFilter.mode(
+                  AppColors.darkText,
+                  BlendMode.srcIn,
+                ),
+                width: 46,
+                height: 46,
               ),
-              width: 46,
-              height: 46,
             ),
             SvgPicture.asset(
               'assets/images/s40iconexplore.svg',
@@ -88,23 +92,31 @@ class Screen40DiscoverEvents extends ConsumerWidget {
               width: 44,
               height: 44,
             ),
-            SvgPicture.asset(
-              'assets/images/s40iconfav.svg',
-              colorFilter: const ColorFilter.mode(
-                AppColors.lightText,
-                BlendMode.srcIn,
+            GestureDetector(
+              onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Favorites coming soon')),
               ),
-              width: 44,
-              height: 44,
+              child: SvgPicture.asset(
+                'assets/images/s40iconfav.svg',
+                colorFilter: const ColorFilter.mode(
+                  AppColors.lightText,
+                  BlendMode.srcIn,
+                ),
+                width: 44,
+                height: 44,
+              ),
             ),
-            SvgPicture.asset(
-              'assets/images/s32icon4profile.svg',
-              colorFilter: const ColorFilter.mode(
-                AppColors.lightText,
-                BlendMode.srcIn,
+            GestureDetector(
+              onTap: () => context.pushNamed('profile'),
+              child: SvgPicture.asset(
+                'assets/images/s32icon4profile.svg',
+                colorFilter: const ColorFilter.mode(
+                  AppColors.lightText,
+                  BlendMode.srcIn,
+                ),
+                width: 44,
+                height: 44,
               ),
-              width: 44,
-              height: 44,
             ),
           ],
         ),
@@ -113,7 +125,7 @@ class Screen40DiscoverEvents extends ConsumerWidget {
   }
 
   /// App Bar with Title and Notification Icon
-  AppBar _buildAppBar() {
+  AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: AppColors.background,
       surfaceTintColor: Colors.transparent,
@@ -129,7 +141,9 @@ class Screen40DiscoverEvents extends ConsumerWidget {
       ),
       leading: IconButton(
         icon: const Icon(Icons.explore_outlined, color: AppColors.iconColor),
-        onPressed: () {},
+        onPressed: () => ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Exploring...'))),
       ),
       actions: [
         IconButton(
@@ -137,7 +151,9 @@ class Screen40DiscoverEvents extends ConsumerWidget {
             Icons.notifications_none,
             color: AppColors.iconColor,
           ),
-          onPressed: () {},
+          onPressed: () => ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Notifications'))),
         ),
       ],
     );
@@ -213,76 +229,79 @@ class Screen40DiscoverEvents extends ConsumerWidget {
         separatorBuilder: (_, __) => const SizedBox(width: 16),
         itemBuilder: (context, index) {
           final event = events[index];
-          return SizedBox(
-            width: 220,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF5F5F5),
-                      borderRadius: BorderRadius.circular(16),
-                      image: DecorationImage(
-                        image: AssetImage(event.bannerImage),
-                        fit: BoxFit.cover,
+          return GestureDetector(
+            onTap: () => context.pushNamed('eventDetails'),
+            child: SizedBox(
+              width: 220,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5F5F5),
+                        borderRadius: BorderRadius.circular(16),
+                        image: DecorationImage(
+                          image: AssetImage(event.bannerImage),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  event.category.toUpperCase(),
-                  style: const TextStyle(
-                    color: AppColors.primaryGreen,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.0,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  event.title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                    color: AppColors.darkText,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  event.description,
-                  style: const TextStyle(
-                    color: AppColors.lightText,
-                    fontSize: 12,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      event.startDate,
-                      style: const TextStyle(
-                        color: AppColors.lightText,
-                        fontSize: 12,
-                      ),
+                  const SizedBox(height: 12),
+                  Text(
+                    event.category.toUpperCase(),
+                    style: const TextStyle(
+                      color: AppColors.primaryGreen,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.0,
                     ),
-                    Text(
-                      _getPriceText(event),
-                      style: const TextStyle(
-                        color: AppColors.darkText,
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    event.title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: AppColors.darkText,
                     ),
-                  ],
-                ),
-              ],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    event.description,
+                    style: const TextStyle(
+                      color: AppColors.lightText,
+                      fontSize: 12,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        event.startDate,
+                        style: const TextStyle(
+                          color: AppColors.lightText,
+                          fontSize: 12,
+                        ),
+                      ),
+                      Text(
+                        _getPriceText(event),
+                        style: const TextStyle(
+                          color: AppColors.darkText,
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -311,104 +330,108 @@ class Screen40DiscoverEvents extends ConsumerWidget {
         separatorBuilder: (_, __) => const SizedBox(width: 16),
         itemBuilder: (context, index) {
           final event = events[index];
-          return Container(
-            width: 260,
-            decoration: BoxDecoration(
-              color: AppColors.background,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFFF0F0F0)),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(20),
-                      ),
-                      image: DecorationImage(
-                        image: AssetImage(event.bannerImage),
-                        fit: BoxFit.cover,
+          return GestureDetector(
+            onTap: () => context.pushNamed('eventDetails'),
+            child: Container(
+              width: 260,
+              decoration: BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFFF0F0F0)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                        image: DecorationImage(
+                          image: AssetImage(event.bannerImage),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        event.category.toUpperCase(),
-                        style: const TextStyle(
-                          color: AppColors.primaryGreen,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.0,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        event.title,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: AppColors.darkText,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        event.description,
-                        style: const TextStyle(
-                          color: AppColors.lightText,
-                          fontSize: 12,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            _getPriceText(event),
-                            style: const TextStyle(
-                              color: AppColors.darkText,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          event.category.toUpperCase(),
+                          style: const TextStyle(
+                            color: AppColors.primaryGreen,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.0,
                           ),
-                          SizedBox(
-                            width: 100,
-                            height: 36,
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFEDF2F4),
-                                foregroundColor: AppColors.darkText,
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              child: const Text(
-                                'Register',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          event.title,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: AppColors.darkText,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          event.description,
+                          style: const TextStyle(
+                            color: AppColors.lightText,
+                            fontSize: 12,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              _getPriceText(event),
+                              style: const TextStyle(
+                                color: AppColors.darkText,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                            SizedBox(
+                              width: 100,
+                              height: 36,
+                              child: ElevatedButton(
+                                onPressed: () =>
+                                    context.pushNamed('eventDetails'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFEDF2F4),
+                                  foregroundColor: AppColors.darkText,
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Register',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },
@@ -503,75 +526,78 @@ class Screen40DiscoverEvents extends ConsumerWidget {
         ),
         itemBuilder: (context, index) {
           final event = events[index];
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    image: DecorationImage(
-                      image: AssetImage(event.bannerImage),
-                      fit: BoxFit.cover,
+          return GestureDetector(
+            onTap: () => context.pushNamed('eventDetails'),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      image: DecorationImage(
+                        image: AssetImage(event.bannerImage),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                event.category.toUpperCase(),
-                style: const TextStyle(
-                  color: AppColors.primaryGreen,
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                event.title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
-                  color: AppColors.darkText,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 2),
-              Text(
-                event.description,
-                style: const TextStyle(
-                  color: AppColors.lightText,
-                  fontSize: 11,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 6),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    event.startDate,
-                    style: const TextStyle(
-                      color: AppColors.lightText,
-                      fontSize: 11,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                const SizedBox(height: 8),
+                Text(
+                  event.category.toUpperCase(),
+                  style: const TextStyle(
+                    color: AppColors.primaryGreen,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5,
                   ),
-                  Text(
-                    _getPriceText(event),
-                    style: const TextStyle(
-                      color: AppColors.darkText,
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                    ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  event.title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                    color: AppColors.darkText,
                   ),
-                ],
-              ),
-            ],
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  event.description,
+                  style: const TextStyle(
+                    color: AppColors.lightText,
+                    fontSize: 11,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 6),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      event.startDate,
+                      style: const TextStyle(
+                        color: AppColors.lightText,
+                        fontSize: 11,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      _getPriceText(event),
+                      style: const TextStyle(
+                        color: AppColors.darkText,
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           );
         },
       ),
@@ -592,73 +618,76 @@ class Screen40DiscoverEvents extends ConsumerWidget {
         separatorBuilder: (_, __) => const SizedBox(width: 16),
         itemBuilder: (context, index) {
           final event = events[index];
-          return SizedBox(
-            width: 200,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      image: DecorationImage(
-                        image: AssetImage(event.bannerImage),
-                        fit: BoxFit.cover,
+          return GestureDetector(
+            onTap: () => context.pushNamed('eventDetails'),
+            child: SizedBox(
+              width: 200,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: DecorationImage(
+                          image: AssetImage(event.bannerImage),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  event.category.toUpperCase(),
-                  style: const TextStyle(
-                    color: AppColors.primaryGreen,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.0,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  event.title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                    color: AppColors.darkText,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  event.description,
-                  style: const TextStyle(
-                    color: AppColors.lightText,
-                    fontSize: 12,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      event.startDate,
-                      style: const TextStyle(
-                        color: AppColors.lightText,
-                        fontSize: 12,
-                      ),
+                  const SizedBox(height: 12),
+                  Text(
+                    event.category.toUpperCase(),
+                    style: const TextStyle(
+                      color: AppColors.primaryGreen,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.0,
                     ),
-                    Text(
-                      _getPriceText(event),
-                      style: const TextStyle(
-                        color: AppColors.darkText,
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    event.title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                      color: AppColors.darkText,
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    event.description,
+                    style: const TextStyle(
+                      color: AppColors.lightText,
+                      fontSize: 12,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        event.startDate,
+                        style: const TextStyle(
+                          color: AppColors.lightText,
+                          fontSize: 12,
+                        ),
+                      ),
+                      Text(
+                        _getPriceText(event),
+                        style: const TextStyle(
+                          color: AppColors.darkText,
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -686,73 +715,76 @@ class Screen40DiscoverEvents extends ConsumerWidget {
         separatorBuilder: (_, __) => const SizedBox(width: 16),
         itemBuilder: (context, index) {
           final event = events[index];
-          return SizedBox(
-            width: 200,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      image: DecorationImage(
-                        image: AssetImage(event.bannerImage),
-                        fit: BoxFit.cover,
+          return GestureDetector(
+            onTap: () => context.pushNamed('eventDetails'),
+            child: SizedBox(
+              width: 200,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: DecorationImage(
+                          image: AssetImage(event.bannerImage),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  event.category.toUpperCase(),
-                  style: const TextStyle(
-                    color: AppColors.primaryGreen,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.0,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  event.title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                    color: AppColors.darkText,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  event.description,
-                  style: const TextStyle(
-                    color: AppColors.lightText,
-                    fontSize: 12,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      event.startDate,
-                      style: const TextStyle(
-                        color: AppColors.lightText,
-                        fontSize: 12,
-                      ),
+                  const SizedBox(height: 12),
+                  Text(
+                    event.category.toUpperCase(),
+                    style: const TextStyle(
+                      color: AppColors.primaryGreen,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.0,
                     ),
-                    Text(
-                      _getPriceText(event),
-                      style: const TextStyle(
-                        color: AppColors.darkText,
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    event.title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                      color: AppColors.darkText,
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    event.description,
+                    style: const TextStyle(
+                      color: AppColors.lightText,
+                      fontSize: 12,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        event.startDate,
+                        style: const TextStyle(
+                          color: AppColors.lightText,
+                          fontSize: 12,
+                        ),
+                      ),
+                      Text(
+                        _getPriceText(event),
+                        style: const TextStyle(
+                          color: AppColors.darkText,
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         },

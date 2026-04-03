@@ -19,10 +19,11 @@ class Screen32Register extends ConsumerWidget {
 
     // Show Snackbar on Success or Error
     ref.listen<RegisterState>(registerProvider, (previous, next) {
-      if (next.errorMessage.isNotEmpty && (previous?.errorMessage != next.errorMessage)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(next.errorMessage)),
-        );
+      if (next.errorMessage.isNotEmpty &&
+          (previous?.errorMessage != next.errorMessage)) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(next.errorMessage)));
       }
       if (next.isSuccess && (previous?.isSuccess != true)) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -54,7 +55,9 @@ class Screen32Register extends ConsumerWidget {
               width: 44,
               height: 44,
             ),
-            onPressed: () {},
+            onPressed: () => ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Share menu opened'))),
           ),
         ],
       ),
@@ -356,11 +359,8 @@ class _TermsCheckbox extends StatelessWidget {
   final bool value;
   final ValueChanged<bool?> onChanged;
 
-  const _TermsCheckbox({
-    Key? key,
-    required this.value,
-    required this.onChanged,
-  }) : super(key: key);
+  const _TermsCheckbox({Key? key, required this.value, required this.onChanged})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {

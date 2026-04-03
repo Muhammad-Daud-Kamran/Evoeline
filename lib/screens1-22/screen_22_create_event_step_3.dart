@@ -220,7 +220,7 @@ class _Screen22CreateEventStep3State extends State<Screen22CreateEventStep3> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => context.pop(),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.searchBarFillColor,
                 foregroundColor: AppColors.darkText,
@@ -239,7 +239,7 @@ class _Screen22CreateEventStep3State extends State<Screen22CreateEventStep3> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => context.pushNamed('review'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryGreen,
                 foregroundColor: Colors.white,

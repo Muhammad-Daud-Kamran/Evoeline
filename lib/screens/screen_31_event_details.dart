@@ -28,7 +28,9 @@ class Screen31EventDetails extends ConsumerWidget {
     // If any core data is loading, show a loader
     if (eventState.isLoading) {
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator(color: AppColors.primaryGreen)),
+        body: Center(
+          child: CircularProgressIndicator(color: AppColors.primaryGreen),
+        ),
       );
     }
 
@@ -46,14 +48,15 @@ class Screen31EventDetails extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.ios_share, color: AppColors.darkText),
-            onPressed: () {},
+            onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Sharing coming soon')),
+            ),
           ),
           IconButton(
-            icon: const Icon(
-              Icons.check_circle,
-              color: AppColors.successGreen,
-            ),
-            onPressed: () {},
+            icon: const Icon(Icons.check_circle, color: AppColors.successGreen),
+            onPressed: () => ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Saved locally'))),
           ),
         ],
       ),
@@ -85,21 +88,21 @@ class Screen31EventDetails extends ConsumerWidget {
                   children: [
                     _buildInfoChip(Icons.calendar_today, event.startDate),
                     const SizedBox(width: 8),
-                    _buildInfoChip(Icons.access_time, '${event.startTime} - ${event.endTime}'),
+                    _buildInfoChip(
+                      Icons.access_time,
+                      '${event.startTime} - ${event.endTime}',
+                    ),
                   ],
                 ),
                 const SizedBox(height: 8),
-                _buildInfoChip(
-                  Icons.location_on_outlined,
-                  event.venueName,
-                ),
+                _buildInfoChip(Icons.location_on_outlined, event.venueName),
               ],
             ),
             const SizedBox(height: 24),
 
             // Register Button
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () => context.pushNamed('registerEvent'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryGreen,
                 foregroundColor: Colors.white,
@@ -141,11 +144,13 @@ class Screen31EventDetails extends ConsumerWidget {
             if (agendaState.isLoading)
               const Center(child: CircularProgressIndicator())
             else
-              ...agendaState.items.map((item) => AgendaTimelineItem(
-                    title: item.title,
-                    time: item.time,
-                    isLast: item.isLast,
-                  )),
+              ...agendaState.items.map(
+                (item) => AgendaTimelineItem(
+                  title: item.title,
+                  time: item.time,
+                  isLast: item.isLast,
+                ),
+              ),
             const SizedBox(height: 32),
 
             // ── STEP 4: DYNAMIC SPEAKERS ────────────────────
@@ -166,7 +171,11 @@ class Screen31EventDetails extends ConsumerWidget {
                         return SpeakerAvatarItem(
                           name: speaker.name,
                           role: speaker.designation,
-                          avatarColor: index == 0 ? AppColors.avatarGreen1 : (index == 1 ? AppColors.avatarGreen2 : AppColors.avatarGrey),
+                          avatarColor: index == 0
+                              ? AppColors.avatarGreen1
+                              : (index == 1
+                                    ? AppColors.avatarGreen2
+                                    : AppColors.avatarGrey),
                           imagepath: speaker.profileImage,
                         );
                       },
@@ -184,7 +193,9 @@ class Screen31EventDetails extends ConsumerWidget {
               height: 100,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                children: event.sponsors.map((s) => _buildSponsorCard(s)).toList(),
+                children: event.sponsors
+                    .map((s) => _buildSponsorCard(s))
+                    .toList(),
               ),
             ),
             const SizedBox(height: 32),
@@ -197,10 +208,7 @@ class Screen31EventDetails extends ConsumerWidget {
             const SizedBox(height: 8),
             Align(
               alignment: Alignment.centerLeft,
-              child: Text(
-                event.address,
-                style: AppTextStyles.bodyText,
-              ),
+              child: Text(event.address, style: AppTextStyles.bodyText),
             ),
             const SizedBox(height: 16),
 
@@ -222,10 +230,7 @@ class Screen31EventDetails extends ConsumerWidget {
                   SizedBox(width: 8),
                   Text(
                     'View on Map',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

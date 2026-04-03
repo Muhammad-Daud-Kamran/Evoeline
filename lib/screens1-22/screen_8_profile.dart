@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 
@@ -20,7 +21,7 @@ class Screen7Profile extends StatelessWidget {
               Icons.settings_outlined,
               color: AppColors.darkText,
             ),
-            onPressed: () {},
+            onPressed: () => context.pushNamed('settings'),
           ),
         ],
       ),
@@ -82,9 +83,19 @@ class Screen7Profile extends StatelessWidget {
             const SizedBox(height: 12),
             Row(
               children: [
-                Expanded(child: _buildActionChip('Edit Profile')),
+                Expanded(
+                  child: _buildActionChip(
+                    'Edit Profile',
+                    onTap: () => context.pushNamed('editProfile'),
+                  ),
+                ),
                 const SizedBox(width: 16),
-                Expanded(child: _buildActionChip('Settings')),
+                Expanded(
+                  child: _buildActionChip(
+                    'Settings',
+                    onTap: () => context.pushNamed('settings'),
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 12),
@@ -92,6 +103,7 @@ class Screen7Profile extends StatelessWidget {
               'Certificates',
               icon: Icons.description_outlined,
               width: double.infinity,
+              onTap: () => context.pushNamed('myCertificates'),
             ),
             const SizedBox(height: 24),
 
@@ -173,7 +185,22 @@ class Screen7Profile extends StatelessWidget {
         unselectedLabelStyle: const TextStyle(fontSize: 12),
         elevation: 10,
         backgroundColor: AppColors.background,
-        onTap: (_) {},
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              context.goNamed('dashboard');
+              break;
+            case 1:
+              context.goNamed('myEvents');
+              break;
+            case 2:
+              // Currently on Profile, do nothing
+              break;
+            case 3:
+              context.goNamed('notifications');
+              break;
+          }
+        },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
@@ -226,30 +253,38 @@ class Screen7Profile extends StatelessWidget {
     );
   }
 
-  Widget _buildActionChip(String label, {IconData? icon, double? width}) {
-    return Container(
-      width: width,
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      decoration: BoxDecoration(
-        color: AppColors.analyticsLightGreen,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (icon != null) ...[
-            Icon(icon, size: 18, color: AppColors.darkText),
-            const SizedBox(width: 8),
-          ],
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkText,
+  Widget _buildActionChip(
+    String label, {
+    IconData? icon,
+    double? width,
+    VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: AppColors.analyticsLightGreen,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (icon != null) ...[
+              Icon(icon, size: 18, color: AppColors.darkText),
+              const SizedBox(width: 8),
+            ],
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: AppColors.darkText,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

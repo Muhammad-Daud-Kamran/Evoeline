@@ -17,10 +17,12 @@ class Screen38VendorReviews extends ConsumerWidget {
     if (state.isLoading) {
       return const Scaffold(
         backgroundColor: AppColors.background,
-        body: Center(child: CircularProgressIndicator(color: AppColors.primaryGreen)),
+        body: Center(
+          child: CircularProgressIndicator(color: AppColors.primaryGreen),
+        ),
       );
     }
-    
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -35,7 +37,9 @@ class Screen38VendorReviews extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.tune, color: AppColors.darkText),
-            onPressed: () {},
+            onPressed: () => ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Filter options'))),
           ),
         ],
       ),
@@ -64,14 +68,19 @@ class Screen38VendorReviews extends ConsumerWidget {
                       Row(
                         children: List.generate(5, (index) {
                           return Icon(
-                            index < state.averageRating.round() ? Icons.star : Icons.star_border,
+                            index < state.averageRating.round()
+                                ? Icons.star
+                                : Icons.star_border,
                             color: const Color(0xFF8CC9EB),
                             size: 16,
                           );
                         }),
                       ),
                       const SizedBox(height: 4),
-                      Text('${state.totalReviews} reviews', style: AppTextStyles.label),
+                      Text(
+                        '${state.totalReviews} reviews',
+                        style: AppTextStyles.label,
+                      ),
                     ],
                   ),
                   const SizedBox(width: 24),
@@ -80,15 +89,35 @@ class Screen38VendorReviews extends ConsumerWidget {
                   Expanded(
                     child: Column(
                       children: [
-                        _buildProgressBar(5, state.getRatingPercentage(5), '${(state.getRatingPercentage(5) * 100).toInt()}%'),
+                        _buildProgressBar(
+                          5,
+                          state.getRatingPercentage(5),
+                          '${(state.getRatingPercentage(5) * 100).toInt()}%',
+                        ),
                         const SizedBox(height: 4),
-                        _buildProgressBar(4, state.getRatingPercentage(4), '${(state.getRatingPercentage(4) * 100).toInt()}%'),
+                        _buildProgressBar(
+                          4,
+                          state.getRatingPercentage(4),
+                          '${(state.getRatingPercentage(4) * 100).toInt()}%',
+                        ),
                         const SizedBox(height: 4),
-                        _buildProgressBar(3, state.getRatingPercentage(3), '${(state.getRatingPercentage(3) * 100).toInt()}%'),
+                        _buildProgressBar(
+                          3,
+                          state.getRatingPercentage(3),
+                          '${(state.getRatingPercentage(3) * 100).toInt()}%',
+                        ),
                         const SizedBox(height: 4),
-                        _buildProgressBar(2, state.getRatingPercentage(2), '${(state.getRatingPercentage(2) * 100).toInt()}%'),
+                        _buildProgressBar(
+                          2,
+                          state.getRatingPercentage(2),
+                          '${(state.getRatingPercentage(2) * 100).toInt()}%',
+                        ),
                         const SizedBox(height: 4),
-                        _buildProgressBar(1, state.getRatingPercentage(1), '${(state.getRatingPercentage(1) * 100).toInt()}%'),
+                        _buildProgressBar(
+                          1,
+                          state.getRatingPercentage(1),
+                          '${(state.getRatingPercentage(1) * 100).toInt()}%',
+                        ),
                       ],
                     ),
                   ),
@@ -119,7 +148,10 @@ class Screen38VendorReviews extends ConsumerWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(state.selectedSortOption, style: AppTextStyles.bodyText),
+                    Text(
+                      state.selectedSortOption,
+                      style: AppTextStyles.bodyText,
+                    ),
                     const Icon(Icons.arrow_drop_up, color: AppColors.darkText),
                   ],
                 ),
@@ -136,7 +168,8 @@ class Screen38VendorReviews extends ConsumerWidget {
                   return ReviewListItem(
                     authorName: review.authorName,
                     reviewText: review.reviewText,
-                    ratingTimestampInfo: '${review.overallRating.toInt()} stars • ${review.eventContext}',
+                    ratingTimestampInfo:
+                        '${review.overallRating.toInt()} stars • ${review.eventContext}',
                     avatarColor: Color(review.avatarColorValue),
                     avatarInitials: review.authorInitials,
                   );
@@ -156,7 +189,6 @@ class Screen38VendorReviews extends ConsumerWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-
               ),
               const SizedBox(height: 24),
 
@@ -165,7 +197,9 @@ class Screen38VendorReviews extends ConsumerWidget {
                 width: double.infinity,
                 height: 48,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Loading more...')),
+                  ),
                   style: TextButton.styleFrom(
                     backgroundColor: AppColors.lightGreyBackground,
                     shape: RoundedRectangleBorder(
@@ -196,32 +230,47 @@ class Screen38VendorReviews extends ConsumerWidget {
           children: [
             SvgPicture.asset(
               'assets/images/s32icon1home.svg',
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.lightText,
+                BlendMode.srcIn,
+              ),
               width: 44,
               height: 44,
             ),
             SvgPicture.asset(
               'assets/images/s32icon2events.svg',
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn), // Selected
+              colorFilter: const ColorFilter.mode(
+                AppColors.lightText,
+                BlendMode.srcIn,
+              ), // Selected
               width: 44,
               height: 44,
             ),
-            SizedBox(width: 6,),
+            SizedBox(width: 6),
             SvgPicture.asset(
               'assets/images/s36icone3vendors.svg', // Re-verified filename in assets
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.lightText,
+                BlendMode.srcIn,
+              ),
               width: 44,
               height: 44,
             ),
             SvgPicture.asset(
               'assets/images/s38icon1review.svg',
-              colorFilter: const ColorFilter.mode(AppColors.darkText, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.darkText,
+                BlendMode.srcIn,
+              ),
               width: 44,
               height: 44,
             ),
             SvgPicture.asset(
               'assets/images/s32icon4profile.svg',
-              colorFilter: const ColorFilter.mode(AppColors.lightText, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.lightText,
+                BlendMode.srcIn,
+              ),
               width: 44,
               height: 44,
             ),
@@ -277,5 +326,4 @@ class Screen38VendorReviews extends ConsumerWidget {
       ],
     );
   }
-
 }

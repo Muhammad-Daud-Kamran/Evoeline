@@ -125,7 +125,7 @@ class _Screen14SettingsState extends State<Screen14Settings> {
 
             const SizedBox(height: 32),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => context.goNamed('login'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.analyticsLightGreen,
                 foregroundColor: AppColors.darkText,
@@ -143,7 +143,9 @@ class _Screen14SettingsState extends State<Screen14Settings> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Account deletion disabled.')),
+              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryGreen,
                 foregroundColor: Colors.white,
@@ -167,32 +169,37 @@ class _Screen14SettingsState extends State<Screen14Settings> {
   }
 
   Widget _buildListTile(String title, IconData icon, {String? trailingText}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.lightGreyBackground,
-              borderRadius: BorderRadius.circular(8),
+    return InkWell(
+      onTap: () => ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('$title tapped'))),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.lightGreyBackground,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, color: AppColors.darkText, size: 20),
             ),
-            child: Icon(icon, color: AppColors.darkText, size: 20),
-          ),
-          const SizedBox(width: 16),
-          Expanded(child: Text(title, style: AppTextStyles.bodyText)),
-          if (trailingText != null)
-            Text(
-              trailingText,
-              style: const TextStyle(fontSize: 14, color: AppColors.darkText),
-            )
-          else
-            const Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-              color: AppColors.lightText,
-            ),
-        ],
+            const SizedBox(width: 16),
+            Expanded(child: Text(title, style: AppTextStyles.bodyText)),
+            if (trailingText != null)
+              Text(
+                trailingText,
+                style: const TextStyle(fontSize: 14, color: AppColors.darkText),
+              )
+            else
+              const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: AppColors.lightText,
+              ),
+          ],
+        ),
       ),
     );
   }

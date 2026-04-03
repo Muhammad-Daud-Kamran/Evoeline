@@ -42,17 +42,19 @@ class _Screen42RegisterEventState extends ConsumerState<Screen42RegisterEvent> {
   }
 
   void _handleSubmit() {
-    ref.read(eventRegistrationProvider.notifier).submitRegistration(
-      fullName: _fullNameController.text,
-      email: _emailController.text,
-      phone: _phoneController.text,
-      companyName: _companyController.text,
-      designation: _designationController.text,
-      expectations: _expectationsController.text,
-      accessibilityRequirements: _accessibilityController.text,
-      emergencyContactName: _emergencyNameController.text,
-      emergencyContactPhone: _emergencyPhoneController.text,
-    );
+    ref
+        .read(eventRegistrationProvider.notifier)
+        .submitRegistration(
+          fullName: _fullNameController.text,
+          email: _emailController.text,
+          phone: _phoneController.text,
+          companyName: _companyController.text,
+          designation: _designationController.text,
+          expectations: _expectationsController.text,
+          accessibilityRequirements: _accessibilityController.text,
+          emergencyContactName: _emergencyNameController.text,
+          emergencyContactPhone: _emergencyPhoneController.text,
+        );
   }
 
   @override
@@ -70,7 +72,7 @@ class _Screen42RegisterEventState extends ConsumerState<Screen42RegisterEvent> {
             backgroundColor: AppColors.primaryGreen,
           ),
         );
-        context.pop();
+        context.pushNamed('registrationSuccess');
       }
     });
 
@@ -95,7 +97,9 @@ class _Screen42RegisterEventState extends ConsumerState<Screen42RegisterEvent> {
         actions: [
           IconButton(
             icon: const Icon(Icons.info_outline, color: AppColors.iconColor),
-            onPressed: () {},
+            onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Showing registration help')),
+            ),
           ),
         ],
       ),
@@ -254,35 +258,35 @@ class _Screen42RegisterEventState extends ConsumerState<Screen42RegisterEvent> {
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children:
-                  EventRegistrationViewModel.hearAboutUsOptions.map((option) {
-                    final isSelected = state.selectedHearAboutUs == option;
-                    return ChoiceChip(
-                      label: Text(
-                        option,
-                        style: TextStyle(
-                          color:
-                              isSelected ? Colors.white : AppColors.darkText,
-                          fontWeight: isSelected
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                        ),
-                      ),
-                      selected: isSelected,
-                      onSelected: (selected) =>
-                          vm.toggleHearAboutUs(option, selected),
-                      selectedColor: AppColors.primaryGreen,
-                      backgroundColor: AppColors.background,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        side: BorderSide(
-                          color: isSelected
-                              ? AppColors.primaryGreen
-                              : AppColors.dividerColor,
-                        ),
-                      ),
-                    );
-                  }).toList(),
+              children: EventRegistrationViewModel.hearAboutUsOptions.map((
+                option,
+              ) {
+                final isSelected = state.selectedHearAboutUs == option;
+                return ChoiceChip(
+                  label: Text(
+                    option,
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : AppColors.darkText,
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                    ),
+                  ),
+                  selected: isSelected,
+                  onSelected: (selected) =>
+                      vm.toggleHearAboutUs(option, selected),
+                  selectedColor: AppColors.primaryGreen,
+                  backgroundColor: AppColors.background,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide(
+                      color: isSelected
+                          ? AppColors.primaryGreen
+                          : AppColors.dividerColor,
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
             const SizedBox(height: 24),
 
@@ -376,11 +380,12 @@ class _Screen42RegisterEventState extends ConsumerState<Screen42RegisterEvent> {
                 'Select',
                 style: TextStyle(color: AppColors.lightText),
               ),
-              icon: const Icon(Icons.arrow_drop_down, color: AppColors.iconColor),
+              icon: const Icon(
+                Icons.arrow_drop_down,
+                color: AppColors.iconColor,
+              ),
               items: options
-                  .map(
-                    (opt) => DropdownMenuItem(value: opt, child: Text(opt)),
-                  )
+                  .map((opt) => DropdownMenuItem(value: opt, child: Text(opt)))
                   .toList(),
               onChanged: onChanged,
             ),

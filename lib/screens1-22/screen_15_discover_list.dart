@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 
@@ -17,7 +18,9 @@ class Screen15DiscoverList extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.tune, color: AppColors.darkText),
-            onPressed: () {},
+            onPressed: () => ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Filter settings'))),
           ),
         ],
       ),
@@ -88,6 +91,7 @@ class Screen15DiscoverList extends StatelessWidget {
               'Oct 26, 2024 • San Francisco',
               'Free',
               const Color(0xFF8D6E63),
+              context,
             ),
             const SizedBox(height: 16),
             _buildEventCard(
@@ -95,6 +99,7 @@ class Screen15DiscoverList extends StatelessWidget {
               'Nov 15, 2024 • New York',
               '\$25',
               const Color(0xFFD7CCC8),
+              context,
             ),
             const SizedBox(height: 16),
             _buildEventCard(
@@ -102,6 +107,7 @@ class Screen15DiscoverList extends StatelessWidget {
               'Dec 5, 2024 • Boston',
               '\$50',
               const Color(0xFF263238),
+              context,
             ),
             const SizedBox(height: 32),
           ],
@@ -169,6 +175,7 @@ class Screen15DiscoverList extends StatelessWidget {
     String details,
     String price,
     Color imageColor,
+    BuildContext context,
   ) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,7 +210,7 @@ class Screen15DiscoverList extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () => context.pushNamed('eventDetails'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.analyticsLightGreen,
                   foregroundColor: AppColors.darkText,

@@ -26,26 +26,32 @@ class Screen20Dashboard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: AppColors.searchBarFillColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.notifications_none,
-                      color: AppColors.darkText,
-                      size: 24,
+                  GestureDetector(
+                    onTap: () => context.pushNamed('notifications'),
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                        color: AppColors.searchBarFillColor,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.notifications_none,
+                        color: AppColors.darkText,
+                        size: 24,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const CircleAvatar(
-                    backgroundColor: AppColors.primaryGreen,
-                    radius: 20,
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.white,
-                    ), // Placeholder Avatar
+                  GestureDetector(
+                    onTap: () => context.pushNamed('profile'),
+                    child: const CircleAvatar(
+                      backgroundColor: AppColors.primaryGreen,
+                      radius: 20,
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ), // Placeholder Avatar
+                    ),
                   ),
                 ],
               ),
@@ -153,7 +159,7 @@ class Screen20Dashboard extends StatelessWidget {
                   'Vendors',
                   Icons.storefront,
                   const Color(0xFFF5F5F5),
-                  () => context.pushNamed('vendors'),
+                  () => context.pushNamed('vendorDirectory'),
                 ),
                 const SizedBox(width: 12),
                 _buildActionCard(
@@ -167,7 +173,7 @@ class Screen20Dashboard extends StatelessWidget {
                   'Certificates',
                   Icons.workspace_premium,
                   const Color(0xFFFFCCBC),
-                  () => context.pushNamed('certificates'),
+                  () => context.pushNamed('myCertificates'),
                 ),
                 const SizedBox(width: 12),
                 _buildActionCard(
@@ -194,24 +200,24 @@ class Screen20Dashboard extends StatelessWidget {
               elevation: 0,
               iconTheme: const IconThemeData(color: AppColors.darkText),
             ),
-      drawer: isDesktop ? null : _buildSidebar(),
+      drawer: isDesktop ? null : _buildSidebar(context),
       body: Row(
         children: [
-          if (isDesktop) SizedBox(width: 250, child: _buildSidebar()),
+          if (isDesktop) SizedBox(width: 250, child: _buildSidebar(context)),
           if (isDesktop)
             const VerticalDivider(width: 1, color: AppColors.dividerColor),
           Expanded(child: content),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => context.pushNamed('createEventStep1'),
         backgroundColor: AppColors.primaryGreen,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
 
-  Widget _buildSidebar() {
+  Widget _buildSidebar(BuildContext context) {
     return Drawer(
       backgroundColor: AppColors.lightGreyBackground,
       elevation: 0,
@@ -222,10 +228,24 @@ class Screen20Dashboard extends StatelessWidget {
             padding: EdgeInsets.all(24.0),
             child: Text('EventFlow', style: AppTextStyles.heading2),
           ),
-          _buildSidebarItem('Home', Icons.home, isSelected: true),
-          _buildSidebarItem('Events', Icons.calendar_today),
-          _buildSidebarItem('Tasks', Icons.check_box_outlined),
-          _buildSidebarItem('Profile', Icons.person_outline),
+          _buildSidebarItem('Home', Icons.home, isSelected: true, onTap: () {}),
+          _buildSidebarItem(
+            'Events',
+            Icons.calendar_today,
+            onTap: () => context.pushNamed('myEvents'),
+          ),
+          _buildSidebarItem(
+            'Tasks',
+            Icons.check_box_outlined,
+            onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Task screen not implemented')),
+            ),
+          ),
+          _buildSidebarItem(
+            'Profile',
+            Icons.person_outline,
+            onTap: () => context.pushNamed('profile'),
+          ),
         ],
       ),
     );
@@ -235,6 +255,7 @@ class Screen20Dashboard extends StatelessWidget {
     String title,
     IconData icon, {
     bool isSelected = false,
+    VoidCallback? onTap,
   }) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -251,7 +272,7 @@ class Screen20Dashboard extends StatelessWidget {
             color: AppColors.darkText,
           ),
         ),
-        onTap: () {},
+        onTap: onTap,
       ),
     );
   }

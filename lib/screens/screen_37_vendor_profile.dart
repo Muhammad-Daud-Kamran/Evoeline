@@ -18,7 +18,9 @@ class Screen37VendorProfile extends ConsumerWidget {
     if (state.isLoading) {
       return const Scaffold(
         backgroundColor: AppColors.background,
-        body: Center(child: CircularProgressIndicator(color: AppColors.primaryGreen)),
+        body: Center(
+          child: CircularProgressIndicator(color: AppColors.primaryGreen),
+        ),
       );
     }
 
@@ -66,7 +68,9 @@ class Screen37VendorProfile extends ConsumerWidget {
                   top: MediaQuery.of(context).padding.top + 10,
                   right: 16,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Sharing coming soon!')),
+                    ),
                     child: CircleAvatar(
                       backgroundColor: Colors.white,
                       radius: 18,
@@ -94,7 +98,11 @@ class Screen37VendorProfile extends ConsumerWidget {
                     child: CircleAvatar(
                       radius: 36,
                       backgroundColor: const Color(0xFFBCAAA4), // Brownish
-                      backgroundImage: AssetImage(vendor.logoImage.isNotEmpty ? vendor.logoImage : 'assets/images/placeholder.jpg'),
+                      backgroundImage: AssetImage(
+                        vendor.logoImage.isNotEmpty
+                            ? vendor.logoImage
+                            : 'assets/images/placeholder.jpg',
+                      ),
                     ),
                   ),
                 ),
@@ -135,7 +143,9 @@ class Screen37VendorProfile extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Text(
-                          vendor.serviceCategories.isNotEmpty ? vendor.serviceCategories.first : 'Service',
+                          vendor.serviceCategories.isNotEmpty
+                              ? vendor.serviceCategories.first
+                              : 'Service',
                           style: AppTextStyles.label,
                         ),
                       ),
@@ -267,7 +277,10 @@ class Screen37VendorProfile extends ConsumerWidget {
                   // Added Business Stats based on Schema
                   _buildStatRow('Total Bookings', '${vendor.totalBookings}'),
                   const SizedBox(height: 12),
-                  _buildStatRow('Completed Bookings', '${vendor.completedBookings}'),
+                  _buildStatRow(
+                    'Completed Bookings',
+                    '${vendor.completedBookings}',
+                  ),
                   const SizedBox(height: 24),
 
                   // Service Areas
@@ -290,7 +303,9 @@ class Screen37VendorProfile extends ConsumerWidget {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: vendor.verificationBadges.map((badge) => _buildChip(badge)).toList(),
+                    children: vendor.verificationBadges
+                        .map((badge) => _buildChip(badge))
+                        .toList(),
                   ),
                   const SizedBox(height: 24),
 
@@ -307,7 +322,10 @@ class Screen37VendorProfile extends ConsumerWidget {
                   ],
                   if (vendor.secondaryPhone.isNotEmpty) ...[
                     // Secondary Phone
-                    _buildContactRow(Icons.phone_android_outlined, vendor.secondaryPhone),
+                    _buildContactRow(
+                      Icons.phone_android_outlined,
+                      vendor.secondaryPhone,
+                    ),
                     const SizedBox(height: 16),
                   ],
                   if (vendor.businessEmail.isNotEmpty) ...[
@@ -320,9 +338,13 @@ class Screen37VendorProfile extends ConsumerWidget {
                     _buildContactRow(Icons.language, vendor.website),
                     const SizedBox(height: 16),
                   ],
-                  if (vendor.addressStreet.isNotEmpty || vendor.addressCity.isNotEmpty) ...[
+                  if (vendor.addressStreet.isNotEmpty ||
+                      vendor.addressCity.isNotEmpty) ...[
                     // Address
-                    _buildContactRow(Icons.location_on_outlined, '${vendor.addressStreet}, ${vendor.addressCity}'),
+                    _buildContactRow(
+                      Icons.location_on_outlined,
+                      '${vendor.addressStreet}, ${vendor.addressCity}',
+                    ),
                     const SizedBox(height: 32),
                   ],
 
@@ -331,7 +353,12 @@ class Screen37VendorProfile extends ConsumerWidget {
                     width: double.infinity,
                     height: 48,
                     child: ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () =>
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Profile sharing coming soon!'),
+                            ),
+                          ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(
                           0xFF88C9E8,
@@ -369,7 +396,12 @@ class Screen37VendorProfile extends ConsumerWidget {
     );
   }
 
-  Widget _buildTab(String title, int index, int activeIndex, VendorProfileViewModel viewModel) {
+  Widget _buildTab(
+    String title,
+    int index,
+    int activeIndex,
+    VendorProfileViewModel viewModel,
+  ) {
     bool isActive = index == activeIndex;
     return InkWell(
       onTap: () => viewModel.setTab(index),
