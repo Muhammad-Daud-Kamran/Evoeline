@@ -53,167 +53,208 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/review',
         name: 'review',
         builder: (context, state) => const Screen24Review(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/eventDetails',
         name: 'eventDetails',
         builder: (context, state) => const Screen25EventDetails(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/eventOverview',
         name: 'eventOverview',
         builder: (context, state) => const Screen26EventOverview(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/attendees',
         name: 'attendees',
         builder: (context, state) => const Screen27Attendees(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/analytics',
         name: 'analytics',
         builder: (context, state) => const Screen29Analytics(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/speakerProfile',
         name: 'speakerProfile',
         builder: (context, state) => const Screen30SpeakerProfile(),
-      ),      GoRoute(
-        path: '/eventDetails',
-        name: 'eventDetails',
+      ),
+      GoRoute(
+        path: '/eventDetails31',
+        name: 'eventDetails31',
         builder: (context, state) => const Screen31EventDetails(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/register',
         name: 'register',
         builder: (context, state) => const Screen32Register(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/checkIn',
         name: 'checkIn',
         builder: (context, state) => const Screen33CheckIn(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/generateCertificates',
         name: 'generateCertificates',
         builder: (context, state) => const Screen34GenerateCertificates(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/vendorDirectory',
         name: 'vendorDirectory',
         builder: (context, state) => const Screen35VendorDirectory(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/photographyCategory',
         name: 'photographyCategory',
         builder: (context, state) => const Screen36PhotographyCategory(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/vendorProfile',
         name: 'vendorProfile',
         builder: (context, state) => const Screen37VendorProfile(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/vendorReviews',
         name: 'vendorReviews',
         builder: (context, state) => const Screen38VendorReviews(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/reviewVendor',
         name: 'reviewVendor',
         builder: (context, state) => const Screen39ReviewVendor(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/discoverEvents',
         name: 'discoverEvents',
         builder: (context, state) => const Screen40DiscoverEvents(),
-      ),      GoRoute(
-        path: '/eventDetails',
-        name: 'eventDetails',
+      ),
+      GoRoute(
+        path: '/eventDetails41',
+        name: 'eventDetails41',
         builder: (context, state) => const Screen41EventDetails(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/registerEvent',
         name: 'registerEvent',
         builder: (context, state) => const Screen42RegisterEvent(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/checkout',
         name: 'checkout',
         builder: (context, state) => const Screen43Checkout(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/registrationSuccess',
         name: 'registrationSuccess',
         builder: (context, state) => const Screen44RegistrationSuccess(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/discover',
         name: 'discover',
         builder: (context, state) => const Screen10Discover(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/notificationSettings',
         name: 'notificationSettings',
         builder: (context, state) => const Screen11NotificationSettings(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/myCertificates',
         name: 'myCertificates',
         builder: (context, state) => const Screen12MyCertificates(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/certificateDetails',
         name: 'certificateDetails',
         builder: (context, state) => const Screen13CertificateDetails(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/settings',
         name: 'settings',
         builder: (context, state) => const Screen14Settings(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/discoverList',
         name: 'discoverList',
         builder: (context, state) => const Screen15DiscoverList(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/analyticsDashboard',
         name: 'analyticsDashboard',
         builder: (context, state) => const Screen16AnalyticsDashboard(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/myEvents',
         name: 'myEvents',
         builder: (context, state) => const Screen17MyEvents(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/notifications',
         name: 'notifications',
         builder: (context, state) => const Screen18Notifications(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/createEventStep1',
         name: 'createEventStep1',
         builder: (context, state) => const Screen19CreateEventStep1(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/',
         name: 'splash',
         builder: (context, state) => const Screen1Splash(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/dashboard',
         name: 'dashboard',
         builder: (context, state) => const Screen20Dashboard(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/createEventStep2',
         name: 'createEventStep2',
         builder: (context, state) => const Screen21CreateEventStep2(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/createEventStep3',
         name: 'createEventStep3',
         builder: (context, state) => const Screen22CreateEventStep3(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/onboarding1',
         name: 'onboarding1',
         builder: (context, state) => const Screen2Onboarding1(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/onboarding2',
         name: 'onboarding2',
         builder: (context, state) => const Screen3Onboarding2(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/login',
         name: 'login',
         builder: (context, state) => const Screen4Login(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/signUp',
         name: 'signUp',
         builder: (context, state) => const Screen5SignUp(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/forgotPassword',
         name: 'forgotPassword',
         builder: (context, state) => const Screen6ForgotPassword(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/setUpProfile',
         name: 'setUpProfile',
         builder: (context, state) => const Screen8SetUpProfile(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/profile',
         name: 'profile',
         builder: (context, state) => const Screen7Profile(),
-      ),      GoRoute(
+      ),
+      GoRoute(
         path: '/editProfile',
         name: 'editProfile',
         builder: (context, state) => const Screen9EditProfile(),
