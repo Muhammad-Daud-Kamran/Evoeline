@@ -71,7 +71,7 @@ class Screen3Onboarding2 extends StatelessWidget {
                 children: [
                   TextButton(
                     onPressed: () {
-                      // Skip Action
+                      context.goNamed('login');
                     },
                     style: TextButton.styleFrom(
                       foregroundColor: AppColors.darkText,

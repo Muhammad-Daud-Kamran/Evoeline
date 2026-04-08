@@ -152,7 +152,7 @@ class _Screen4LoginState extends State<Screen4Login> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      context.goNamed('signup');
+                      context.goNamed('signUp');
                     },
                     child: const Text(
                       'Sign Up',
