@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../constants/app_colors.dart';
 
 /// Bottom Navigation Bar for the Discover Events flow (Screens 39-40)
@@ -23,7 +24,23 @@ class DiscoverBottomNavBar extends StatelessWidget {
       unselectedLabelStyle: const TextStyle(fontSize: 12),
       elevation: 10,
       backgroundColor: AppColors.background,
-      onTap: (_) {},
+      onTap: (index) {
+        if (index == currentIndex) return;
+        switch (index) {
+          case 0:
+            context.goNamed('dashboard');
+            break;
+          case 1:
+            context.goNamed('discover');
+            break;
+          case 2:
+            context.goNamed('myEvents');
+            break;
+          case 3:
+            context.goNamed('profile');
+            break;
+        }
+      },
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home_outlined),

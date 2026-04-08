@@ -316,20 +316,24 @@ class Screen26EventOverview extends ConsumerWidget {
                     text:            'View Public Page',
                     backgroundColor: AppColors.lightGreyBackground,
                     textColor:       AppColors.darkText,
-                    onPressed:       () {},
+                    onPressed:       () => context.pushNamed('eventDetails'),
                   ),
                   const SizedBox(height: 12),
                   CustomButton(
                     text:            'Share Event',
                     backgroundColor: AppColors.lightGreyBackground,
                     textColor:       AppColors.darkText,
-                    onPressed:       () {},
+                    onPressed:       () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Event link copied to clipboard!')),
+                      );
+                    },
                   ),
                   const SizedBox(height: 12),
                   CustomButton(
                     text:            'Edit Details',
                     backgroundColor: AppColors.primaryGreen,
-                    onPressed:       () {},
+                    onPressed:       () => context.pushNamed('createEventStep1'),
                   ),
                   const SizedBox(height: 16),
 
@@ -352,35 +356,58 @@ class Screen26EventOverview extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            SvgPicture.asset(
-              'assets/images/screen26overviewicon.svg',
-              colorFilter: const ColorFilter.mode(
-                  AppColors.lightText, BlendMode.srcIn),
-              width: 44, height: 44,
+            InkWell(
+              onTap: () {}, // Already on Overview
+              child: SvgPicture.asset(
+                'assets/images/screen26overviewicon.svg',
+                colorFilter: const ColorFilter.mode(
+                    AppColors.primaryGreen, BlendMode.srcIn), // Highlight active tab
+                width: 44, height: 44,
+              ),
             ),
-            SvgPicture.asset(
-              'assets/images/s26 attendeeicon.svg',
-              colorFilter: const ColorFilter.mode(
-                  AppColors.lightText, BlendMode.srcIn),
-              width: 44, height: 44,
+            InkWell(
+              onTap: () => context.pushNamed('attendees'),
+              child: SvgPicture.asset(
+                'assets/images/s26 attendeeicon.svg',
+                colorFilter: const ColorFilter.mode(
+                    AppColors.lightText, BlendMode.srcIn),
+                width: 44, height: 44,
+              ),
             ),
-            SvgPicture.asset(
-              'assets/images/s26scheduleicon.svg',
-              colorFilter: const ColorFilter.mode(
-                  AppColors.lightText, BlendMode.srcIn),
-              width: 44, height: 44,
+            InkWell(
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Schedule management module coming soon!')),
+                );
+              },
+              child: SvgPicture.asset(
+                'assets/images/s26scheduleicon.svg',
+                colorFilter: const ColorFilter.mode(
+                    AppColors.lightText, BlendMode.srcIn),
+                width: 44, height: 44,
+              ),
             ),
-            SvgPicture.asset(
-              'assets/images/s26promoteicon.svg',
-              colorFilter: const ColorFilter.mode(
-                  AppColors.lightText, BlendMode.srcIn),
-              width: 44, height: 44,
+            InkWell(
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Promotional tools module coming soon!')),
+                );
+              },
+              child: SvgPicture.asset(
+                'assets/images/s26promoteicon.svg',
+                colorFilter: const ColorFilter.mode(
+                    AppColors.lightText, BlendMode.srcIn),
+                width: 44, height: 44,
+              ),
             ),
-            SvgPicture.asset(
-              'assets/images/s26settingsicon.svg',
-              colorFilter: const ColorFilter.mode(
-                  AppColors.lightText, BlendMode.srcIn),
-              width: 44, height: 44,
+            InkWell(
+              onTap: () => context.pushNamed('settings'),
+              child: SvgPicture.asset(
+                'assets/images/s26settingsicon.svg',
+                colorFilter: const ColorFilter.mode(
+                    AppColors.lightText, BlendMode.srcIn),
+                width: 44, height: 44,
+              ),
             ),
           ],
         ),

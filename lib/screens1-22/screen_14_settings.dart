@@ -33,13 +33,19 @@ class _Screen14SettingsState extends State<Screen14Settings> {
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-            // Top Illustration Placeholder
+            // Top Illustration
             Container(
-              height: 150,
+              height: 200,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: const Color(0xFFD7CCC8),
                 borderRadius: BorderRadius.circular(12),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  'assets/images/Screen_14_1.png',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             const SizedBox(height: 24),
@@ -54,11 +60,17 @@ class _Screen14SettingsState extends State<Screen14Settings> {
 
             const SizedBox(height: 24),
             Container(
-              height: 150,
+              height: 200,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: const Color(0xFFCFD8DC),
                 borderRadius: BorderRadius.circular(12),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  'assets/images/Screen_14_2.png',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             const SizedBox(height: 24),
@@ -81,11 +93,17 @@ class _Screen14SettingsState extends State<Screen14Settings> {
 
             const SizedBox(height: 24),
             Container(
-              height: 150,
+              height: 200,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: const Color(0xFFD7CCC8),
                 borderRadius: BorderRadius.circular(12),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  'assets/images/Screen_14_3.png',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             const SizedBox(height: 24),
@@ -96,11 +114,17 @@ class _Screen14SettingsState extends State<Screen14Settings> {
 
             const SizedBox(height: 24),
             Container(
-              height: 150,
+              height: 200,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: const Color(0xFFBCAAA4),
                 borderRadius: BorderRadius.circular(12),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  'assets/images/Screen_14_4.png',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             const SizedBox(height: 24),
@@ -109,11 +133,17 @@ class _Screen14SettingsState extends State<Screen14Settings> {
 
             const SizedBox(height: 24),
             Container(
-              height: 150,
+              height: 200,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: const Color(0xFFCFD8DC),
                 borderRadius: BorderRadius.circular(12),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  'assets/images/Screen_14_5.png',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             const SizedBox(height: 24),

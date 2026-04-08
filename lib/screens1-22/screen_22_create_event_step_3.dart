@@ -13,6 +13,14 @@ class Screen22CreateEventStep3 extends StatefulWidget {
 
 class _Screen22CreateEventStep3State extends State<Screen22CreateEventStep3> {
   String selectedFormat = 'Physical';
+  String? selectedCity;
+  final List<String> cities = [
+    'San Francisco',
+    'New York',
+    'Los Angeles',
+    'Chicago',
+    'Houston',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -115,11 +123,18 @@ class _Screen22CreateEventStep3State extends State<Screen22CreateEventStep3> {
             ),
             const SizedBox(height: 8),
             Container(
-              height: 120,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 border: Border.all(color: AppColors.dividerColor),
                 borderRadius: BorderRadius.circular(12),
+              ),
+              child: const TextField(
+                maxLines: 4,
+                decoration: InputDecoration(
+                  hintText: 'Enter full venue address',
+                  hintStyle: TextStyle(color: AppColors.lightText, fontSize: 14),
+                  contentPadding: EdgeInsets.all(16),
+                  border: InputBorder.none,
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -130,42 +145,56 @@ class _Screen22CreateEventStep3State extends State<Screen22CreateEventStep3> {
             ),
             const SizedBox(height: 8),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 border: Border.all(color: AppColors.dividerColor),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Select',
+              child: DropdownButtonFormField<String>(
+                initialValue: selectedCity,
+                decoration: const InputDecoration(
                   border: InputBorder.none,
-                  suffixIcon: Icon(
-                    Icons.keyboard_arrow_down,
-                    color: AppColors.darkText,
-                  ),
+                  hintText: 'Select City',
+                  hintStyle: TextStyle(color: AppColors.darkText, fontSize: 14),
                 ),
-                enabled: false,
+                icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.darkText),
+                items: cities.map((String city) {
+                  return DropdownMenuItem<String>(
+                    value: city,
+                    child: Text(city, style: const TextStyle(fontSize: 14)),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedCity = newValue;
+                  });
+                },
               ),
             ),
             const SizedBox(height: 24),
 
-            // Map Placeholder
+            // Map Image
             Container(
               height: 180,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: const Color(0xFFB3E5FC), // Light blue to represent map
                 borderRadius: BorderRadius.circular(12),
+                image: const DecorationImage(
+                  image: AssetImage('assets/images/Screen_22.png'),
+                  fit: BoxFit.cover,
+                ),
               ),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  const Text(
-                    'Map Image Placeholder',
-                    style: TextStyle(color: AppColors.darkText),
+                  // A standard red map pin
+                  const Icon(
+                    Icons.location_on,
+                    color: Colors.red,
+                    size: 40,
                   ),
                   Positioned(
-                    top: 60,
+                    top: 45, // Adjusted to gracefully sit above the pin
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -209,7 +238,7 @@ class _Screen22CreateEventStep3State extends State<Screen22CreateEventStep3> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
             ),
             const SizedBox(height: 8),
-            _buildInputField('Number\nof people'),
+            _buildInputField('Number\nof people', keyboardType: TextInputType.number),
             const SizedBox(height: 32),
           ],
         ),
@@ -239,7 +268,7 @@ class _Screen22CreateEventStep3State extends State<Screen22CreateEventStep3> {
               ),
             ),
             ElevatedButton(
-              onPressed: () => context.pushNamed('review'),
+              onPressed: () => context.pushNamed('createEventStep4'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryGreen,
                 foregroundColor: Colors.white,
@@ -296,7 +325,7 @@ class _Screen22CreateEventStep3State extends State<Screen22CreateEventStep3> {
     );
   }
 
-  Widget _buildInputField(String hint) {
+  Widget _buildInputField(String hint, {TextInputType keyboardType = TextInputType.text}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
@@ -304,6 +333,7 @@ class _Screen22CreateEventStep3State extends State<Screen22CreateEventStep3> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: TextField(
+        keyboardType: keyboardType,
         decoration: InputDecoration(
           hintText: hint,
           hintMaxLines: 2,

@@ -25,7 +25,7 @@ import '../../../widgets/custom_button.dart';
 import '../../../widgets/registration_card.dart';
 import '../../../widgets/step_progress_indicator.dart';
 import '../../../widgets/accordion_section.dart';
-import 'screen_24_review.dart'; // Screen 24
+
 
 // ── ConsumerWidget = StatelessWidget that can use Riverpod ──
 class RegistrationSetupScreen extends ConsumerWidget {
@@ -81,7 +81,7 @@ class RegistrationSetupScreen extends ConsumerWidget {
                     ref.read(registrationSetupProvider.notifier)
                         .toggleRegistration(val);
                   },
-                  activeColor: AppColors.primaryGreen,
+                  activeThumbColor: AppColors.primaryGreen,
                 ),
               ],
             ),
@@ -125,7 +125,7 @@ class RegistrationSetupScreen extends ConsumerWidget {
                         onChanged: (val) => ref
                             .read(registrationSetupProvider.notifier)
                             .toggleFreeEvent(val),
-                        activeColor: AppColors.primaryGreen,
+                        activeThumbColor: AppColors.primaryGreen,
                       ),
                       const Spacer(),
                       // Only show currency when event is paid
@@ -378,7 +378,7 @@ class RegistrationSetupScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
-                value: selectedType,
+                initialValue: selectedType,
                 items: ['Text', 'Dropdown', 'Checkbox']
                     .map((v) => DropdownMenuItem(
                   value: v,
@@ -525,7 +525,7 @@ class _DiscountSection extends StatelessWidget {
             Switch(
               value:       discount.isEnabled, // ← from DiscountModel
               onChanged:   onToggle,
-              activeColor: AppColors.primaryGreen,
+              activeThumbColor: AppColors.primaryGreen,
             ),
           ],
         ),

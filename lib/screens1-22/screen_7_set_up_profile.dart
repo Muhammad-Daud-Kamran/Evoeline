@@ -32,10 +32,10 @@ class Screen8SetUpProfile extends StatelessWidget {
                     color: Color(0xFFFBE9E7),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
-                    Icons.person,
-                    size: 36,
-                    color: AppColors.iconColor,
+                  child:  Image.asset(
+                    'assets/images/Screen_7.png',
+                    width: 40,
+                    height: 40,
                   ),
                 ),
               ),

@@ -24,10 +24,10 @@ class Screen3Onboarding2 extends StatelessWidget {
                       height: 350,
                       color: AppColors.background,
                       child: Center(
-                        child: Icon(
-                          Icons.workspace_premium, // Certificate icon
-                          size: 100,
-                          color: AppColors.primaryGreen.withValues(alpha: 0.5),
+                        child:  Image.asset(
+                          'assets/images/Screen_3.png',
+                          width: 800,
+                          height: 600,
                         ),
                       ),
                     ),
@@ -71,7 +71,7 @@ class Screen3Onboarding2 extends StatelessWidget {
                 children: [
                   TextButton(
                     onPressed: () {
-                      // Skip Action
+                      context.goNamed('login');
                     },
                     style: TextButton.styleFrom(
                       foregroundColor: AppColors.darkText,

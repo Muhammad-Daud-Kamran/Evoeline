@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../screens/screen_23_registration.dart';
 import '../screens/screen_24_review.dart';
 import '../screens/screen_25_event_details.dart';
 import '../screens/screen_26_event_overview.dart';
@@ -218,6 +219,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/createEventStep3',
         name: 'createEventStep3',
         builder: (context, state) => const Screen22CreateEventStep3(),
+      ),
+      GoRoute(
+        path: '/createEventStep4',
+        name: 'createEventStep4',
+        builder: (context, state) => const RegistrationSetupScreen(),
       ),
       GoRoute(
         path: '/onboarding1',

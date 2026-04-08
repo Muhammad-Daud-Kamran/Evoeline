@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
-import '../widgets/custom_button.dart';
+
 
 class Screen12MyCertificates extends StatefulWidget {
   const Screen12MyCertificates({super.key});
@@ -109,25 +109,25 @@ class _Screen12MyCertificatesState extends State<Screen12MyCertificates>
             'Tech Summit 2024',
             'July 15, 2024',
             'Blockchain',
-            const Color(0xFFB2DFDB),
+            'assets/images/Screen_12_1.png',
           ),
           _buildCertificateCard(
             'Leadership Workshop',
             'June 20, 2024',
             null,
-            const Color(0xFF00796B),
+            'assets/images/Screen_12_2.png',
           ),
           _buildCertificateCard(
             'Digital Marketing Conference',
             'May 5, 2024',
             'Blockchain',
-            const Color(0xFFD7CCC8),
+            'assets/images/Screen_12_3.png',
           ),
           _buildCertificateCard(
             'Project Management Seminar',
             'April 10, 2024',
             null,
-            const Color(0xFFCFD8DC),
+            'assets/images/Screen_12_4.png',
           ),
 
           const SizedBox(height: 32),
@@ -142,7 +142,11 @@ class _Screen12MyCertificatesState extends State<Screen12MyCertificates>
             ),
             child: Column(
               children: [
-                const SizedBox(height: 100), // Placeholder for illustration
+                Image.asset(
+                  'assets/images/Screen_12_5.png',
+                  height: 180,
+                  fit: BoxFit.contain,
+                ),
                 const Text(
                   'No certificates yet',
                   style: AppTextStyles.heading2,
@@ -185,7 +189,7 @@ class _Screen12MyCertificatesState extends State<Screen12MyCertificates>
     String title,
     String date,
     String? type,
-    Color imageColor,
+    String imagePath,
   ) {
     return GestureDetector(
       onTap: () => context.pushNamed('certificateDetails'),
@@ -231,8 +235,14 @@ class _Screen12MyCertificatesState extends State<Screen12MyCertificates>
               width: 120,
               height: 70,
               decoration: BoxDecoration(
-                color: imageColor,
                 borderRadius: BorderRadius.circular(8),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  imagePath,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ],

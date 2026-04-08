@@ -15,7 +15,10 @@ class Screen13CertificateDetails extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.darkText),
+          icon: const Icon(
+              Icons.arrow_back,
+              color: AppColors.darkText
+          ),
           onPressed: () => context.pop(),
         ),
         title: const Text('Certificate Details', style: AppTextStyles.heading2),
@@ -31,10 +34,15 @@ class Screen13CertificateDetails extends StatelessWidget {
               height: 200,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: const Color(0xFFF1F8E9),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Center(child: Text('Certificate Image Placeholder')),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  'assets/images/Screen_13_1.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
             const SizedBox(height: 16),
 
@@ -117,8 +125,14 @@ class Screen13CertificateDetails extends StatelessWidget {
                   width: 100,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFEFEBE9),
                     borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      'assets/images/Screen_13_2.png',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ],

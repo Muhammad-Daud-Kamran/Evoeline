@@ -51,13 +51,13 @@ class _Screen11NotificationSettingsState
               const Text('Event Updates', style: AppTextStyles.heading2),
               const SizedBox(height: 16),
               _buildToggleItem(
-                'New Event Invitatio...',
+                'New Event Invitations',
                 Icons.email_outlined,
                 newEventInvitations,
                 (val) => setState(() => newEventInvitations = val),
               ),
               _buildToggleItem(
-                'Event Reminde...',
+                'Event Reminders',
                 Icons.notifications_none,
                 eventReminders,
                 (val) => setState(() => eventReminders = val),
@@ -88,7 +88,7 @@ class _Screen11NotificationSettingsState
                 (val) => setState(() => promotionalEmails = val),
               ),
               _buildToggleItem(
-                'Feature Updat...',
+                'Feature Updates',
                 Icons.star_outline,
                 featureUpdates,
                 (val) => setState(() => featureUpdates = val),
@@ -143,7 +143,7 @@ class _Screen11NotificationSettingsState
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: Colors.white,
+            activeThumbColor: Colors.white,
             activeTrackColor: AppColors.primaryGreen,
             inactiveThumbColor: Colors.white,
             inactiveTrackColor: AppColors.dividerColor,

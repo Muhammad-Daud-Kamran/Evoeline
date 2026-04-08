@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../widgets/discover_bottom_nav_bar.dart';
@@ -27,9 +28,7 @@ class Screen10Discover extends StatelessWidget {
               Icons.notifications_none,
               color: AppColors.darkText,
             ),
-            onPressed: () => ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(const SnackBar(content: Text('Notifications'))),
+            onPressed: () => context.pushNamed('notifications'),
           ),
         ],
       ),
@@ -51,30 +50,35 @@ class Screen10Discover extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Search Bar
-            Container(
-              height: 48,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: AppColors.searchBarFillColor,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Row(
-                children: [
-                  Icon(Icons.search, color: AppColors.iconColor),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search events, keywords, or speakers',
-                        hintStyle: TextStyle(
-                          color: AppColors.lightText,
-                          fontSize: 14,
+            GestureDetector(
+              onTap: () => context.pushNamed('discoverList'),
+              child: Container(
+                height: 48,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.searchBarFillColor,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.search, color: AppColors.iconColor),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        readOnly: true,
+                        onTap: () => context.pushNamed('discoverList'),
+                        decoration: const InputDecoration(
+                          hintText: 'Search events, keywords, or speakers',
+                          hintStyle: TextStyle(
+                            color: AppColors.lightText,
+                            fontSize: 14,
+                          ),
+                          border: InputBorder.none,
                         ),
-                        border: InputBorder.none,
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -82,17 +86,32 @@ class Screen10Discover extends StatelessWidget {
             // Chips
             Row(
               children: [
-                _buildFilterChip('Type'),
+                _buildFilterChip('Type', context),
                 const SizedBox(width: 8),
-                _buildFilterChip('Date'),
+                _buildFilterChip('Date', context),
                 const SizedBox(width: 8),
-                _buildFilterChip('Location'),
+                _buildFilterChip('Location', context),
               ],
             ),
             const SizedBox(height: 24),
 
             // Featured Events
-            const Text('Featured Events', style: AppTextStyles.heading2),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Featured Events', style: AppTextStyles.heading2),
+                TextButton(
+                  onPressed: () => context.pushNamed('discoverList'),
+                  child: const Text(
+                    'View All',
+                    style: TextStyle(
+                      color: AppColors.primaryGreen,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 16),
             SizedBox(
               height: 180,
@@ -102,13 +121,15 @@ class Screen10Discover extends StatelessWidget {
                   _buildFeaturedCard(
                     'Tech Summit 2024',
                     'Featured',
-                    const Color(0xFFB2DFDB),
-                  ), // Example color
+                    'assets/images/Screen_10_1.png',
+                    context,
+                  ),
                   const SizedBox(width: 16),
                   _buildFeaturedCard(
                     'Design Thinking Workshop',
                     'Popular',
-                    const Color(0xFF388E3C),
+                    'assets/images/Screen_10_2.png',
+                    context,
                   ),
                 ],
               ),
@@ -121,19 +142,22 @@ class Screen10Discover extends StatelessWidget {
             _buildRegisteredEventItem(
               'AI in Business Conference',
               '2 days left',
-              const Color(0xFFCFD8DC),
+              'assets/images/Screen_10_3.png',
+              context,
             ),
             const SizedBox(height: 12),
             _buildRegisteredEventItem(
               'Digital Marketing Workshop',
               'No Certificate',
-              const Color(0xFF3E2723),
+              'assets/images/Screen_10_4.png',
+              context,
             ),
             const SizedBox(height: 12),
             _buildRegisteredEventItem(
               'Leadership Seminar',
               'Pending',
-              const Color(0xFF37474F),
+              'assets/images/Screen_10_5.png',
+              context,
             ),
 
             const SizedBox(height: 24),
@@ -167,28 +191,31 @@ class Screen10Discover extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 12),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.analyticsLightGreen,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'View',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 12,
+                        GestureDetector(
+                          onTap: () => context.pushNamed('myCertificates'),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.analyticsLightGreen,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'View',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(width: 4),
-                              Icon(Icons.arrow_forward, size: 16),
-                            ],
+                                SizedBox(width: 4),
+                                Icon(Icons.arrow_forward, size: 16),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -223,19 +250,22 @@ class Screen10Discover extends StatelessWidget {
                   _buildRecommendedCard(
                     'Future of Tech',
                     'Tech',
-                    const Color(0xFF263238),
+                    'assets/images/Screen_10_6.png',
+                    context,
                   ),
                   const SizedBox(width: 16),
                   _buildRecommendedCard(
                     'Marketing Trends',
                     'Marketing',
-                    const Color(0xFF00695C),
+                    'assets/images/Screen_10_7.png',
+                    context,
                   ),
                   const SizedBox(width: 16),
                   _buildRecommendedCard(
                     'Design Systems',
                     'Design',
-                    const Color(0xFF8D6E63),
+                    'assets/images/Screen_10_1.png',
+                    context,
                   ),
                 ],
               ),
@@ -248,50 +278,76 @@ class Screen10Discover extends StatelessWidget {
     );
   }
 
-  Widget _buildFilterChip(String label) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: AppColors.analyticsLightGreen,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 14,
-          color: AppColors.darkText,
+  Widget _buildFilterChip(String label, BuildContext context) {
+    return GestureDetector(
+      onTap: () => context.pushNamed('discoverList'),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.analyticsLightGreen,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 14,
+            color: AppColors.darkText,
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildFeaturedCard(String title, String subtitle, Color bgColor) {
-    return Container(
-      width: 240,
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Container(height: 80), // Image placeholder
-          Text(
-            title,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: AppColors.darkText,
+  Widget _buildFeaturedCard(String title, String subtitle, String imagePath, BuildContext context) {
+    return GestureDetector(
+      onTap: () => context.pushNamed('eventDetails'),
+      child: Container(
+        width: 240,
+        decoration: BoxDecoration(
+          color: const Color(0xFFF5F5F5), // Light background to ground the card
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              child: Image.asset(
+                imagePath,
+                height: 110,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          Text(
-            subtitle,
-            style: const TextStyle(color: AppColors.primaryGreen, fontSize: 12),
-          ),
-        ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: AppColors.darkText,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: const TextStyle(color: AppColors.primaryGreen, fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -299,72 +355,86 @@ class Screen10Discover extends StatelessWidget {
   Widget _buildRegisteredEventItem(
     String title,
     String status,
-    Color imageColor,
+    String imagePath,
+    BuildContext context,
   ) {
-    return Row(
-      children: [
-        Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            color: imageColor,
+    return GestureDetector(
+      onTap: () => context.pushNamed('eventOverview'),
+      child: Row(
+        children: [
+          ClipRRect(
             borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              imagePath,
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                  color: AppColors.darkText,
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    color: AppColors.darkText,
+                  ),
                 ),
-              ),
-              Text(
-                status,
-                style: const TextStyle(
-                  color: AppColors.primaryGreen,
-                  fontSize: 12,
+                Text(
+                  status,
+                  style: const TextStyle(
+                    color: AppColors.primaryGreen,
+                    fontSize: 12,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        const Icon(Icons.arrow_forward, color: AppColors.iconColor, size: 20),
-      ],
+          const Icon(Icons.arrow_forward, color: AppColors.iconColor, size: 20),
+        ],
+      ),
     );
   }
 
-  Widget _buildRecommendedCard(String title, String category, Color bgColor) {
-    return Container(
-      width: 160,
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Container(height: 40), // Image placeholder
-          Text(
-            title,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-              color: Colors.white,
+  Widget _buildRecommendedCard(String title, String category, String imagePath, BuildContext context) {
+    return GestureDetector(
+      onTap: () => context.pushNamed('eventDetails'),
+      child: Container(
+        width: 160,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          image: DecorationImage(
+            image: AssetImage(imagePath),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.black.withValues(alpha: 0.4),
+              BlendMode.darken,
             ),
           ),
-          Text(
-            category,
-            style: const TextStyle(color: Colors.white70, fontSize: 12),
-          ),
-        ],
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+                color: Colors.white,
+              ),
+            ),
+            Text(
+              category,
+              style: const TextStyle(color: Colors.white70, fontSize: 12),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -13,6 +13,8 @@ class Screen19CreateEventStep1 extends StatefulWidget {
 
 class _Screen19CreateEventStep1State extends State<Screen19CreateEventStep1> {
   String selectedType = 'Conference';
+  String? selectedCategory;
+  final List<String> categories = ['Technology', 'Business', 'Art', 'Music', 'Health'];
 
   @override
   Widget build(BuildContext context) {
@@ -87,17 +89,17 @@ class _Screen19CreateEventStep1State extends State<Screen19CreateEventStep1> {
               physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
               crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              childAspectRatio: 0.85,
+              mainAxisSpacing: 8, // Reduced from 16
+              childAspectRatio: 1.1, // Increased from 0.85 to reduce vertical dead space in each cell
               children: [
-                _buildEventTypeCard('Conference', const Color(0xFFD6BFAF)),
-                _buildEventTypeCard('Seminar', const Color(0xFFEBEBEB)),
-                _buildEventTypeCard('Workshop', const Color(0xFF1E3D33)),
-                _buildEventTypeCard('Training', const Color(0xFF2E4E42)),
-                _buildEventTypeCard('Networking', const Color(0xFFF0EAE3)),
+                _buildEventTypeCard('Conference', 'assets/images/Screen_19_1.png'),
+                _buildEventTypeCard('Seminar', 'assets/images/Screen_19_2.png'),
+                _buildEventTypeCard('Workshop', 'assets/images/Screen_19_6.png'),
+                _buildEventTypeCard('Training', 'assets/images/Screen_19_3.png'),
+                _buildEventTypeCard('Networking', 'assets/images/Screen_19_4.png'),
                 _buildEventTypeCard(
                   'Custom',
-                  const Color(0xFFE8DAC),
+                  'assets/images/Screen_19_5.png',
                   isTextDark: true,
                 ),
               ],
@@ -135,11 +137,21 @@ class _Screen19CreateEventStep1State extends State<Screen19CreateEventStep1> {
             ),
             const SizedBox(height: 8),
             Container(
-              height: 100,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 color: AppColors.searchBarFillColor,
                 borderRadius: BorderRadius.circular(8),
+              ),
+              child: const TextField(
+                maxLines: 4,
+                decoration: InputDecoration(
+                  hintText: 'Describe your event here...',
+                  hintStyle: TextStyle(
+                    color: AppColors.lightText,
+                    fontSize: 14,
+                  ),
+                  contentPadding: EdgeInsets.all(16),
+                  border: InputBorder.none,
+                ),
               ),
             ),
             const SizedBox(height: 24),
@@ -155,45 +167,55 @@ class _Screen19CreateEventStep1State extends State<Screen19CreateEventStep1> {
                 color: AppColors.searchBarFillColor,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Category',
-                  hintStyle: TextStyle(color: AppColors.darkText, fontSize: 14),
+              child: DropdownButtonFormField<String>(
+                initialValue: selectedCategory,
+                decoration: const InputDecoration(
                   border: InputBorder.none,
-                  suffixIcon: Icon(
-                    Icons.keyboard_arrow_down,
-                    color: AppColors.darkText,
-                  ),
+                  hintText: 'Select Category',
+                  hintStyle: TextStyle(color: AppColors.darkText, fontSize: 14),
                 ),
-                enabled: false, // Dropdown placeholder
+                icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.darkText),
+                items: categories.map((String category) {
+                  return DropdownMenuItem<String>(
+                    value: category,
+                    child: Text(category, style: const TextStyle(fontSize: 14)),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedCategory = newValue;
+                  });
+                },
               ),
             ),
             const SizedBox(height: 24),
 
             // Upload Banner
-            Container(
-              height: 100,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: AppColors.lightGreyBackground,
-                  width: 2,
-                  style: BorderStyle.none,
+            InkWell(
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Upload dialogue opened (Feature simulation)')),
+                );
+              },
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                height: 100,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              // Using a simple Dashed Rect simulation for ease
-              child: CustomPaint(
-                painter: const DashedRectPainter(
-                  color: AppColors.lightGreyBackground,
-                ),
-                child: const Center(
-                  child: Text(
-                    'Upload event banner image',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                      color: AppColors.darkText,
+                child: CustomPaint(
+                  painter: const DashedRectPainter(
+                    color: AppColors.lightGreyBackground,
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Upload event banner image',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: AppColors.darkText,
+                      ),
                     ),
                   ),
                 ),
@@ -255,7 +277,7 @@ class _Screen19CreateEventStep1State extends State<Screen19CreateEventStep1> {
 
   Widget _buildEventTypeCard(
     String title,
-    Color imageColor, {
+    String imagePath, {
     bool isTextDark = false,
   }) {
     bool isSelected = selectedType == title;
@@ -264,14 +286,26 @@ class _Screen19CreateEventStep1State extends State<Screen19CreateEventStep1> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 120, // adjust as needed
-            decoration: BoxDecoration(
-              color: imageColor,
-              borderRadius: BorderRadius.circular(12),
-              border: isSelected
-                  ? Border.all(color: AppColors.primaryGreen, width: 2)
-                  : null,
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: isSelected
+                    ? Border.all(color: AppColors.primaryGreen, width: 2)
+                    : Border.all(color: Colors.transparent, width: 2), // Keeps the layout stable
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10), // Safe radius within the border
+                child: Image.asset(
+                  imagePath,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    color: AppColors.lightGreyBackground,
+                    child: const Icon(Icons.broken_image, color: Colors.grey),
+                  ),
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -280,7 +314,7 @@ class _Screen19CreateEventStep1State extends State<Screen19CreateEventStep1> {
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 13,
-              color: isTextDark ? AppColors.darkText : AppColors.darkText,
+              color: isTextDark ? AppColors.darkText : AppColors.darkText, // Ensures text is always correct color
             ),
           ),
         ],
@@ -295,7 +329,7 @@ class DashedRectPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    double dashWidth = 8, dashSpace = 4;
+    // double dashWidth = 8, dashSpace = 4;
     final paint = Paint()
       ..color = color
       ..strokeWidth = 2

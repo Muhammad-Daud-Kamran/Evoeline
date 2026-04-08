@@ -40,10 +40,10 @@ class Screen7Profile extends StatelessWidget {
                   ), // Light peach background for the avatar
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
-                  Icons.person,
-                  size: 60,
-                  color: AppColors.iconColor,
+                child:  Image.asset(
+                  'assets/images/Profile_Pic.png',
+                  width: 40,
+                  height: 40,
                 ),
               ),
             ),
@@ -146,23 +146,56 @@ class Screen7Profile extends StatelessWidget {
                 children: [
                   _buildBadgeItem(
                     'First Event\nOrganized',
-                    Icons.assignment_turned_in_outlined,
-                    const Color(0xFFE0F2F1),
-                    iconColor: AppColors.primaryGreen,
+                    Image.asset(
+                      'assets/images/Screen_8_1.png',
+                      width: 100,
+                      height: 100,
+                    ),
                   ),
                   const SizedBox(width: 16),
                   _buildBadgeItem(
                     '100 Attendees\nMilestone',
-                    Icons.assignment,
-                    const Color(0xFF00897B),
-                    iconColor: Colors.white,
+                    Image.asset(
+                      'assets/images/Screen_8_2.png',
+                      width: 100,
+                      height: 100,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  _buildBadgeItem(
+                    '100 Attendees\nMilestone',
+                    Image.asset(
+                      'assets/images/Screen_8_1.png',
+                      width: 100,
+                      height: 100,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  _buildBadgeItem(
+                    '100 Attendees\nMilestone',
+                    Image.asset(
+                      'assets/images/Screen_8_2.png',
+                      width: 100,
+                      height: 100,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  _buildBadgeItem(
+                    '100 Attendees\nMilestone',
+                    Image.asset(
+                      'assets/images/Screen_8_1.png',
+                      width: 100,
+                      height: 100,
+                    ),
                   ),
                   const SizedBox(width: 16),
                   _buildBadgeItem(
                     'Blockchain',
-                    Icons.lock_outline,
-                    const Color(0xFFF5F5F5),
-                    iconColor: AppColors.iconColor,
+                    Image.asset(
+                      'assets/images/Screen_8_2.png',
+                      width: 100,
+                      height: 100,
+                    ),
                   ),
                 ],
               ),
@@ -330,10 +363,8 @@ class Screen7Profile extends StatelessWidget {
 
   Widget _buildBadgeItem(
     String title,
-    IconData icon,
-    Color bgColor, {
-    required Color iconColor,
-  }) {
+    Widget imageWidget,
+  ) {
     return SizedBox(
       width: 100,
       child: Column(
@@ -341,8 +372,11 @@ class Screen7Profile extends StatelessWidget {
           Container(
             width: 80,
             height: 80,
-            decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
-            child: Icon(icon, color: iconColor, size: 36),
+            decoration: const BoxDecoration(
+              color: AppColors.analyticsLightGreen,
+              shape: BoxShape.circle,
+            ),
+            child: Center(child: imageWidget),
           ),
           const SizedBox(height: 8),
           Text(

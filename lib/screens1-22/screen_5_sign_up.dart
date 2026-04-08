@@ -155,7 +155,7 @@ class _Screen5SignUpState extends State<Screen5SignUp> {
               CustomButton(
                 text: 'Sign Up',
                 onPressed: () {
-                  // Sign Up Action
+                  context.goNamed('setUpProfile');
                 },
               ),
               const SizedBox(height: 48),

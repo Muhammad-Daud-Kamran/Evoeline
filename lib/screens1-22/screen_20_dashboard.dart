@@ -45,12 +45,8 @@ class Screen20Dashboard extends StatelessWidget {
                   GestureDetector(
                     onTap: () => context.pushNamed('profile'),
                     child: const CircleAvatar(
-                      backgroundColor: AppColors.primaryGreen,
+                      backgroundImage: AssetImage('assets/images/Screen_20_0.png'),
                       radius: 20,
-                      child: Icon(
-                        Icons.person,
-                        color: Colors.white,
-                      ), // Placeholder Avatar
                     ),
                   ),
                 ],
@@ -73,7 +69,7 @@ class Screen20Dashboard extends StatelessWidget {
                 child: _buildStatCard(
                   'Upcoming Events',
                   '3',
-                  const Color(0xFFFFCCBC),
+                  'assets/images/Screen_20_1.png',
                 ),
               ),
               const SizedBox(width: 16),
@@ -81,7 +77,7 @@ class Screen20Dashboard extends StatelessWidget {
                 child: _buildStatCard(
                   'Total Attendees',
                   '150',
-                  const Color(0xFFCFD8DC),
+                  'assets/images/Screen_20_2.png',
                 ),
               ),
             ],
@@ -99,21 +95,21 @@ class Screen20Dashboard extends StatelessWidget {
                 _buildEventCard(
                   'Tech Summit 2024',
                   'July 15, 2024',
-                  const Color(0xFF80CBC4),
+                  'assets/images/Screen_20_3.png',
                   () => context.pushNamed('eventDetails'),
                 ),
                 const SizedBox(width: 16),
                 _buildEventCard(
                   'Summer Jam Fest',
                   'August 5, 2024',
-                  const Color(0xFFFFF59D),
+                  'assets/images/Screen_20_4.png',
                   () => context.pushNamed('eventDetails'),
                 ),
                 const SizedBox(width: 16),
                 _buildEventCard(
                   'Business Growth Seminar',
                   'September 20, 2024',
-                  const Color(0xFF90CAF9),
+                  'assets/images/Screen_20_5.png',
                   () => context.pushNamed('eventDetails'),
                 ),
               ],
@@ -149,37 +145,38 @@ class Screen20Dashboard extends StatelessWidget {
             child: Row(
               children: [
                 _buildActionCard(
+                  'Discover',
+                  'assets/images/Screen_20_9.png',
+                  () => context.pushNamed('discover'),
+                ),
+                const SizedBox(width: 12),
+                _buildActionCard(
                   'My Events',
-                  Icons.calendar_today,
-                  const Color(0xFFFFCCBC),
+                  'assets/images/Screen_20_6.png',
                   () => context.pushNamed('myEvents'),
                 ),
                 const SizedBox(width: 12),
                 _buildActionCard(
                   'Vendors',
-                  Icons.storefront,
-                  const Color(0xFFF5F5F5),
+                  'assets/images/Screen_20_7.png',
                   () => context.pushNamed('vendorDirectory'),
                 ),
                 const SizedBox(width: 12),
                 _buildActionCard(
                   'Analytics',
-                  Icons.bar_chart,
-                  const Color(0xFF4DB6AC),
+                  'assets/images/Screen_20_8.png',
                   () => context.pushNamed('analytics'),
                 ),
                 const SizedBox(width: 12),
                 _buildActionCard(
                   'Certificates',
-                  Icons.workspace_premium,
-                  const Color(0xFFFFCCBC),
+                  'assets/images/Screen_20_9.png',
                   () => context.pushNamed('myCertificates'),
                 ),
                 const SizedBox(width: 12),
                 _buildActionCard(
                   'Settings',
-                  Icons.settings,
-                  const Color(0xFFEEEEEE),
+                  'assets/images/Screen_20_10.png', // Fallback for last action
                   () => context.pushNamed('settings'),
                 ),
               ],
@@ -235,6 +232,11 @@ class Screen20Dashboard extends StatelessWidget {
             onTap: () => context.pushNamed('myEvents'),
           ),
           _buildSidebarItem(
+            'Discover',
+            Icons.explore,
+            onTap: () => context.pushNamed('discover'),
+          ),
+          _buildSidebarItem(
             'Tasks',
             Icons.check_box_outlined,
             onTap: () => ScaffoldMessenger.of(context).showSnackBar(
@@ -277,44 +279,57 @@ class Screen20Dashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(String title, String value, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.5), // Reduced opacity for pastel look
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Icon(
-            Icons.insert_chart_outlined,
-            color: AppColors.darkText,
-            size: 40,
-          ), // Placeholder icon
-          const SizedBox(height: 16),
-          Text(
-            title,
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 13,
-              color: AppColors.darkText,
+  Widget _buildStatCard(String title, String value, String imagePath) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: double.infinity,
+          height: 120, // Adjusted height to match mockup proportions
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.asset(
+              imagePath,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Container(
+                color: AppColors.lightGreyBackground,
+                child: const Icon(
+                  Icons.insert_chart_outlined,
+                  color: AppColors.darkText,
+                  size: 40,
+                ),
+              ),
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(color: AppColors.primaryGreen, fontSize: 12),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+            color: AppColors.darkText,
           ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: const TextStyle(
+            color: AppColors.primaryGreen,
+            fontSize: 13,
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildEventCard(
     String title,
     String date,
-    Color color,
+    String imagePath,
     VoidCallback onTap,
   ) {
     return GestureDetector(
@@ -327,8 +342,11 @@ class Screen20Dashboard extends StatelessWidget {
             Container(
               height: 100,
               decoration: BoxDecoration(
-                color: color,
                 borderRadius: BorderRadius.circular(12),
+                image: DecorationImage(
+                  image: AssetImage(imagePath),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -395,34 +413,44 @@ class Screen20Dashboard extends StatelessWidget {
 
   Widget _buildActionCard(
     String title,
-    IconData icon,
-    Color color,
+    String imagePath,
     VoidCallback onTap,
   ) {
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
-        width: 100,
+        width: 110,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: 100,
-              width: 100,
+              height: 110,
+              width: 110,
               decoration: BoxDecoration(
-                color: color,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(icon, color: AppColors.darkText, size: 40),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  imagePath,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    color: AppColors.lightGreyBackground,
+                    child: const Icon(Icons.broken_image, color: Colors.grey),
+                  ),
+                ),
+              ),
             ),
             const SizedBox(height: 8),
             Text(
               title,
               style: const TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
                 color: AppColors.darkText,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

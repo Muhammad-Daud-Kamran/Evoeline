@@ -13,6 +13,46 @@ class Screen21CreateEventStep2 extends StatefulWidget {
 
 class _Screen21CreateEventStep2State extends State<Screen21CreateEventStep2> {
   bool allDayEvent = false;
+  DateTime? startDate;
+  DateTime? endDate;
+  TimeOfDay? startTime;
+  TimeOfDay? endTime;
+  String? selectedTimezone;
+  final List<String> timezones = ['GMT', 'PST', 'EST', 'CET', 'PKT'];
+
+  Future<void> _selectDate(BuildContext context, bool isStart) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null) {
+      setState(() {
+        if (isStart) {
+          startDate = picked;
+        } else {
+          endDate = picked;
+        }
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context, bool isStart) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        if (isStart) {
+          startTime = picked;
+        } else {
+          endTime = picked;
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,16 +127,18 @@ class _Screen21CreateEventStep2State extends State<Screen21CreateEventStep2> {
                 Expanded(
                   child: _buildInputField(
                     'Start Date',
-                    'Select\ndate',
+                    startDate != null ? '${startDate!.day}/${startDate!.month}/${startDate!.year}' : 'Select\ndate',
                     Icons.calendar_today,
+                    onTap: () => _selectDate(context, true),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: _buildInputField(
                     'End Date',
-                    'Select\ndate',
+                    endDate != null ? '${endDate!.day}/${endDate!.month}/${endDate!.year}' : 'Select\ndate',
                     Icons.calendar_today,
+                    onTap: () => _selectDate(context, false),
                   ),
                 ),
               ],
@@ -109,16 +151,18 @@ class _Screen21CreateEventStep2State extends State<Screen21CreateEventStep2> {
                 Expanded(
                   child: _buildInputField(
                     'Start Time',
-                    'Select\ntime',
+                    startTime != null ? startTime!.format(context) : 'Select\ntime',
                     Icons.access_time,
+                    onTap: () => _selectTime(context, true),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: _buildInputField(
                     'End Time',
-                    'Select\ntime',
+                    endTime != null ? endTime!.format(context) : 'Select\ntime',
                     Icons.access_time,
+                    onTap: () => _selectTime(context, false),
                   ),
                 ),
               ],
@@ -132,21 +176,30 @@ class _Screen21CreateEventStep2State extends State<Screen21CreateEventStep2> {
             ),
             const SizedBox(height: 8),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 border: Border.all(color: AppColors.dividerColor),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Select',
+              child: DropdownButtonFormField<String>(
+                initialValue: selectedTimezone,
+                decoration: const InputDecoration(
                   border: InputBorder.none,
-                  suffixIcon: Icon(
-                    Icons.keyboard_arrow_down,
-                    color: AppColors.darkText,
-                  ),
+                  hintText: 'Select',
+                  hintStyle: TextStyle(color: AppColors.darkText, fontSize: 14),
                 ),
-                enabled: false,
+                icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.darkText),
+                items: timezones.map((String tz) {
+                  return DropdownMenuItem<String>(
+                    value: tz,
+                    child: Text(tz, style: const TextStyle(fontSize: 14)),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedTimezone = newValue;
+                  });
+                },
               ),
             ),
             const SizedBox(height: 32),
@@ -162,7 +215,7 @@ class _Screen21CreateEventStep2State extends State<Screen21CreateEventStep2> {
                 Switch(
                   value: allDayEvent,
                   onChanged: (v) => setState(() => allDayEvent = v),
-                  activeColor: Colors.white,
+                  activeThumbColor: Colors.white,
                   activeTrackColor: AppColors.primaryGreen,
                   inactiveThumbColor: Colors.white,
                   inactiveTrackColor: AppColors.dividerColor,
@@ -176,7 +229,7 @@ class _Screen21CreateEventStep2State extends State<Screen21CreateEventStep2> {
     );
   }
 
-  Widget _buildInputField(String label, String hint, IconData icon) {
+  Widget _buildInputField(String label, String hint, IconData icon, {VoidCallback? onTap}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -185,24 +238,29 @@ class _Screen21CreateEventStep2State extends State<Screen21CreateEventStep2> {
           style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
         ),
         const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColors.dividerColor),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  hint,
-                  style: const TextStyle(
-                    color: AppColors.primaryGreen,
-                    fontSize: 14,
+        InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.dividerColor),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    hint,
+                    style: const TextStyle(
+                      color: AppColors.primaryGreen,
+                      fontSize: 14,
+                    ),
                   ),
                 ),
-              ),
-            ],
+                Icon(icon, color: AppColors.primaryGreen, size: 20),
+              ],
+            ),
           ),
         ),
       ],

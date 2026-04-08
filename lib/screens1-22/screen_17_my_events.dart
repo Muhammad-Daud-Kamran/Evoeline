@@ -129,7 +129,7 @@ class _Screen17MyEventsState extends State<Screen17MyEvents>
             'Tech Summit 2024',
             'Jul 20, 2024 • 9:00 AM',
             AppColors.primaryGreen,
-            const Color(0xFF263238),
+            'assets/images/Screen_17_1.png',
           ),
           const SizedBox(height: 24),
           _buildEventItem(
@@ -137,7 +137,7 @@ class _Screen17MyEventsState extends State<Screen17MyEvents>
             'Music Festival',
             'Aug 15, 2024 • 12:00 PM',
             AppColors.primaryGreen,
-            const Color(0xFFFFF3E0),
+            'assets/images/Screen_17_2.png',
           ),
           const SizedBox(height: 24),
           _buildEventItem(
@@ -145,7 +145,7 @@ class _Screen17MyEventsState extends State<Screen17MyEvents>
             'Art Exhibition',
             'Sep 5, 2024 • 10:00 AM',
             AppColors.primaryGreen,
-            const Color(0xFF5D4037),
+            'assets/images/Screen_17_4.png',
           ),
           const SizedBox(height: 24),
           _buildEventItem(
@@ -153,7 +153,7 @@ class _Screen17MyEventsState extends State<Screen17MyEvents>
             'Food Fair',
             'Jun 10, 2024 • 11:00 AM',
             AppColors.primaryGreen,
-            const Color(0xFF388E3C),
+            'assets/images/Screen_17_3.png',
           ),
           const SizedBox(height: 80), // To avoid FAB overlapping
         ],
@@ -166,7 +166,7 @@ class _Screen17MyEventsState extends State<Screen17MyEvents>
     String title,
     String date,
     Color statusColor,
-    Color imageColor,
+    String imagePath,
   ) {
     return GestureDetector(
       onTap: () => context.pushNamed('eventOverview'),
@@ -231,8 +231,20 @@ class _Screen17MyEventsState extends State<Screen17MyEvents>
             width: 130,
             height: 120,
             decoration: BoxDecoration(
-              color: imageColor,
               borderRadius: BorderRadius.circular(12),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.grey[200],
+                    child: const Icon(Icons.broken_image, color: Colors.grey),
+                  );
+                },
+              ),
             ),
           ),
         ],
